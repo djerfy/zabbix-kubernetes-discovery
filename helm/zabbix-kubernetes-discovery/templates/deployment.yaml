@@ -1,0 +1,64 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.deployment.name }}
+  namespace: {{ .Values.namespace.name }}
+  labels:
+    app: {{ .Values.deployment.name }}
+spec:
+  replicas: {{ .Values.deployment.replicas }}
+  strategy:
+    type: {{ .Values.deployment.strategy }}
+  selector:
+    matchLabels:
+      app: {{ .Values.deployment.name }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.deployment.name }}
+    spec:
+      {{- if .Values.serviceAccount.create }}
+      serviceAccountName: {{ .Values.serviceAccount.name }}
+      {{- end }}
+      restartPolicy: Always
+      containers:
+      - name: {{ .Values.deployment.name }}
+        image: {{ .Values.deployment.image.name }}
+        imagePullPolicy: {{ .Values.deployment.image.pullPolicy }}
+        env:
+        - name: ZABBIX_ENDPOINT
+          value: {{ .Values.environment.ZABBIX_ENDPOINT }}
+        - name: KUBERNETES_NAME
+          value: {{ .Values.environment.KUBERNETES_NAME }}
+        {{- if .Values.environment.KUBECONFIG }}
+        - name: KUBECONFIG
+          valueFrom:
+            secretKeyRef:
+              name: zabbix-kubernetes-discovery-kubeconfig
+              key: kubeconfig
+        {{- end }}
+        volumeMounts:
+        - name: crontab
+          mountPath: /app/crontab
+          subPath: crontab
+        resources:
+{{ toYaml .Values.resources | indent 10 }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+{{ toYaml . | indent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+{{ toYaml . | indent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+{{ toYaml . | indent 8 }}
+      {{- end }}
+      volumes:
+      - name: crontab
+        configMap:
+          name: {{ .Values.crontab.name }}
+          items:
+          - key: crontab
+            path: crontab

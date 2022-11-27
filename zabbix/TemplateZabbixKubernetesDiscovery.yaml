@@ -1,0 +1,1376 @@
+zabbix_export:
+  version: '5.4'
+  date: '2022-08-22T17:13:34Z'
+  groups:
+    -
+      uuid: 56f8489d42224d24902e80448aa03b3d
+      name: Kubernetes
+  templates:
+    -
+      uuid: b7d6aacfdc234feaa5d5a062ab834532
+      template: 'Template Zabbix Kubernetes Discovery'
+      name: 'Template Zabbix Kubernetes Discovery'
+      description: |
+        Template for Kubernetes (k3s, k8s, aks, eks, ...) monitoring for Zabbix. Based on discovery rules with a custom container to deploy on the cluster.
+        
+        I recommend to associate this template on the first control-plane or a dedicated host where is the cluster (group).
+      groups:
+        -
+          name: Kubernetes
+      discovery_rules:
+        -
+          uuid: da80cdb0ec5c4ee68c3e88cd9d907386
+          name: Cronjob
+          type: TRAP
+          key: kubernetes.cronjob.discovery
+          delay: '0'
+          description: 'Discovery of all Cronjob'
+          item_prototypes:
+            -
+              uuid: 6ed92f4055364aaeb02d2b5b6e868428
+              name: 'Cronjob {#KUBERNETES_CRONJOB_NAMESPACE}/{#KUBERNETES_CRONJOB_NAME}: Last job exit code'
+              type: TRAP
+              key: 'kubernetes.cronjob.exitcode[{#KUBERNETES_CRONJOB_NAMESPACE},{#KUBERNETES_CRONJOB_NAME}]'
+              delay: '0'
+              description: 'Last exit code on the cronjob.'
+              tags:
+                -
+                  tag: KubernetesObject
+                  value: Cronjob
+              trigger_prototypes:
+                -
+                  uuid: 40ce24d68f0d413fa83b4dfd8fbb9105
+                  expression: 'nodata(/Template Zabbix Kubernetes Discovery/kubernetes.cronjob.exitcode[{#KUBERNETES_CRONJOB_NAMESPACE},{#KUBERNETES_CRONJOB_NAME}],{$KUBERNETES.TIMEOUT.NODATA})=1'
+                  name: 'Cronjob {#KUBERNETES_CRONJOB_NAMESPACE}/{#KUBERNETES_CRONJOB_NAME}: Last job exit code nodata'
+                  priority: HIGH
+                  description: 'No data since 900 seconds (by default) for cronjob exitcode item.'
+                  manual_close: 'YES'
+                  dependencies:
+                    -
+                      name: 'Cronjob {#KUBERNETES_CRONJOB_NAMESPACE}/{#KUBERNETES_CRONJOB_NAME}: Problem items nodata'
+                      expression: |
+                        nodata(/Template Zabbix Kubernetes Discovery/kubernetes.cronjob.exitcode[{#KUBERNETES_CRONJOB_NAMESPACE},{#KUBERNETES_CRONJOB_NAME}],{$KUBERNETES.TIMEOUT.NODATA})=1
+                        and
+                        nodata(/Template Zabbix Kubernetes Discovery/kubernetes.cronjob.reason[{#KUBERNETES_CRONJOB_NAMESPACE},{#KUBERNETES_CRONJOB_NAME}],{$KUBERNETES.TIMEOUT.NODATA})=1
+                        and
+                        nodata(/Template Zabbix Kubernetes Discovery/kubernetes.cronjob.restart[{#KUBERNETES_CRONJOB_NAMESPACE},{#KUBERNETES_CRONJOB_NAME}],{$KUBERNETES.TIMEOUT.NODATA})=1
+                  tags:
+                    -
+                      tag: KubernetesObject
+                      value: Cronjob
+                -
+                  uuid: dafe30004fd442f3a9344554783f2bcc
+                  expression: 'last(/Template Zabbix Kubernetes Discovery/kubernetes.cronjob.exitcode[{#KUBERNETES_CRONJOB_NAMESPACE},{#KUBERNETES_CRONJOB_NAME}],#3)<>0'
+                  name: 'Cronjob {#KUBERNETES_CRONJOB_NAMESPACE}/{#KUBERNETES_CRONJOB_NAME}: Problem last job exit code'
+                  priority: HIGH
+                  description: 'Problem during the last execution of the cronjob. Exit code is not equal to 0.'
+                  manual_close: 'YES'
+                  tags:
+                    -
+                      tag: KubernetesObject
+                      value: Cronjob
+            -
+              uuid: 897ba892567b4deb998678c6bc01d82c
+              name: 'Cronjob {#KUBERNETES_CRONJOB_NAMESPACE}/{#KUBERNETES_CRONJOB_NAME}: Last job reason'
+              type: TRAP
+              key: 'kubernetes.cronjob.reason[{#KUBERNETES_CRONJOB_NAMESPACE},{#KUBERNETES_CRONJOB_NAME}]'
+              delay: '0'
+              trends: '0'
+              value_type: TEXT
+              description: 'Last reason on the cronjob.'
+              tags:
+                -
+                  tag: KubernetesObject
+                  value: Cronjob
+              trigger_prototypes:
+                -
+                  uuid: e820b3d2804343eaa8280f74cab045ef
+                  expression: 'nodata(/Template Zabbix Kubernetes Discovery/kubernetes.cronjob.reason[{#KUBERNETES_CRONJOB_NAMESPACE},{#KUBERNETES_CRONJOB_NAME}],{$KUBERNETES.TIMEOUT.NODATA})=1'
+                  name: 'Cronjob {#KUBERNETES_CRONJOB_NAMESPACE}/{#KUBERNETES_CRONJOB_NAME}: Last job reason nodata'
+                  priority: HIGH
+                  description: 'No data since 900 seconds (by default) for cronjob reason item.'
+                  manual_close: 'YES'
+                  dependencies:
+                    -
+                      name: 'Cronjob {#KUBERNETES_CRONJOB_NAMESPACE}/{#KUBERNETES_CRONJOB_NAME}: Problem items nodata'
+                      expression: |
+                        nodata(/Template Zabbix Kubernetes Discovery/kubernetes.cronjob.exitcode[{#KUBERNETES_CRONJOB_NAMESPACE},{#KUBERNETES_CRONJOB_NAME}],{$KUBERNETES.TIMEOUT.NODATA})=1
+                        and
+                        nodata(/Template Zabbix Kubernetes Discovery/kubernetes.cronjob.reason[{#KUBERNETES_CRONJOB_NAMESPACE},{#KUBERNETES_CRONJOB_NAME}],{$KUBERNETES.TIMEOUT.NODATA})=1
+                        and
+                        nodata(/Template Zabbix Kubernetes Discovery/kubernetes.cronjob.restart[{#KUBERNETES_CRONJOB_NAMESPACE},{#KUBERNETES_CRONJOB_NAME}],{$KUBERNETES.TIMEOUT.NODATA})=1
+                  tags:
+                    -
+                      tag: KubernetesObject
+                      value: Cronjob
+            -
+              uuid: 27eab17286d4495a8b4cbd7d3914e538
+              name: 'Cronjob {#KUBERNETES_CRONJOB_NAMESPACE}/{#KUBERNETES_CRONJOB_NAME}: Last job restart count'
+              type: TRAP
+              key: 'kubernetes.cronjob.restart[{#KUBERNETES_CRONJOB_NAMESPACE},{#KUBERNETES_CRONJOB_NAME}]'
+              delay: '0'
+              description: 'Last restart count of the cronjob.'
+              tags:
+                -
+                  tag: KubernetesObject
+                  value: Cronjob
+              trigger_prototypes:
+                -
+                  uuid: a96ff38033a94036accd8ce8cc803511
+                  expression: 'nodata(/Template Zabbix Kubernetes Discovery/kubernetes.cronjob.restart[{#KUBERNETES_CRONJOB_NAMESPACE},{#KUBERNETES_CRONJOB_NAME}],{$KUBERNETES.TIMEOUT.NODATA})=1'
+                  name: 'Cronjob {#KUBERNETES_CRONJOB_NAMESPACE}/{#KUBERNETES_CRONJOB_NAME}: Last job restart count nodata'
+                  priority: HIGH
+                  description: 'No data since 900 seconds (by default) for cronjob restart count item.'
+                  manual_close: 'YES'
+                  dependencies:
+                    -
+                      name: 'Cronjob {#KUBERNETES_CRONJOB_NAMESPACE}/{#KUBERNETES_CRONJOB_NAME}: Problem items nodata'
+                      expression: |
+                        nodata(/Template Zabbix Kubernetes Discovery/kubernetes.cronjob.exitcode[{#KUBERNETES_CRONJOB_NAMESPACE},{#KUBERNETES_CRONJOB_NAME}],{$KUBERNETES.TIMEOUT.NODATA})=1
+                        and
+                        nodata(/Template Zabbix Kubernetes Discovery/kubernetes.cronjob.reason[{#KUBERNETES_CRONJOB_NAMESPACE},{#KUBERNETES_CRONJOB_NAME}],{$KUBERNETES.TIMEOUT.NODATA})=1
+                        and
+                        nodata(/Template Zabbix Kubernetes Discovery/kubernetes.cronjob.restart[{#KUBERNETES_CRONJOB_NAMESPACE},{#KUBERNETES_CRONJOB_NAME}],{$KUBERNETES.TIMEOUT.NODATA})=1
+                  tags:
+                    -
+                      tag: KubernetesObject
+                      value: Cronjob
+          trigger_prototypes:
+            -
+              uuid: ff09ba4f9b1a4d29a7e3a1ec545df03d
+              expression: |
+                nodata(/Template Zabbix Kubernetes Discovery/kubernetes.cronjob.exitcode[{#KUBERNETES_CRONJOB_NAMESPACE},{#KUBERNETES_CRONJOB_NAME}],{$KUBERNETES.TIMEOUT.NODATA})=1
+                and
+                nodata(/Template Zabbix Kubernetes Discovery/kubernetes.cronjob.reason[{#KUBERNETES_CRONJOB_NAMESPACE},{#KUBERNETES_CRONJOB_NAME}],{$KUBERNETES.TIMEOUT.NODATA})=1
+                and
+                nodata(/Template Zabbix Kubernetes Discovery/kubernetes.cronjob.restart[{#KUBERNETES_CRONJOB_NAMESPACE},{#KUBERNETES_CRONJOB_NAME}],{$KUBERNETES.TIMEOUT.NODATA})=1
+              name: 'Cronjob {#KUBERNETES_CRONJOB_NAMESPACE}/{#KUBERNETES_CRONJOB_NAME}: Problem items nodata'
+              priority: HIGH
+              description: 'No data since 900 seconds (by default) for all cronjob items.'
+              manual_close: 'YES'
+              tags:
+                -
+                  tag: KubernetesObject
+                  value: Cronjob
+          graph_prototypes:
+            -
+              uuid: 65e11c4d205e463a868381c7dfe0a88e
+              name: 'Cronjob {#KUBERNETES_CRONJOB_NAMESPACE}/{#KUBERNETES_CRONJOB_NAME}: Graphs exitcode and restartcount'
+              graph_items:
+                -
+                  sortorder: '1'
+                  color: FFFF00
+                  item:
+                    host: 'Template Zabbix Kubernetes Discovery'
+                    key: 'kubernetes.cronjob.exitcode[{#KUBERNETES_CRONJOB_NAMESPACE},{#KUBERNETES_CRONJOB_NAME}]'
+                -
+                  sortorder: '2'
+                  color: F63100
+                  item:
+                    host: 'Template Zabbix Kubernetes Discovery'
+                    key: 'kubernetes.cronjob.restart[{#KUBERNETES_CRONJOB_NAMESPACE},{#KUBERNETES_CRONJOB_NAME}]'
+        -
+          uuid: 54bdab339ea4474e94739785eda595c7
+          name: Daemonset
+          type: TRAP
+          key: kubernetes.daemonset.discovery
+          delay: '0'
+          description: 'Discovery of all Daemonset'
+          item_prototypes:
+            -
+              uuid: 6a7efea77ecb4433b98dc5c34bd6ddcc
+              name: 'Daemonset {#KUBERNETES_DAEMONSET_NAMESPACE}/{#KUBERNETES_DAEMONSET_NAME}: Available replicas'
+              type: TRAP
+              key: 'kubernetes.daemonset.availableReplicas[{#KUBERNETES_DAEMONSET_NAMESPACE},{#KUBERNETES_DAEMONSET_NAME}]'
+              delay: '0'
+              description: 'Available replicas on the daemonset.'
+              tags:
+                -
+                  tag: KubernetesObject
+                  value: Daemonset
+              trigger_prototypes:
+                -
+                  uuid: 3612c5aeb11041f8bb0fc2b4c477630e
+                  expression: 'nodata(/Template Zabbix Kubernetes Discovery/kubernetes.daemonset.availableReplicas[{#KUBERNETES_DAEMONSET_NAMESPACE},{#KUBERNETES_DAEMONSET_NAME}],{$KUBERNETES.TIMEOUT.NODATA})=1'
+                  name: 'Daemonset {#KUBERNETES_DAEMONSET_NAMESPACE}/{#KUBERNETES_DAEMONSET_NAME}: Available replicas nodata'
+                  priority: HIGH
+                  description: 'No data since 900 seconds (by default) for item available replicas on the daemonset.'
+                  manual_close: 'YES'
+                  dependencies:
+                    -
+                      name: 'Daemonset {#KUBERNETES_DAEMONSET_NAMESPACE}/{#KUBERNETES_DAEMONSET_NAME}: Problem items nodata'
+                      expression: |
+                        nodata(/Template Zabbix Kubernetes Discovery/kubernetes.daemonset.availableReplicas[{#KUBERNETES_DAEMONSET_NAMESPACE},{#KUBERNETES_DAEMONSET_NAME}],{$KUBERNETES.TIMEOUT.NODATA})=1
+                        and
+                        nodata(/Template Zabbix Kubernetes Discovery/kubernetes.daemonset.currentReplicas[{#KUBERNETES_DAEMONSET_NAMESPACE},{#KUBERNETES_DAEMONSET_NAME}],{$KUBERNETES.TIMEOUT.NODATA})=1
+                        and
+                        nodata(/Template Zabbix Kubernetes Discovery/kubernetes.daemonset.desiredReplicas[{#KUBERNETES_DAEMONSET_NAMESPACE},{#KUBERNETES_DAEMONSET_NAME}],{$KUBERNETES.TIMEOUT.NODATA})=1
+                        and
+                        nodata(/Template Zabbix Kubernetes Discovery/kubernetes.daemonset.readyReplicas[{#KUBERNETES_DAEMONSET_NAMESPACE},{#KUBERNETES_DAEMONSET_NAME}],{$KUBERNETES.TIMEOUT.NODATA})=1
+                  tags:
+                    -
+                      tag: KubernetesObject
+                      value: Daemonset
+            -
+              uuid: c46a6f99a077487883035987025520af
+              name: 'Daemonset {#KUBERNETES_DAEMONSET_NAMESPACE}/{#KUBERNETES_DAEMONSET_NAME}: Current replicas'
+              type: TRAP
+              key: 'kubernetes.daemonset.currentReplicas[{#KUBERNETES_DAEMONSET_NAMESPACE},{#KUBERNETES_DAEMONSET_NAME}]'
+              delay: '0'
+              description: 'Current replicas on the daemonset.'
+              tags:
+                -
+                  tag: KubernetesObject
+                  value: Daemonset
+              trigger_prototypes:
+                -
+                  uuid: 34e00d66dafc4da4afb45eccb0892d7a
+                  expression: 'nodata(/Template Zabbix Kubernetes Discovery/kubernetes.daemonset.currentReplicas[{#KUBERNETES_DAEMONSET_NAMESPACE},{#KUBERNETES_DAEMONSET_NAME}],{$KUBERNETES.TIMEOUT.NODATA})=1'
+                  name: 'Daemonset {#KUBERNETES_DAEMONSET_NAMESPACE}/{#KUBERNETES_DAEMONSET_NAME}: Current replicas nodata'
+                  priority: HIGH
+                  description: 'No data since 900 seconds (by default) for item current replicas on the daemonset.'
+                  manual_close: 'YES'
+                  dependencies:
+                    -
+                      name: 'Daemonset {#KUBERNETES_DAEMONSET_NAMESPACE}/{#KUBERNETES_DAEMONSET_NAME}: Problem items nodata'
+                      expression: |
+                        nodata(/Template Zabbix Kubernetes Discovery/kubernetes.daemonset.availableReplicas[{#KUBERNETES_DAEMONSET_NAMESPACE},{#KUBERNETES_DAEMONSET_NAME}],{$KUBERNETES.TIMEOUT.NODATA})=1
+                        and
+                        nodata(/Template Zabbix Kubernetes Discovery/kubernetes.daemonset.currentReplicas[{#KUBERNETES_DAEMONSET_NAMESPACE},{#KUBERNETES_DAEMONSET_NAME}],{$KUBERNETES.TIMEOUT.NODATA})=1
+                        and
+                        nodata(/Template Zabbix Kubernetes Discovery/kubernetes.daemonset.desiredReplicas[{#KUBERNETES_DAEMONSET_NAMESPACE},{#KUBERNETES_DAEMONSET_NAME}],{$KUBERNETES.TIMEOUT.NODATA})=1
+                        and
+                        nodata(/Template Zabbix Kubernetes Discovery/kubernetes.daemonset.readyReplicas[{#KUBERNETES_DAEMONSET_NAMESPACE},{#KUBERNETES_DAEMONSET_NAME}],{$KUBERNETES.TIMEOUT.NODATA})=1
+                  tags:
+                    -
+                      tag: KubernetesObject
+                      value: Daemonset
+            -
+              uuid: ebeec89d292b46418c64a6f6d8adb8c4
+              name: 'Daemonset {#KUBERNETES_DAEMONSET_NAMESPACE}/{#KUBERNETES_DAEMONSET_NAME}: Desired replicas'
+              type: TRAP
+              key: 'kubernetes.daemonset.desiredReplicas[{#KUBERNETES_DAEMONSET_NAMESPACE},{#KUBERNETES_DAEMONSET_NAME}]'
+              delay: '0'
+              description: 'Desired replicas on the daemonset.'
+              tags:
+                -
+                  tag: KubernetesObject
+                  value: Daemonset
+              trigger_prototypes:
+                -
+                  uuid: 9a634db2b7174feea4b78949ec232333
+                  expression: 'nodata(/Template Zabbix Kubernetes Discovery/kubernetes.daemonset.desiredReplicas[{#KUBERNETES_DAEMONSET_NAMESPACE},{#KUBERNETES_DAEMONSET_NAME}],{$KUBERNETES.TIMEOUT.NODATA})=1'
+                  name: 'Daemonset {#KUBERNETES_DAEMONSET_NAMESPACE}/{#KUBERNETES_DAEMONSET_NAME}: Desired replicas nodata'
+                  priority: HIGH
+                  description: 'No data since 900 seconds (by default) for item desired replicas on the daemonset.'
+                  manual_close: 'YES'
+                  dependencies:
+                    -
+                      name: 'Daemonset {#KUBERNETES_DAEMONSET_NAMESPACE}/{#KUBERNETES_DAEMONSET_NAME}: Problem items nodata'
+                      expression: |
+                        nodata(/Template Zabbix Kubernetes Discovery/kubernetes.daemonset.availableReplicas[{#KUBERNETES_DAEMONSET_NAMESPACE},{#KUBERNETES_DAEMONSET_NAME}],{$KUBERNETES.TIMEOUT.NODATA})=1
+                        and
+                        nodata(/Template Zabbix Kubernetes Discovery/kubernetes.daemonset.currentReplicas[{#KUBERNETES_DAEMONSET_NAMESPACE},{#KUBERNETES_DAEMONSET_NAME}],{$KUBERNETES.TIMEOUT.NODATA})=1
+                        and
+                        nodata(/Template Zabbix Kubernetes Discovery/kubernetes.daemonset.desiredReplicas[{#KUBERNETES_DAEMONSET_NAMESPACE},{#KUBERNETES_DAEMONSET_NAME}],{$KUBERNETES.TIMEOUT.NODATA})=1
+                        and
+                        nodata(/Template Zabbix Kubernetes Discovery/kubernetes.daemonset.readyReplicas[{#KUBERNETES_DAEMONSET_NAMESPACE},{#KUBERNETES_DAEMONSET_NAME}],{$KUBERNETES.TIMEOUT.NODATA})=1
+                  tags:
+                    -
+                      tag: KubernetesObject
+                      value: Daemonset
+            -
+              uuid: 05363546fe874410a9d739695e785b18
+              name: 'Daemonset {#KUBERNETES_DAEMONSET_NAMESPACE}/{#KUBERNETES_DAEMONSET_NAME}: Ready replicas'
+              type: TRAP
+              key: 'kubernetes.daemonset.readyReplicas[{#KUBERNETES_DAEMONSET_NAMESPACE},{#KUBERNETES_DAEMONSET_NAME}]'
+              delay: '0'
+              description: 'Ready replicas on the daemonset.'
+              tags:
+                -
+                  tag: KubernetesObject
+                  value: Daemonset
+              trigger_prototypes:
+                -
+                  uuid: 700af575ce6c403c9db45f0a1c11f53b
+                  expression: 'nodata(/Template Zabbix Kubernetes Discovery/kubernetes.daemonset.readyReplicas[{#KUBERNETES_DAEMONSET_NAMESPACE},{#KUBERNETES_DAEMONSET_NAME}],{$KUBERNETES.TIMEOUT.NODATA})=1'
+                  name: 'Daemonset {#KUBERNETES_DAEMONSET_NAMESPACE}/{#KUBERNETES_DAEMONSET_NAME}: Ready replicas nodata'
+                  priority: HIGH
+                  description: 'No data since 900 seconds (by default) for item ready replicas on the daemonset.'
+                  manual_close: 'YES'
+                  dependencies:
+                    -
+                      name: 'Daemonset {#KUBERNETES_DAEMONSET_NAMESPACE}/{#KUBERNETES_DAEMONSET_NAME}: Problem items nodata'
+                      expression: |
+                        nodata(/Template Zabbix Kubernetes Discovery/kubernetes.daemonset.availableReplicas[{#KUBERNETES_DAEMONSET_NAMESPACE},{#KUBERNETES_DAEMONSET_NAME}],{$KUBERNETES.TIMEOUT.NODATA})=1
+                        and
+                        nodata(/Template Zabbix Kubernetes Discovery/kubernetes.daemonset.currentReplicas[{#KUBERNETES_DAEMONSET_NAMESPACE},{#KUBERNETES_DAEMONSET_NAME}],{$KUBERNETES.TIMEOUT.NODATA})=1
+                        and
+                        nodata(/Template Zabbix Kubernetes Discovery/kubernetes.daemonset.desiredReplicas[{#KUBERNETES_DAEMONSET_NAMESPACE},{#KUBERNETES_DAEMONSET_NAME}],{$KUBERNETES.TIMEOUT.NODATA})=1
+                        and
+                        nodata(/Template Zabbix Kubernetes Discovery/kubernetes.daemonset.readyReplicas[{#KUBERNETES_DAEMONSET_NAMESPACE},{#KUBERNETES_DAEMONSET_NAME}],{$KUBERNETES.TIMEOUT.NODATA})=1
+                  tags:
+                    -
+                      tag: KubernetesObject
+                      value: Daemonset
+          trigger_prototypes:
+            -
+              uuid: fbcdc7e876224e15b9289761f9fb80f6
+              expression: |
+                nodata(/Template Zabbix Kubernetes Discovery/kubernetes.daemonset.availableReplicas[{#KUBERNETES_DAEMONSET_NAMESPACE},{#KUBERNETES_DAEMONSET_NAME}],{$KUBERNETES.TIMEOUT.NODATA})=1
+                and
+                nodata(/Template Zabbix Kubernetes Discovery/kubernetes.daemonset.currentReplicas[{#KUBERNETES_DAEMONSET_NAMESPACE},{#KUBERNETES_DAEMONSET_NAME}],{$KUBERNETES.TIMEOUT.NODATA})=1
+                and
+                nodata(/Template Zabbix Kubernetes Discovery/kubernetes.daemonset.desiredReplicas[{#KUBERNETES_DAEMONSET_NAMESPACE},{#KUBERNETES_DAEMONSET_NAME}],{$KUBERNETES.TIMEOUT.NODATA})=1
+                and
+                nodata(/Template Zabbix Kubernetes Discovery/kubernetes.daemonset.readyReplicas[{#KUBERNETES_DAEMONSET_NAMESPACE},{#KUBERNETES_DAEMONSET_NAME}],{$KUBERNETES.TIMEOUT.NODATA})=1
+              name: 'Daemonset {#KUBERNETES_DAEMONSET_NAMESPACE}/{#KUBERNETES_DAEMONSET_NAME}: Problem items nodata'
+              priority: HIGH
+              description: 'No data since 900 seconds (by default) for all daemonset items.'
+              manual_close: 'YES'
+              tags:
+                -
+                  tag: KubernetesObject
+                  value: Daemonset
+          graph_prototypes:
+            -
+              uuid: 78185ebd59be4c60baea603b47fa10c0
+              name: 'Daemonset {#KUBERNETES_DAEMONSET_NAMESPACE}/{#KUBERNETES_DAEMONSET_NAME}: Graph replicas'
+              graph_items:
+                -
+                  sortorder: '1'
+                  color: 1A7C11
+                  item:
+                    host: 'Template Zabbix Kubernetes Discovery'
+                    key: 'kubernetes.daemonset.availableReplicas[{#KUBERNETES_DAEMONSET_NAMESPACE},{#KUBERNETES_DAEMONSET_NAME}]'
+                -
+                  sortorder: '2'
+                  color: F63100
+                  item:
+                    host: 'Template Zabbix Kubernetes Discovery'
+                    key: 'kubernetes.daemonset.currentReplicas[{#KUBERNETES_DAEMONSET_NAMESPACE},{#KUBERNETES_DAEMONSET_NAME}]'
+                -
+                  sortorder: '3'
+                  color: 2774A4
+                  item:
+                    host: 'Template Zabbix Kubernetes Discovery'
+                    key: 'kubernetes.daemonset.desiredReplicas[{#KUBERNETES_DAEMONSET_NAMESPACE},{#KUBERNETES_DAEMONSET_NAME}]'
+                -
+                  sortorder: '4'
+                  color: A54F10
+                  item:
+                    host: 'Template Zabbix Kubernetes Discovery'
+                    key: 'kubernetes.daemonset.readyReplicas[{#KUBERNETES_DAEMONSET_NAMESPACE},{#KUBERNETES_DAEMONSET_NAME}]'
+        -
+          uuid: 018b4db27b994deabe12ca9773cd3da1
+          name: Deployment
+          type: TRAP
+          key: kubernetes.deployment.discovery
+          delay: '0'
+          description: 'Discovery of all Deployment'
+          item_prototypes:
+            -
+              uuid: 8a90ddcccae94d079d839a2021c0347f
+              name: 'Deployment {#KUBERNETES_DEPLOYMENT_NAMESPACE}/{#KUBERNETES_DEPLOYMENT_NAME}: Available replicas'
+              type: TRAP
+              key: 'kubernetes.deployment.availableReplicas[{#KUBERNETES_DEPLOYMENT_NAMESPACE},{#KUBERNETES_DEPLOYMENT_NAME}]'
+              delay: '0'
+              description: 'Replicas available on the deployment.'
+              tags:
+                -
+                  tag: KubernetesObject
+                  value: Deployment
+              trigger_prototypes:
+                -
+                  uuid: 9371b67ba372446b8a1ff62cdd4534ae
+                  expression: 'nodata(/Template Zabbix Kubernetes Discovery/kubernetes.deployment.availableReplicas[{#KUBERNETES_DEPLOYMENT_NAMESPACE},{#KUBERNETES_DEPLOYMENT_NAME}],{$KUBERNETES.TIMEOUT.NODATA})=1'
+                  name: 'Deployment {#KUBERNETES_DEPLOYMENT_NAMESPACE}/{#KUBERNETES_DEPLOYMENT_NAME}: Available replicas nodata'
+                  priority: HIGH
+                  description: 'No data since 900 seconds (by default) for item available replicas on the deployment.'
+                  manual_close: 'YES'
+                  dependencies:
+                    -
+                      name: 'Deployment {#KUBERNETES_DEPLOYMENT_NAMESPACE}/{#KUBERNETES_DEPLOYMENT_NAME}: Problem items nodata'
+                      expression: |
+                        nodata(/Template Zabbix Kubernetes Discovery/kubernetes.deployment.availableReplicas[{#KUBERNETES_DEPLOYMENT_NAMESPACE},{#KUBERNETES_DEPLOYMENT_NAME}],{$KUBERNETES.TIMEOUT.NODATA})=1
+                        and
+                        nodata(/Template Zabbix Kubernetes Discovery/kubernetes.deployment.desiredReplicas[{#KUBERNETES_DEPLOYMENT_NAMESPACE},{#KUBERNETES_DEPLOYMENT_NAME}],{$KUBERNETES.TIMEOUT.NODATA})=1
+                        and
+                        nodata(/Template Zabbix Kubernetes Discovery/kubernetes.deployment.readyReplicas[{#KUBERNETES_DEPLOYMENT_NAMESPACE},{#KUBERNETES_DEPLOYMENT_NAME}],{$KUBERNETES.TIMEOUT.NODATA})=1
+                  tags:
+                    -
+                      tag: KubernetesObject
+                      value: Deployment
+            -
+              uuid: 9dff58e5fad74a4b97ac387ee8f73623
+              name: 'Deployment {#KUBERNETES_DEPLOYMENT_NAMESPACE}/{#KUBERNETES_DEPLOYMENT_NAME}: Desired replicas'
+              type: TRAP
+              key: 'kubernetes.deployment.desiredReplicas[{#KUBERNETES_DEPLOYMENT_NAMESPACE},{#KUBERNETES_DEPLOYMENT_NAME}]'
+              delay: '0'
+              description: 'Replicas desired on the deployment.'
+              tags:
+                -
+                  tag: KubernetesObject
+                  value: Deployment
+              trigger_prototypes:
+                -
+                  uuid: 39302c2ccae145e6a58feaeeb291385e
+                  expression: 'nodata(/Template Zabbix Kubernetes Discovery/kubernetes.deployment.desiredReplicas[{#KUBERNETES_DEPLOYMENT_NAMESPACE},{#KUBERNETES_DEPLOYMENT_NAME}],{$KUBERNETES.TIMEOUT.NODATA})=1'
+                  name: 'Deployment {#KUBERNETES_DEPLOYMENT_NAMESPACE}/{#KUBERNETES_DEPLOYMENT_NAME}: Desired replicas nodata'
+                  priority: HIGH
+                  description: 'No data since 900 seconds (by default) for item desired replicas on the deployment.'
+                  manual_close: 'YES'
+                  dependencies:
+                    -
+                      name: 'Deployment {#KUBERNETES_DEPLOYMENT_NAMESPACE}/{#KUBERNETES_DEPLOYMENT_NAME}: Problem items nodata'
+                      expression: |
+                        nodata(/Template Zabbix Kubernetes Discovery/kubernetes.deployment.availableReplicas[{#KUBERNETES_DEPLOYMENT_NAMESPACE},{#KUBERNETES_DEPLOYMENT_NAME}],{$KUBERNETES.TIMEOUT.NODATA})=1
+                        and
+                        nodata(/Template Zabbix Kubernetes Discovery/kubernetes.deployment.desiredReplicas[{#KUBERNETES_DEPLOYMENT_NAMESPACE},{#KUBERNETES_DEPLOYMENT_NAME}],{$KUBERNETES.TIMEOUT.NODATA})=1
+                        and
+                        nodata(/Template Zabbix Kubernetes Discovery/kubernetes.deployment.readyReplicas[{#KUBERNETES_DEPLOYMENT_NAMESPACE},{#KUBERNETES_DEPLOYMENT_NAME}],{$KUBERNETES.TIMEOUT.NODATA})=1
+                  tags:
+                    -
+                      tag: KubernetesObject
+                      value: Deployment
+            -
+              uuid: f2d6fd9dadb94f8eb9e530bc5afa160e
+              name: 'Deployment {#KUBERNETES_DEPLOYMENT_NAMESPACE}/{#KUBERNETES_DEPLOYMENT_NAME}: Ready replicas'
+              type: TRAP
+              key: 'kubernetes.deployment.readyReplicas[{#KUBERNETES_DEPLOYMENT_NAMESPACE},{#KUBERNETES_DEPLOYMENT_NAME}]'
+              delay: '0'
+              description: 'Replicas ready on the deployment.'
+              tags:
+                -
+                  tag: KubernetesObject
+                  value: Deployment
+              trigger_prototypes:
+                -
+                  uuid: 3ea87297522945f0aa5f1e964d8d922f
+                  expression: 'nodata(/Template Zabbix Kubernetes Discovery/kubernetes.deployment.readyReplicas[{#KUBERNETES_DEPLOYMENT_NAMESPACE},{#KUBERNETES_DEPLOYMENT_NAME}],{$KUBERNETES.TIMEOUT.NODATA})=1'
+                  name: 'Deployment {#KUBERNETES_DEPLOYMENT_NAMESPACE}/{#KUBERNETES_DEPLOYMENT_NAME}: Ready replicas nodata'
+                  priority: HIGH
+                  description: 'No data since 900 seconds (by default) for item ready replicas on the deployment.'
+                  manual_close: 'YES'
+                  dependencies:
+                    -
+                      name: 'Deployment {#KUBERNETES_DEPLOYMENT_NAMESPACE}/{#KUBERNETES_DEPLOYMENT_NAME}: Problem items nodata'
+                      expression: |
+                        nodata(/Template Zabbix Kubernetes Discovery/kubernetes.deployment.availableReplicas[{#KUBERNETES_DEPLOYMENT_NAMESPACE},{#KUBERNETES_DEPLOYMENT_NAME}],{$KUBERNETES.TIMEOUT.NODATA})=1
+                        and
+                        nodata(/Template Zabbix Kubernetes Discovery/kubernetes.deployment.desiredReplicas[{#KUBERNETES_DEPLOYMENT_NAMESPACE},{#KUBERNETES_DEPLOYMENT_NAME}],{$KUBERNETES.TIMEOUT.NODATA})=1
+                        and
+                        nodata(/Template Zabbix Kubernetes Discovery/kubernetes.deployment.readyReplicas[{#KUBERNETES_DEPLOYMENT_NAMESPACE},{#KUBERNETES_DEPLOYMENT_NAME}],{$KUBERNETES.TIMEOUT.NODATA})=1
+                  tags:
+                    -
+                      tag: KubernetesObject
+                      value: Deployment
+          trigger_prototypes:
+            -
+              uuid: 4ccb9ac2f23e4a3f871f30c8488cf208
+              expression: |
+                nodata(/Template Zabbix Kubernetes Discovery/kubernetes.deployment.availableReplicas[{#KUBERNETES_DEPLOYMENT_NAMESPACE},{#KUBERNETES_DEPLOYMENT_NAME}],{$KUBERNETES.TIMEOUT.NODATA})=1
+                and
+                nodata(/Template Zabbix Kubernetes Discovery/kubernetes.deployment.desiredReplicas[{#KUBERNETES_DEPLOYMENT_NAMESPACE},{#KUBERNETES_DEPLOYMENT_NAME}],{$KUBERNETES.TIMEOUT.NODATA})=1
+                and
+                nodata(/Template Zabbix Kubernetes Discovery/kubernetes.deployment.readyReplicas[{#KUBERNETES_DEPLOYMENT_NAMESPACE},{#KUBERNETES_DEPLOYMENT_NAME}],{$KUBERNETES.TIMEOUT.NODATA})=1
+              name: 'Deployment {#KUBERNETES_DEPLOYMENT_NAMESPACE}/{#KUBERNETES_DEPLOYMENT_NAME}: Problem items nodata'
+              priority: HIGH
+              description: 'No data since 900 seconds (by default) for all deployment items.'
+              manual_close: 'YES'
+              tags:
+                -
+                  tag: KubernetesObject
+                  value: Deployment
+            -
+              uuid: 1a2124fb40e3461da08ce6db3eb83f09
+              expression: 'last(/Template Zabbix Kubernetes Discovery/kubernetes.deployment.readyReplicas[{#KUBERNETES_DEPLOYMENT_NAMESPACE},{#KUBERNETES_DEPLOYMENT_NAME}]) < last(/Template Zabbix Kubernetes Discovery/kubernetes.deployment.desiredReplicas[{#KUBERNETES_DEPLOYMENT_NAMESPACE},{#KUBERNETES_DEPLOYMENT_NAME}])'
+              name: 'Deployment {#KUBERNETES_DEPLOYMENT_NAMESPACE}/{#KUBERNETES_DEPLOYMENT_NAME}: Problem number of replicas'
+              priority: HIGH
+              description: 'Problem on the number of the replicas on the deployment.'
+              manual_close: 'YES'
+              tags:
+                -
+                  tag: KubernetesObject
+                  value: Deployment
+          graph_prototypes:
+            -
+              uuid: 80656cd8c20d44ecac0e46f61fd34190
+              name: 'Deployment {#KUBERNETES_DEPLOYMENT_NAMESPACE}/{#KUBERNETES_DEPLOYMENT_NAME}: Graph replicas'
+              graph_items:
+                -
+                  sortorder: '1'
+                  color: FFBF00
+                  item:
+                    host: 'Template Zabbix Kubernetes Discovery'
+                    key: 'kubernetes.deployment.availableReplicas[{#KUBERNETES_DEPLOYMENT_NAMESPACE},{#KUBERNETES_DEPLOYMENT_NAME}]'
+                -
+                  sortorder: '2'
+                  color: 1A7C11
+                  item:
+                    host: 'Template Zabbix Kubernetes Discovery'
+                    key: 'kubernetes.deployment.desiredReplicas[{#KUBERNETES_DEPLOYMENT_NAMESPACE},{#KUBERNETES_DEPLOYMENT_NAME}]'
+                -
+                  sortorder: '3'
+                  color: 0080FF
+                  item:
+                    host: 'Template Zabbix Kubernetes Discovery'
+                    key: 'kubernetes.deployment.readyReplicas[{#KUBERNETES_DEPLOYMENT_NAMESPACE},{#KUBERNETES_DEPLOYMENT_NAME}]'
+        -
+          uuid: 0429a75c8003403799f591cb8ccea890
+          name: Node
+          type: TRAP
+          key: kubernetes.node.discovery
+          delay: '0'
+          description: 'Discovery of the Node'
+          item_prototypes:
+            -
+              uuid: 2d9b9d8b9d0d4d70a10b61554f064485
+              name: 'Node {#KUBERNETES_NODE_NAME}: Allocatable cpu'
+              type: TRAP
+              key: 'kubernetes.node.allocatable.cpu[{#KUBERNETES_NODE_NAME}]'
+              delay: '0'
+              history: 1d
+              trends: '0'
+              value_type: TEXT
+              description: 'Allocatable cpu on the node (history restricted to 1 day)'
+              tags:
+                -
+                  tag: KubernetesObject
+                  value: Node
+            -
+              uuid: 32567b7500b348f4a4c5a615aaf32e23
+              name: 'Node {#KUBERNETES_NODE_NAME}: Allocatable memory'
+              type: TRAP
+              key: 'kubernetes.node.allocatable.memory[{#KUBERNETES_NODE_NAME}]'
+              delay: '0'
+              history: 1d
+              trends: '0'
+              value_type: TEXT
+              description: 'Allocatable memory on the node (history restricted to 1 day)'
+              tags:
+                -
+                  tag: KubernetesObject
+                  value: Node
+            -
+              uuid: f391a9bda9e54bd3b5fc48323f8a5da2
+              name: 'Node {#KUBERNETES_NODE_NAME}: Allocatable pods'
+              type: TRAP
+              key: 'kubernetes.node.allocatable.pods[{#KUBERNETES_NODE_NAME}]'
+              delay: '0'
+              history: 1d
+              description: 'Allocatable pods on the node (history restricted to 1 day)'
+              tags:
+                -
+                  tag: KubernetesObject
+                  value: Node
+              trigger_prototypes:
+                -
+                  uuid: 285807ef91ab412a951f91dd5cac94db
+                  expression: 'nodata(/Template Zabbix Kubernetes Discovery/kubernetes.node.allocatable.pods[{#KUBERNETES_NODE_NAME}],{$KUBERNETES.TIMEOUT.NODATA})=1'
+                  name: 'Node {#KUBERNETES_NODE_NAME}: Allocatable pods nodata'
+                  priority: HIGH
+                  description: 'No data since 900 seconds (by default) for item allocatable pods on the node.'
+                  manual_close: 'YES'
+                  dependencies:
+                    -
+                      name: 'Node {#KUBERNETES_NODE_NAME}: Problem items nodata'
+                      expression: |
+                        nodata(/Template Zabbix Kubernetes Discovery/kubernetes.node.allocatable.pods[{#KUBERNETES_NODE_NAME}],{$KUBERNETES.TIMEOUT.NODATA})=1
+                        and
+                        nodata(/Template Zabbix Kubernetes Discovery/kubernetes.node.capacity.pods[{#KUBERNETES_NODE_NAME}],{$KUBERNETES.TIMEOUT.NODATA})=1
+                        and
+                        nodata(/Template Zabbix Kubernetes Discovery/kubernetes.node.current.pods[{#KUBERNETES_NODE_NAME}],{$KUBERNETES.TIMEOUT.NODATA})=1
+                        and
+                        nodata(/Template Zabbix Kubernetes Discovery/kubernetes.node.healthz[{#KUBERNETES_NODE_NAME}],{$KUBERNETES.TIMEOUT.NODATA})=1
+                  tags:
+                    -
+                      tag: KubernetesObject
+                      value: Node
+            -
+              uuid: 8a5646c38b6846da9ea058335ad986f3
+              name: 'Node {#KUBERNETES_NODE_NAME}: Capacity cpu'
+              type: TRAP
+              key: 'kubernetes.node.capacity.cpu[{#KUBERNETES_NODE_NAME}]'
+              delay: '0'
+              history: 1d
+              trends: '0'
+              value_type: TEXT
+              description: 'Capacity cpu on the node (history restricted to 1 day)'
+              tags:
+                -
+                  tag: KubernetesObject
+                  value: Node
+            -
+              uuid: 2bad925cb5c24d33892b53c7dd59c9f2
+              name: 'Node {#KUBERNETES_NODE_NAME}: Capacity memory'
+              type: TRAP
+              key: 'kubernetes.node.capacity.memory[{#KUBERNETES_NODE_NAME}]'
+              delay: '0'
+              history: 1d
+              trends: '0'
+              value_type: TEXT
+              description: 'Capacity memory on the node (history restricted to 1 day)'
+              tags:
+                -
+                  tag: KubernetesObject
+                  value: Node
+            -
+              uuid: 55697d66102e4116a96fdb88d77e2c8b
+              name: 'Node {#KUBERNETES_NODE_NAME}: Capacity pods'
+              type: TRAP
+              key: 'kubernetes.node.capacity.pods[{#KUBERNETES_NODE_NAME}]'
+              delay: '0'
+              history: 1d
+              description: 'Capacity pods on the node (history restricted to 1 day)'
+              tags:
+                -
+                  tag: KubernetesObject
+                  value: Node
+              trigger_prototypes:
+                -
+                  uuid: ee19f268bfc047ed83339cd63e02a3bc
+                  expression: 'nodata(/Template Zabbix Kubernetes Discovery/kubernetes.node.capacity.pods[{#KUBERNETES_NODE_NAME}],{$KUBERNETES.TIMEOUT.NODATA})=1'
+                  name: 'Node {#KUBERNETES_NODE_NAME}: Capacity pods nodata'
+                  priority: HIGH
+                  description: 'No data since 900 seconds (by default) for item capacity pods on the node.'
+                  manual_close: 'YES'
+                  dependencies:
+                    -
+                      name: 'Node {#KUBERNETES_NODE_NAME}: Problem items nodata'
+                      expression: |
+                        nodata(/Template Zabbix Kubernetes Discovery/kubernetes.node.allocatable.pods[{#KUBERNETES_NODE_NAME}],{$KUBERNETES.TIMEOUT.NODATA})=1
+                        and
+                        nodata(/Template Zabbix Kubernetes Discovery/kubernetes.node.capacity.pods[{#KUBERNETES_NODE_NAME}],{$KUBERNETES.TIMEOUT.NODATA})=1
+                        and
+                        nodata(/Template Zabbix Kubernetes Discovery/kubernetes.node.current.pods[{#KUBERNETES_NODE_NAME}],{$KUBERNETES.TIMEOUT.NODATA})=1
+                        and
+                        nodata(/Template Zabbix Kubernetes Discovery/kubernetes.node.healthz[{#KUBERNETES_NODE_NAME}],{$KUBERNETES.TIMEOUT.NODATA})=1
+                  tags:
+                    -
+                      tag: KubernetesObject
+                      value: Node
+            -
+              uuid: 22c7e2710f444456b7af8f8f5fe87496
+              name: 'Node {#KUBERNETES_NODE_NAME}: Current pods'
+              type: TRAP
+              key: 'kubernetes.node.current.pods[{#KUBERNETES_NODE_NAME}]'
+              delay: '0'
+              history: 1d
+              description: 'Current pods on the node (history restricted to 1 day)'
+              tags:
+                -
+                  tag: KubernetesObject
+                  value: Node
+              trigger_prototypes:
+                -
+                  uuid: 916d4807694e4992b705973afe16bcb1
+                  expression: 'nodata(/Template Zabbix Kubernetes Discovery/kubernetes.node.current.pods[{#KUBERNETES_NODE_NAME}],{$KUBERNETES.TIMEOUT.NODATA})=1'
+                  name: 'Node {#KUBERNETES_NODE_NAME}: Current pods nodata'
+                  priority: HIGH
+                  description: 'No data since 900 seconds (by default) for item current pods on the node.'
+                  manual_close: 'YES'
+                  dependencies:
+                    -
+                      name: 'Node {#KUBERNETES_NODE_NAME}: Problem items nodata'
+                      expression: |
+                        nodata(/Template Zabbix Kubernetes Discovery/kubernetes.node.allocatable.pods[{#KUBERNETES_NODE_NAME}],{$KUBERNETES.TIMEOUT.NODATA})=1
+                        and
+                        nodata(/Template Zabbix Kubernetes Discovery/kubernetes.node.capacity.pods[{#KUBERNETES_NODE_NAME}],{$KUBERNETES.TIMEOUT.NODATA})=1
+                        and
+                        nodata(/Template Zabbix Kubernetes Discovery/kubernetes.node.current.pods[{#KUBERNETES_NODE_NAME}],{$KUBERNETES.TIMEOUT.NODATA})=1
+                        and
+                        nodata(/Template Zabbix Kubernetes Discovery/kubernetes.node.healthz[{#KUBERNETES_NODE_NAME}],{$KUBERNETES.TIMEOUT.NODATA})=1
+                  tags:
+                    -
+                      tag: KubernetesObject
+                      value: Node
+            -
+              uuid: bcbad954256e48319330a7a014da595f
+              name: 'Node {#KUBERNETES_NODE_NAME}: Healthz'
+              type: TRAP
+              key: 'kubernetes.node.healthz[{#KUBERNETES_NODE_NAME}]'
+              delay: '0'
+              history: 1d
+              trends: '0'
+              value_type: TEXT
+              description: 'Status on the node (history restricted to 1 day)'
+              preprocessing:
+                -
+                  type: STR_REPLACE
+                  parameters:
+                    - ''''
+                    - ''
+              tags:
+                -
+                  tag: KubernetesObject
+                  value: Node
+              trigger_prototypes:
+                -
+                  uuid: 9b6a362220ef47ab80a265447bb2d65f
+                  expression: 'nodata(/Template Zabbix Kubernetes Discovery/kubernetes.node.healthz[{#KUBERNETES_NODE_NAME}],{$KUBERNETES.TIMEOUT.NODATA})=1'
+                  name: 'Node {#KUBERNETES_NODE_NAME}: Health nodata'
+                  priority: HIGH
+                  description: 'No data since 900 seconds (by default) for item healthz on the node.'
+                  manual_close: 'YES'
+                  dependencies:
+                    -
+                      name: 'Node {#KUBERNETES_NODE_NAME}: Problem items nodata'
+                      expression: |
+                        nodata(/Template Zabbix Kubernetes Discovery/kubernetes.node.allocatable.pods[{#KUBERNETES_NODE_NAME}],{$KUBERNETES.TIMEOUT.NODATA})=1
+                        and
+                        nodata(/Template Zabbix Kubernetes Discovery/kubernetes.node.capacity.pods[{#KUBERNETES_NODE_NAME}],{$KUBERNETES.TIMEOUT.NODATA})=1
+                        and
+                        nodata(/Template Zabbix Kubernetes Discovery/kubernetes.node.current.pods[{#KUBERNETES_NODE_NAME}],{$KUBERNETES.TIMEOUT.NODATA})=1
+                        and
+                        nodata(/Template Zabbix Kubernetes Discovery/kubernetes.node.healthz[{#KUBERNETES_NODE_NAME}],{$KUBERNETES.TIMEOUT.NODATA})=1
+                  tags:
+                    -
+                      tag: KubernetesObject
+                      value: Node
+                -
+                  uuid: b4a1df24a83d4f5495ff4e1f3c4f353c
+                  expression: 'find(/Template Zabbix Kubernetes Discovery/kubernetes.node.healthz[{#KUBERNETES_NODE_NAME}],,"like","ok")=0'
+                  name: 'Node {#KUBERNETES_NODE_NAME}: Health problem'
+                  priority: HIGH
+                  description: 'Health problem on the node.'
+                  tags:
+                    -
+                      tag: KubernetesObject
+                      value: Node
+          trigger_prototypes:
+            -
+              uuid: fffbf64d876d453bb469038d98a7e24c
+              expression: |
+                nodata(/Template Zabbix Kubernetes Discovery/kubernetes.node.allocatable.pods[{#KUBERNETES_NODE_NAME}],{$KUBERNETES.TIMEOUT.NODATA})=1
+                and
+                nodata(/Template Zabbix Kubernetes Discovery/kubernetes.node.capacity.pods[{#KUBERNETES_NODE_NAME}],{$KUBERNETES.TIMEOUT.NODATA})=1
+                and
+                nodata(/Template Zabbix Kubernetes Discovery/kubernetes.node.current.pods[{#KUBERNETES_NODE_NAME}],{$KUBERNETES.TIMEOUT.NODATA})=1
+                and
+                nodata(/Template Zabbix Kubernetes Discovery/kubernetes.node.healthz[{#KUBERNETES_NODE_NAME}],{$KUBERNETES.TIMEOUT.NODATA})=1
+              name: 'Node {#KUBERNETES_NODE_NAME}: Problem items nodata'
+              priority: HIGH
+              description: 'No data since 900 seconds (by default) for all node items.'
+              manual_close: 'YES'
+              tags:
+                -
+                  tag: KubernetesObject
+                  value: Node
+            -
+              uuid: 67aa7708ed7d42fe94688e62af3c3db0
+              expression: 'last(/Template Zabbix Kubernetes Discovery/kubernetes.node.current.pods[{#KUBERNETES_NODE_NAME}]) * 100 / last(/Template Zabbix Kubernetes Discovery/kubernetes.node.allocatable.pods[{#KUBERNETES_NODE_NAME}]) >= {$KUBERNETES.NODE.PODS.CRITICAL}'
+              name: 'Node {#KUBERNETES_NODE_NAME}: Problem pods limits critical'
+              priority: HIGH
+              description: 'Critical pods limits reached on the node.'
+              manual_close: 'YES'
+              tags:
+                -
+                  tag: KubernetesObject
+                  value: Node
+            -
+              uuid: ede5beb360544f5ea7cf39cec4e74a4f
+              expression: 'last(/Template Zabbix Kubernetes Discovery/kubernetes.node.current.pods[{#KUBERNETES_NODE_NAME}]) * 100 / last(/Template Zabbix Kubernetes Discovery/kubernetes.node.allocatable.pods[{#KUBERNETES_NODE_NAME}]) >= {$KUBERNETES.NODE.PODS.WARNING}'
+              name: 'Node {#KUBERNETES_NODE_NAME}: Problem pods limits warning'
+              priority: WARNING
+              description: 'Warning pods limits reached on the node.'
+              manual_close: 'YES'
+              dependencies:
+                -
+                  name: 'Node {#KUBERNETES_NODE_NAME}: Problem pods limits critical'
+                  expression: 'last(/Template Zabbix Kubernetes Discovery/kubernetes.node.current.pods[{#KUBERNETES_NODE_NAME}]) * 100 / last(/Template Zabbix Kubernetes Discovery/kubernetes.node.allocatable.pods[{#KUBERNETES_NODE_NAME}]) >= {$KUBERNETES.NODE.PODS.CRITICAL}'
+              tags:
+                -
+                  tag: KubernetesObject
+                  value: Node
+          graph_prototypes:
+            -
+              uuid: 45d0a65fb0244684ae376541cc7f89fe
+              name: 'Node {#KUBERNETES_NODE_NAME}: Graph pods'
+              graph_items:
+                -
+                  sortorder: '1'
+                  color: FF8F00
+                  item:
+                    host: 'Template Zabbix Kubernetes Discovery'
+                    key: 'kubernetes.node.allocatable.pods[{#KUBERNETES_NODE_NAME}]'
+                -
+                  sortorder: '2'
+                  color: 1A7C11
+                  item:
+                    host: 'Template Zabbix Kubernetes Discovery'
+                    key: 'kubernetes.node.capacity.pods[{#KUBERNETES_NODE_NAME}]'
+                -
+                  sortorder: '3'
+                  color: 7B1FA2
+                  item:
+                    host: 'Template Zabbix Kubernetes Discovery'
+                    key: 'kubernetes.node.current.pods[{#KUBERNETES_NODE_NAME}]'
+        -
+          uuid: 9b5ddbc61c7f4463aba6d0871169234d
+          name: VolumeClaim
+          type: TRAP
+          key: kubernetes.pvc.discovery
+          delay: '0'
+          description: 'Discovery of all PersistentVolumeClaim, except token(s) volume(s)'
+          item_prototypes:
+            -
+              uuid: c4536e1f91304d1d827f52592d2aebf7
+              name: 'Volume {#KUBERNETES_PVC_NAMESPACE}/{#KUBERNETES_PVC_NAME}: Available bytes'
+              type: TRAP
+              key: 'kubernetes.volumeclaim.availableBytes[{#KUBERNETES_PVC_NAMESPACE},{#KUBERNETES_PVC_NAME}]'
+              delay: '0'
+              description: 'Bytes available on the persistent volume claim.'
+              tags:
+                -
+                  tag: KubernetesObject
+                  value: PersistentVolumeClaim
+              trigger_prototypes:
+                -
+                  uuid: 4692aca44cbd43cc9b599a49658fdcaf
+                  expression: 'nodata(/Template Zabbix Kubernetes Discovery/kubernetes.volumeclaim.availableBytes[{#KUBERNETES_PVC_NAMESPACE},{#KUBERNETES_PVC_NAME}],{$KUBERNETES.TIMEOUT.NODATA})=1'
+                  name: 'Volume {#KUBERNETES_PVC_NAMESPACE}/{#KUBERNETES_PVC_NAME}: Available bytes nodata'
+                  priority: HIGH
+                  description: 'No data since 900 seconds (by default) for item available bytes on the persistent volume claim.'
+                  manual_close: 'YES'
+                  dependencies:
+                    -
+                      name: 'Volume {#KUBERNETES_PVC_NAMESPACE}/{#KUBERNETES_PVC_NAME}: Problem items nodata'
+                      expression: |
+                        nodata(/Template Zabbix Kubernetes Discovery/kubernetes.volumeclaim.availableBytes[{#KUBERNETES_PVC_NAMESPACE},{#KUBERNETES_PVC_NAME}],{$KUBERNETES.TIMEOUT.NODATA})=1
+                        and
+                        nodata(/Template Zabbix Kubernetes Discovery/kubernetes.volumeclaim.capacityBytes[{#KUBERNETES_PVC_NAMESPACE},{#KUBERNETES_PVC_NAME}],{$KUBERNETES.TIMEOUT.NODATA})=1
+                        and
+                        nodata(/Template Zabbix Kubernetes Discovery/kubernetes.volumeclaim.inodes[{#KUBERNETES_PVC_NAMESPACE},{#KUBERNETES_PVC_NAME}],{$KUBERNETES.TIMEOUT.NODATA})=1
+                        and
+                        nodata(/Template Zabbix Kubernetes Discovery/kubernetes.volumeclaim.inodesFree[{#KUBERNETES_PVC_NAMESPACE},{#KUBERNETES_PVC_NAME}],{$KUBERNETES.TIMEOUT.NODATA})=1
+                        and
+                        nodata(/Template Zabbix Kubernetes Discovery/kubernetes.volumeclaim.usedBytes[{#KUBERNETES_PVC_NAMESPACE},{#KUBERNETES_PVC_NAME}],{$KUBERNETES.TIMEOUT.NODATA})=1
+                        and
+                        nodata(/Template Zabbix Kubernetes Discovery/kubernetes.volumeclaim.inodesUsed[{#KUBERNETES_PVC_NAMESPACE},{#KUBERNETES_PVC_NAME}],{$KUBERNETES.TIMEOUT.NODATA})=1
+                  tags:
+                    -
+                      tag: KubernetesObject
+                      value: PersistentVolumeClaim
+            -
+              uuid: 0227a149d87b458295bd3e26e67d696e
+              name: 'Volume {#KUBERNETES_PVC_NAMESPACE}/{#KUBERNETES_PVC_NAME}: Capacity bytes'
+              type: TRAP
+              key: 'kubernetes.volumeclaim.capacityBytes[{#KUBERNETES_PVC_NAMESPACE},{#KUBERNETES_PVC_NAME}]'
+              delay: '0'
+              description: 'Bytes capacity on the persistent volume claim.'
+              tags:
+                -
+                  tag: KubernetesObject
+                  value: PersistentVolumeClaim
+              trigger_prototypes:
+                -
+                  uuid: 98d493a8df7c4156804d5804f63dab55
+                  expression: 'nodata(/Template Zabbix Kubernetes Discovery/kubernetes.volumeclaim.capacityBytes[{#KUBERNETES_PVC_NAMESPACE},{#KUBERNETES_PVC_NAME}],{$KUBERNETES.TIMEOUT.NODATA})=1'
+                  name: 'Volume {#KUBERNETES_PVC_NAMESPACE}/{#KUBERNETES_PVC_NAME}: Capacity bytes nodata'
+                  priority: HIGH
+                  description: 'No data since 900 seconds (by default) for item capacity bytes on the persistent volume claim.'
+                  manual_close: 'YES'
+                  dependencies:
+                    -
+                      name: 'Volume {#KUBERNETES_PVC_NAMESPACE}/{#KUBERNETES_PVC_NAME}: Problem items nodata'
+                      expression: |
+                        nodata(/Template Zabbix Kubernetes Discovery/kubernetes.volumeclaim.availableBytes[{#KUBERNETES_PVC_NAMESPACE},{#KUBERNETES_PVC_NAME}],{$KUBERNETES.TIMEOUT.NODATA})=1
+                        and
+                        nodata(/Template Zabbix Kubernetes Discovery/kubernetes.volumeclaim.capacityBytes[{#KUBERNETES_PVC_NAMESPACE},{#KUBERNETES_PVC_NAME}],{$KUBERNETES.TIMEOUT.NODATA})=1
+                        and
+                        nodata(/Template Zabbix Kubernetes Discovery/kubernetes.volumeclaim.inodes[{#KUBERNETES_PVC_NAMESPACE},{#KUBERNETES_PVC_NAME}],{$KUBERNETES.TIMEOUT.NODATA})=1
+                        and
+                        nodata(/Template Zabbix Kubernetes Discovery/kubernetes.volumeclaim.inodesFree[{#KUBERNETES_PVC_NAMESPACE},{#KUBERNETES_PVC_NAME}],{$KUBERNETES.TIMEOUT.NODATA})=1
+                        and
+                        nodata(/Template Zabbix Kubernetes Discovery/kubernetes.volumeclaim.usedBytes[{#KUBERNETES_PVC_NAMESPACE},{#KUBERNETES_PVC_NAME}],{$KUBERNETES.TIMEOUT.NODATA})=1
+                        and
+                        nodata(/Template Zabbix Kubernetes Discovery/kubernetes.volumeclaim.inodesUsed[{#KUBERNETES_PVC_NAMESPACE},{#KUBERNETES_PVC_NAME}],{$KUBERNETES.TIMEOUT.NODATA})=1
+                  tags:
+                    -
+                      tag: KubernetesObject
+                      value: PersistentVolumeClaim
+            -
+              uuid: 1354a9bf32c04df28eeddf7853c69c60
+              name: 'Volume {#KUBERNETES_PVC_NAMESPACE}/{#KUBERNETES_PVC_NAME}: Free inodes'
+              type: TRAP
+              key: 'kubernetes.volumeclaim.inodesFree[{#KUBERNETES_PVC_NAMESPACE},{#KUBERNETES_PVC_NAME}]'
+              delay: '0'
+              description: 'Free inodes on the persistent volume claim.'
+              preprocessing:
+                -
+                  type: JAVASCRIPT
+                  parameters:
+                    - |
+                      if (value == 0) {
+                        return parseInt("99");
+                      } else {
+                        return value;
+                      }
+              tags:
+                -
+                  tag: KubernetesObject
+                  value: PersistentVolumeClaim
+              trigger_prototypes:
+                -
+                  uuid: 6cb67bdb5f6d4223b35856fc6d9f68b7
+                  expression: 'nodata(/Template Zabbix Kubernetes Discovery/kubernetes.volumeclaim.inodesFree[{#KUBERNETES_PVC_NAMESPACE},{#KUBERNETES_PVC_NAME}],{$KUBERNETES.TIMEOUT.NODATA})=1'
+                  name: 'Volume {#KUBERNETES_PVC_NAMESPACE}/{#KUBERNETES_PVC_NAME}: Free inodes nodata'
+                  priority: HIGH
+                  description: 'No data since 900 seconds (by default) for item free inodes on the persistent volume claim.'
+                  manual_close: 'YES'
+                  dependencies:
+                    -
+                      name: 'Volume {#KUBERNETES_PVC_NAMESPACE}/{#KUBERNETES_PVC_NAME}: Problem items nodata'
+                      expression: |
+                        nodata(/Template Zabbix Kubernetes Discovery/kubernetes.volumeclaim.availableBytes[{#KUBERNETES_PVC_NAMESPACE},{#KUBERNETES_PVC_NAME}],{$KUBERNETES.TIMEOUT.NODATA})=1
+                        and
+                        nodata(/Template Zabbix Kubernetes Discovery/kubernetes.volumeclaim.capacityBytes[{#KUBERNETES_PVC_NAMESPACE},{#KUBERNETES_PVC_NAME}],{$KUBERNETES.TIMEOUT.NODATA})=1
+                        and
+                        nodata(/Template Zabbix Kubernetes Discovery/kubernetes.volumeclaim.inodes[{#KUBERNETES_PVC_NAMESPACE},{#KUBERNETES_PVC_NAME}],{$KUBERNETES.TIMEOUT.NODATA})=1
+                        and
+                        nodata(/Template Zabbix Kubernetes Discovery/kubernetes.volumeclaim.inodesFree[{#KUBERNETES_PVC_NAMESPACE},{#KUBERNETES_PVC_NAME}],{$KUBERNETES.TIMEOUT.NODATA})=1
+                        and
+                        nodata(/Template Zabbix Kubernetes Discovery/kubernetes.volumeclaim.usedBytes[{#KUBERNETES_PVC_NAMESPACE},{#KUBERNETES_PVC_NAME}],{$KUBERNETES.TIMEOUT.NODATA})=1
+                        and
+                        nodata(/Template Zabbix Kubernetes Discovery/kubernetes.volumeclaim.inodesUsed[{#KUBERNETES_PVC_NAMESPACE},{#KUBERNETES_PVC_NAME}],{$KUBERNETES.TIMEOUT.NODATA})=1
+                  tags:
+                    -
+                      tag: KubernetesObject
+                      value: PersistentVolumeClaim
+            -
+              uuid: f60d59d8dcdc4d98a78d962aed6cd8ae
+              name: 'Volume {#KUBERNETES_PVC_NAMESPACE}/{#KUBERNETES_PVC_NAME}: Used inodes'
+              type: TRAP
+              key: 'kubernetes.volumeclaim.inodesUsed[{#KUBERNETES_PVC_NAMESPACE},{#KUBERNETES_PVC_NAME}]'
+              delay: '0'
+              description: 'Used inodes on the persistent volume claim.'
+              preprocessing:
+                -
+                  type: JAVASCRIPT
+                  parameters:
+                    - |
+                      if (value == 0) {
+                        return parseInt("1");
+                      } else {
+                        return value;
+                      }
+              tags:
+                -
+                  tag: KubernetesObject
+                  value: PersistentVolumeClaim
+              trigger_prototypes:
+                -
+                  uuid: 52bde0e770ff4d74be5ff488751a3e8f
+                  expression: 'nodata(/Template Zabbix Kubernetes Discovery/kubernetes.volumeclaim.inodesUsed[{#KUBERNETES_PVC_NAMESPACE},{#KUBERNETES_PVC_NAME}],{$KUBERNETES.TIMEOUT.NODATA})=1'
+                  name: 'Volume {#KUBERNETES_PVC_NAMESPACE}/{#KUBERNETES_PVC_NAME}: Used inodes nodata'
+                  priority: HIGH
+                  description: 'No data since 900 seconds (by default) for item used inodes on the persistent volume claim.'
+                  manual_close: 'YES'
+                  dependencies:
+                    -
+                      name: 'Volume {#KUBERNETES_PVC_NAMESPACE}/{#KUBERNETES_PVC_NAME}: Problem items nodata'
+                      expression: |
+                        nodata(/Template Zabbix Kubernetes Discovery/kubernetes.volumeclaim.availableBytes[{#KUBERNETES_PVC_NAMESPACE},{#KUBERNETES_PVC_NAME}],{$KUBERNETES.TIMEOUT.NODATA})=1
+                        and
+                        nodata(/Template Zabbix Kubernetes Discovery/kubernetes.volumeclaim.capacityBytes[{#KUBERNETES_PVC_NAMESPACE},{#KUBERNETES_PVC_NAME}],{$KUBERNETES.TIMEOUT.NODATA})=1
+                        and
+                        nodata(/Template Zabbix Kubernetes Discovery/kubernetes.volumeclaim.inodes[{#KUBERNETES_PVC_NAMESPACE},{#KUBERNETES_PVC_NAME}],{$KUBERNETES.TIMEOUT.NODATA})=1
+                        and
+                        nodata(/Template Zabbix Kubernetes Discovery/kubernetes.volumeclaim.inodesFree[{#KUBERNETES_PVC_NAMESPACE},{#KUBERNETES_PVC_NAME}],{$KUBERNETES.TIMEOUT.NODATA})=1
+                        and
+                        nodata(/Template Zabbix Kubernetes Discovery/kubernetes.volumeclaim.usedBytes[{#KUBERNETES_PVC_NAMESPACE},{#KUBERNETES_PVC_NAME}],{$KUBERNETES.TIMEOUT.NODATA})=1
+                        and
+                        nodata(/Template Zabbix Kubernetes Discovery/kubernetes.volumeclaim.inodesUsed[{#KUBERNETES_PVC_NAMESPACE},{#KUBERNETES_PVC_NAME}],{$KUBERNETES.TIMEOUT.NODATA})=1
+                  tags:
+                    -
+                      tag: KubernetesObject
+                      value: PersistentVolumeClaim
+            -
+              uuid: c43e8d857e184389a415b84691c4f44b
+              name: 'Volume {#KUBERNETES_PVC_NAMESPACE}/{#KUBERNETES_PVC_NAME}: Capacity inodes'
+              type: TRAP
+              key: 'kubernetes.volumeclaim.inodes[{#KUBERNETES_PVC_NAMESPACE},{#KUBERNETES_PVC_NAME}]'
+              delay: '0'
+              description: 'Capacity inodes on the persistent volume claim.'
+              preprocessing:
+                -
+                  type: JAVASCRIPT
+                  parameters:
+                    - |
+                      if (value == 0) {
+                        return parseInt("100");
+                      } else {
+                        return value;
+                      }
+              tags:
+                -
+                  tag: KubernetesObject
+                  value: PersistentVolumeClaim
+              trigger_prototypes:
+                -
+                  uuid: abbe3523da414fb88011166ecb317573
+                  expression: 'nodata(/Template Zabbix Kubernetes Discovery/kubernetes.volumeclaim.inodes[{#KUBERNETES_PVC_NAMESPACE},{#KUBERNETES_PVC_NAME}],{$KUBERNETES.TIMEOUT.NODATA})=1'
+                  name: 'Volume {#KUBERNETES_PVC_NAMESPACE}/{#KUBERNETES_PVC_NAME}: Capacity inodes nodata'
+                  priority: HIGH
+                  description: 'No data since 900 seconds (by default) for item capacity inodes on the persistent volume claim.'
+                  manual_close: 'YES'
+                  dependencies:
+                    -
+                      name: 'Volume {#KUBERNETES_PVC_NAMESPACE}/{#KUBERNETES_PVC_NAME}: Problem items nodata'
+                      expression: |
+                        nodata(/Template Zabbix Kubernetes Discovery/kubernetes.volumeclaim.availableBytes[{#KUBERNETES_PVC_NAMESPACE},{#KUBERNETES_PVC_NAME}],{$KUBERNETES.TIMEOUT.NODATA})=1
+                        and
+                        nodata(/Template Zabbix Kubernetes Discovery/kubernetes.volumeclaim.capacityBytes[{#KUBERNETES_PVC_NAMESPACE},{#KUBERNETES_PVC_NAME}],{$KUBERNETES.TIMEOUT.NODATA})=1
+                        and
+                        nodata(/Template Zabbix Kubernetes Discovery/kubernetes.volumeclaim.inodes[{#KUBERNETES_PVC_NAMESPACE},{#KUBERNETES_PVC_NAME}],{$KUBERNETES.TIMEOUT.NODATA})=1
+                        and
+                        nodata(/Template Zabbix Kubernetes Discovery/kubernetes.volumeclaim.inodesFree[{#KUBERNETES_PVC_NAMESPACE},{#KUBERNETES_PVC_NAME}],{$KUBERNETES.TIMEOUT.NODATA})=1
+                        and
+                        nodata(/Template Zabbix Kubernetes Discovery/kubernetes.volumeclaim.usedBytes[{#KUBERNETES_PVC_NAMESPACE},{#KUBERNETES_PVC_NAME}],{$KUBERNETES.TIMEOUT.NODATA})=1
+                        and
+                        nodata(/Template Zabbix Kubernetes Discovery/kubernetes.volumeclaim.inodesUsed[{#KUBERNETES_PVC_NAMESPACE},{#KUBERNETES_PVC_NAME}],{$KUBERNETES.TIMEOUT.NODATA})=1
+                  tags:
+                    -
+                      tag: KubernetesObject
+                      value: PersistentVolumeClaim
+            -
+              uuid: dbcbc2a3b41c4437b046c03a3bec460d
+              name: 'Volume {#KUBERNETES_PVC_NAMESPACE}/{#KUBERNETES_PVC_NAME}: Used bytes'
+              type: TRAP
+              key: 'kubernetes.volumeclaim.usedBytes[{#KUBERNETES_PVC_NAMESPACE},{#KUBERNETES_PVC_NAME}]'
+              delay: '0'
+              description: 'Bytes used on the persistent volume claim.'
+              preprocessing:
+                -
+                  type: JAVASCRIPT
+                  parameters:
+                    - |
+                      if (value == 0) {
+                        return parseInt("1");
+                      } else {
+                        return value;
+                      }
+              tags:
+                -
+                  tag: KubernetesObject
+                  value: PersistentVolumeClaim
+              trigger_prototypes:
+                -
+                  uuid: ee3a70d2981f40c5b3e651ae23d5da66
+                  expression: 'nodata(/Template Zabbix Kubernetes Discovery/kubernetes.volumeclaim.usedBytes[{#KUBERNETES_PVC_NAMESPACE},{#KUBERNETES_PVC_NAME}],{$KUBERNETES.TIMEOUT.NODATA})=1'
+                  name: 'Volume {#KUBERNETES_PVC_NAMESPACE}/{#KUBERNETES_PVC_NAME}: Used bytes nodata'
+                  priority: HIGH
+                  description: 'No data since 900 seconds (by default) for item used bytes on the persistent volume claim.'
+                  manual_close: 'YES'
+                  dependencies:
+                    -
+                      name: 'Volume {#KUBERNETES_PVC_NAMESPACE}/{#KUBERNETES_PVC_NAME}: Problem items nodata'
+                      expression: |
+                        nodata(/Template Zabbix Kubernetes Discovery/kubernetes.volumeclaim.availableBytes[{#KUBERNETES_PVC_NAMESPACE},{#KUBERNETES_PVC_NAME}],{$KUBERNETES.TIMEOUT.NODATA})=1
+                        and
+                        nodata(/Template Zabbix Kubernetes Discovery/kubernetes.volumeclaim.capacityBytes[{#KUBERNETES_PVC_NAMESPACE},{#KUBERNETES_PVC_NAME}],{$KUBERNETES.TIMEOUT.NODATA})=1
+                        and
+                        nodata(/Template Zabbix Kubernetes Discovery/kubernetes.volumeclaim.inodes[{#KUBERNETES_PVC_NAMESPACE},{#KUBERNETES_PVC_NAME}],{$KUBERNETES.TIMEOUT.NODATA})=1
+                        and
+                        nodata(/Template Zabbix Kubernetes Discovery/kubernetes.volumeclaim.inodesFree[{#KUBERNETES_PVC_NAMESPACE},{#KUBERNETES_PVC_NAME}],{$KUBERNETES.TIMEOUT.NODATA})=1
+                        and
+                        nodata(/Template Zabbix Kubernetes Discovery/kubernetes.volumeclaim.usedBytes[{#KUBERNETES_PVC_NAMESPACE},{#KUBERNETES_PVC_NAME}],{$KUBERNETES.TIMEOUT.NODATA})=1
+                        and
+                        nodata(/Template Zabbix Kubernetes Discovery/kubernetes.volumeclaim.inodesUsed[{#KUBERNETES_PVC_NAMESPACE},{#KUBERNETES_PVC_NAME}],{$KUBERNETES.TIMEOUT.NODATA})=1
+                  tags:
+                    -
+                      tag: KubernetesObject
+                      value: PersistentVolumeClaim
+          trigger_prototypes:
+            -
+              uuid: 9fe77735296e4601866193eaaf04857f
+              expression: 'last(/Template Zabbix Kubernetes Discovery/kubernetes.volumeclaim.usedBytes[{#KUBERNETES_PVC_NAMESPACE},{#KUBERNETES_PVC_NAME}]) * 100 / last(/Template Zabbix Kubernetes Discovery/kubernetes.volumeclaim.capacityBytes[{#KUBERNETES_PVC_NAMESPACE},{#KUBERNETES_PVC_NAME}]) >= {$KUBERNETES.VOLUME.BYTES.CRITICAL}'
+              name: 'Volume {#KUBERNETES_PVC_NAMESPACE}/{#KUBERNETES_PVC_NAME}: Consumption bytes critical'
+              priority: HIGH
+              description: 'Critical bytes space consumption on the persistent volume claim.'
+              manual_close: 'YES'
+              tags:
+                -
+                  tag: KubernetesObject
+                  value: PersistentVolumeClaim
+            -
+              uuid: 380c773b43aa45d881a26cec95165d7c
+              expression: 'last(/Template Zabbix Kubernetes Discovery/kubernetes.volumeclaim.usedBytes[{#KUBERNETES_PVC_NAMESPACE},{#KUBERNETES_PVC_NAME}]) * 100 / last(/Template Zabbix Kubernetes Discovery/kubernetes.volumeclaim.capacityBytes[{#KUBERNETES_PVC_NAMESPACE},{#KUBERNETES_PVC_NAME}]) >= {$KUBERNETES.VOLUME.BYTES.WARNING}'
+              name: 'Volume {#KUBERNETES_PVC_NAMESPACE}/{#KUBERNETES_PVC_NAME}: Consumption bytes warning'
+              priority: WARNING
+              description: 'Warning bytes space consumption on the persistent volume claim.'
+              manual_close: 'YES'
+              dependencies:
+                -
+                  name: 'Volume {#KUBERNETES_PVC_NAMESPACE}/{#KUBERNETES_PVC_NAME}: Consumption bytes critical'
+                  expression: 'last(/Template Zabbix Kubernetes Discovery/kubernetes.volumeclaim.usedBytes[{#KUBERNETES_PVC_NAMESPACE},{#KUBERNETES_PVC_NAME}]) * 100 / last(/Template Zabbix Kubernetes Discovery/kubernetes.volumeclaim.capacityBytes[{#KUBERNETES_PVC_NAMESPACE},{#KUBERNETES_PVC_NAME}]) >= {$KUBERNETES.VOLUME.BYTES.CRITICAL}'
+              tags:
+                -
+                  tag: KubernetesObject
+                  value: PersistentVolumeClaim
+            -
+              uuid: 8b33456f4b2e4fcf9dd761f155114bc3
+              expression: 'last(/Template Zabbix Kubernetes Discovery/kubernetes.volumeclaim.inodesUsed[{#KUBERNETES_PVC_NAMESPACE},{#KUBERNETES_PVC_NAME}]) * 100 / last(/Template Zabbix Kubernetes Discovery/kubernetes.volumeclaim.inodes[{#KUBERNETES_PVC_NAMESPACE},{#KUBERNETES_PVC_NAME}]) >= {$KUBERNETES.VOLUME.INODES.CRITICAL}'
+              name: 'Volume {#KUBERNETES_PVC_NAMESPACE}/{#KUBERNETES_PVC_NAME}: Consumption inodes critical'
+              priority: HIGH
+              description: 'Critical inodes consumption on the persistent volume claim.'
+              manual_close: 'YES'
+              tags:
+                -
+                  tag: KubernetesObject
+                  value: PersistentVolumeClaim
+            -
+              uuid: 99dd7b79e30844bf9b74efc9c69b3bf4
+              expression: 'last(/Template Zabbix Kubernetes Discovery/kubernetes.volumeclaim.inodesUsed[{#KUBERNETES_PVC_NAMESPACE},{#KUBERNETES_PVC_NAME}]) * 100 / last(/Template Zabbix Kubernetes Discovery/kubernetes.volumeclaim.inodes[{#KUBERNETES_PVC_NAMESPACE},{#KUBERNETES_PVC_NAME}]) >= {$KUBERNETES.VOLUME.INODES.WARNING}'
+              name: 'Volume {#KUBERNETES_PVC_NAMESPACE}/{#KUBERNETES_PVC_NAME}: Consumption inodes warning'
+              priority: WARNING
+              description: 'Warning inodes consumption on the persistent volume claim.'
+              manual_close: 'YES'
+              dependencies:
+                -
+                  name: 'Volume {#KUBERNETES_PVC_NAMESPACE}/{#KUBERNETES_PVC_NAME}: Consumption inodes critical'
+                  expression: 'last(/Template Zabbix Kubernetes Discovery/kubernetes.volumeclaim.inodesUsed[{#KUBERNETES_PVC_NAMESPACE},{#KUBERNETES_PVC_NAME}]) * 100 / last(/Template Zabbix Kubernetes Discovery/kubernetes.volumeclaim.inodes[{#KUBERNETES_PVC_NAMESPACE},{#KUBERNETES_PVC_NAME}]) >= {$KUBERNETES.VOLUME.INODES.CRITICAL}'
+              tags:
+                -
+                  tag: KubernetesObject
+                  value: PersistentVolumeClaim
+            -
+              uuid: feed2bd5a3c5452aa73e9dc7b02aa264
+              expression: |
+                nodata(/Template Zabbix Kubernetes Discovery/kubernetes.volumeclaim.availableBytes[{#KUBERNETES_PVC_NAMESPACE},{#KUBERNETES_PVC_NAME}],{$KUBERNETES.TIMEOUT.NODATA})=1
+                and
+                nodata(/Template Zabbix Kubernetes Discovery/kubernetes.volumeclaim.capacityBytes[{#KUBERNETES_PVC_NAMESPACE},{#KUBERNETES_PVC_NAME}],{$KUBERNETES.TIMEOUT.NODATA})=1
+                and
+                nodata(/Template Zabbix Kubernetes Discovery/kubernetes.volumeclaim.inodes[{#KUBERNETES_PVC_NAMESPACE},{#KUBERNETES_PVC_NAME}],{$KUBERNETES.TIMEOUT.NODATA})=1
+                and
+                nodata(/Template Zabbix Kubernetes Discovery/kubernetes.volumeclaim.inodesFree[{#KUBERNETES_PVC_NAMESPACE},{#KUBERNETES_PVC_NAME}],{$KUBERNETES.TIMEOUT.NODATA})=1
+                and
+                nodata(/Template Zabbix Kubernetes Discovery/kubernetes.volumeclaim.usedBytes[{#KUBERNETES_PVC_NAMESPACE},{#KUBERNETES_PVC_NAME}],{$KUBERNETES.TIMEOUT.NODATA})=1
+                and
+                nodata(/Template Zabbix Kubernetes Discovery/kubernetes.volumeclaim.inodesUsed[{#KUBERNETES_PVC_NAMESPACE},{#KUBERNETES_PVC_NAME}],{$KUBERNETES.TIMEOUT.NODATA})=1
+              name: 'Volume {#KUBERNETES_PVC_NAMESPACE}/{#KUBERNETES_PVC_NAME}: Problem items nodata'
+              priority: HIGH
+              description: 'No data since 900 seconds (by default) for all volume items.'
+              manual_close: 'YES'
+              tags:
+                -
+                  tag: KubernetesObject
+                  value: PersistentVolumeClaim
+          graph_prototypes:
+            -
+              uuid: b87be7e46f6c481dae74e3833e541151
+              name: 'Volume {#KUBERNETES_PVC_NAMESPACE}/{#KUBERNETES_PVC_NAME}: Graph bytes'
+              graph_items:
+                -
+                  sortorder: '1'
+                  color: 1A7C11
+                  item:
+                    host: 'Template Zabbix Kubernetes Discovery'
+                    key: 'kubernetes.volumeclaim.capacityBytes[{#KUBERNETES_PVC_NAMESPACE},{#KUBERNETES_PVC_NAME}]'
+                -
+                  sortorder: '2'
+                  color: F63100
+                  item:
+                    host: 'Template Zabbix Kubernetes Discovery'
+                    key: 'kubernetes.volumeclaim.usedBytes[{#KUBERNETES_PVC_NAMESPACE},{#KUBERNETES_PVC_NAME}]'
+            -
+              uuid: 797af064f91b4f139292acc5b1106e63
+              name: 'Volume {#KUBERNETES_PVC_NAMESPACE}/{#KUBERNETES_PVC_NAME}: Graph inodes'
+              graph_items:
+                -
+                  sortorder: '1'
+                  color: 1A7C11
+                  item:
+                    host: 'Template Zabbix Kubernetes Discovery'
+                    key: 'kubernetes.volumeclaim.inodes[{#KUBERNETES_PVC_NAMESPACE},{#KUBERNETES_PVC_NAME}]'
+                -
+                  sortorder: '2'
+                  color: F63100
+                  item:
+                    host: 'Template Zabbix Kubernetes Discovery'
+                    key: 'kubernetes.volumeclaim.inodesUsed[{#KUBERNETES_PVC_NAMESPACE},{#KUBERNETES_PVC_NAME}]'
+        -
+          uuid: f9006f2307a74b67b385bfca4792f636
+          name: Statefulset
+          type: TRAP
+          key: kubernetes.statefulset.discovery
+          delay: '0'
+          description: 'Discovery of all Statefulset'
+          item_prototypes:
+            -
+              uuid: 50ce353145c049e7895f3aec566371f6
+              name: 'Statefulset {#KUBERNETES_STATEFULSET_NAMESPACE}/{#KUBERNETES_STATEFULSET_NAME}: Available replicas'
+              type: TRAP
+              key: 'kubernetes.statefulset.availableReplicas[{#KUBERNETES_STATEFULSET_NAMESPACE},{#KUBERNETES_STATEFULSET_NAME}]'
+              delay: '0'
+              description: 'Replicas available on the statefulset.'
+              tags:
+                -
+                  tag: KubernetesObject
+                  value: Statefulset
+              trigger_prototypes:
+                -
+                  uuid: 785beca3b51d4ddf974b80593b9b7985
+                  expression: 'nodata(/Template Zabbix Kubernetes Discovery/kubernetes.statefulset.availableReplicas[{#KUBERNETES_STATEFULSET_NAMESPACE},{#KUBERNETES_STATEFULSET_NAME}],{$KUBERNETES.TIMEOUT.NODATA})=1'
+                  name: 'Statefulset {#KUBERNETES_STATEFULSET_NAMESPACE}/{#KUBERNETES_STATEFULSET_NAME}: Available replicas nodata'
+                  priority: HIGH
+                  description: 'No data since 900 seconds (by default) for item available replicas on the statefulset.'
+                  manual_close: 'YES'
+                  dependencies:
+                    -
+                      name: 'Statefulset {#KUBERNETES_STATEFULSET_NAMESPACE}/{#KUBERNETES_STATEFULSET_NAME}: Problem items nodata'
+                      expression: |
+                        nodata(/Template Zabbix Kubernetes Discovery/kubernetes.statefulset.availableReplicas[{#KUBERNETES_STATEFULSET_NAMESPACE},{#KUBERNETES_STATEFULSET_NAME}],{$KUBERNETES.TIMEOUT.NODATA})=1
+                        and	
+                        nodata(/Template Zabbix Kubernetes Discovery/kubernetes.statefulset.desiredReplicas[{#KUBERNETES_STATEFULSET_NAMESPACE},{#KUBERNETES_STATEFULSET_NAME}],{$KUBERNETES.TIMEOUT.NODATA})=1
+                        and
+                        nodata(/Template Zabbix Kubernetes Discovery/kubernetes.statefulset.readyReplicas[{#KUBERNETES_STATEFULSET_NAMESPACE},{#KUBERNETES_STATEFULSET_NAME}],{$KUBERNETES.TIMEOUT.NODATA})=1
+                  tags:
+                    -
+                      tag: KubernetesObject
+                      value: Statefulset
+            -
+              uuid: 8d5903860a43471699fdc95dd90aabbf
+              name: 'Statefulset {#KUBERNETES_STATEFULSET_NAMESPACE}/{#KUBERNETES_STATEFULSET_NAME}: Desired replicas'
+              type: TRAP
+              key: 'kubernetes.statefulset.desiredReplicas[{#KUBERNETES_STATEFULSET_NAMESPACE},{#KUBERNETES_STATEFULSET_NAME}]'
+              delay: '0'
+              description: 'Replicas desired on the statefulset.'
+              tags:
+                -
+                  tag: KubernetesObject
+                  value: Statefulset
+              trigger_prototypes:
+                -
+                  uuid: 07b56c4328ee4cbca2762580d7e07dda
+                  expression: 'nodata(/Template Zabbix Kubernetes Discovery/kubernetes.statefulset.desiredReplicas[{#KUBERNETES_STATEFULSET_NAMESPACE},{#KUBERNETES_STATEFULSET_NAME}],{$KUBERNETES.TIMEOUT.NODATA})=1'
+                  name: 'Statefulset {#KUBERNETES_STATEFULSET_NAMESPACE}/{#KUBERNETES_STATEFULSET_NAME}: Desired replicas nodata'
+                  priority: HIGH
+                  description: 'No data since 900 seconds (by default) for item desired replicas on the statefulset.'
+                  manual_close: 'YES'
+                  dependencies:
+                    -
+                      name: 'Statefulset {#KUBERNETES_STATEFULSET_NAMESPACE}/{#KUBERNETES_STATEFULSET_NAME}: Problem items nodata'
+                      expression: |
+                        nodata(/Template Zabbix Kubernetes Discovery/kubernetes.statefulset.availableReplicas[{#KUBERNETES_STATEFULSET_NAMESPACE},{#KUBERNETES_STATEFULSET_NAME}],{$KUBERNETES.TIMEOUT.NODATA})=1
+                        and	
+                        nodata(/Template Zabbix Kubernetes Discovery/kubernetes.statefulset.desiredReplicas[{#KUBERNETES_STATEFULSET_NAMESPACE},{#KUBERNETES_STATEFULSET_NAME}],{$KUBERNETES.TIMEOUT.NODATA})=1
+                        and
+                        nodata(/Template Zabbix Kubernetes Discovery/kubernetes.statefulset.readyReplicas[{#KUBERNETES_STATEFULSET_NAMESPACE},{#KUBERNETES_STATEFULSET_NAME}],{$KUBERNETES.TIMEOUT.NODATA})=1
+                  tags:
+                    -
+                      tag: KubernetesObject
+                      value: Statefulset
+            -
+              uuid: c0caf71eded04b5e8c184f3f77127de9
+              name: 'Statefulset {#KUBERNETES_STATEFULSET_NAMESPACE}/{#KUBERNETES_STATEFULSET_NAME}: Ready replicas'
+              type: TRAP
+              key: 'kubernetes.statefulset.readyReplicas[{#KUBERNETES_STATEFULSET_NAMESPACE},{#KUBERNETES_STATEFULSET_NAME}]'
+              delay: '0'
+              description: 'Replicas ready on the statefulset.'
+              tags:
+                -
+                  tag: KubernetesObject
+                  value: Statefulset
+              trigger_prototypes:
+                -
+                  uuid: 35a3ac60a1a147c299368ef5ddc54dcd
+                  expression: 'nodata(/Template Zabbix Kubernetes Discovery/kubernetes.statefulset.readyReplicas[{#KUBERNETES_STATEFULSET_NAMESPACE},{#KUBERNETES_STATEFULSET_NAME}],{$KUBERNETES.TIMEOUT.NODATA})=1'
+                  name: 'Statefulset {#KUBERNETES_STATEFULSET_NAMESPACE}/{#KUBERNETES_STATEFULSET_NAME}: Ready replicas nodata'
+                  priority: HIGH
+                  description: 'No data since 900 seconds (by default) for item ready replicas on the statefulset.'
+                  manual_close: 'YES'
+                  dependencies:
+                    -
+                      name: 'Statefulset {#KUBERNETES_STATEFULSET_NAMESPACE}/{#KUBERNETES_STATEFULSET_NAME}: Problem items nodata'
+                      expression: |
+                        nodata(/Template Zabbix Kubernetes Discovery/kubernetes.statefulset.availableReplicas[{#KUBERNETES_STATEFULSET_NAMESPACE},{#KUBERNETES_STATEFULSET_NAME}],{$KUBERNETES.TIMEOUT.NODATA})=1
+                        and	
+                        nodata(/Template Zabbix Kubernetes Discovery/kubernetes.statefulset.desiredReplicas[{#KUBERNETES_STATEFULSET_NAMESPACE},{#KUBERNETES_STATEFULSET_NAME}],{$KUBERNETES.TIMEOUT.NODATA})=1
+                        and
+                        nodata(/Template Zabbix Kubernetes Discovery/kubernetes.statefulset.readyReplicas[{#KUBERNETES_STATEFULSET_NAMESPACE},{#KUBERNETES_STATEFULSET_NAME}],{$KUBERNETES.TIMEOUT.NODATA})=1
+                  tags:
+                    -
+                      tag: KubernetesObject
+                      value: Statefulset
+          trigger_prototypes:
+            -
+              uuid: a4cef27bf7324d7d80f426402e64c29c
+              expression: |
+                nodata(/Template Zabbix Kubernetes Discovery/kubernetes.statefulset.availableReplicas[{#KUBERNETES_STATEFULSET_NAMESPACE},{#KUBERNETES_STATEFULSET_NAME}],{$KUBERNETES.TIMEOUT.NODATA})=1
+                and	
+                nodata(/Template Zabbix Kubernetes Discovery/kubernetes.statefulset.desiredReplicas[{#KUBERNETES_STATEFULSET_NAMESPACE},{#KUBERNETES_STATEFULSET_NAME}],{$KUBERNETES.TIMEOUT.NODATA})=1
+                and
+                nodata(/Template Zabbix Kubernetes Discovery/kubernetes.statefulset.readyReplicas[{#KUBERNETES_STATEFULSET_NAMESPACE},{#KUBERNETES_STATEFULSET_NAME}],{$KUBERNETES.TIMEOUT.NODATA})=1
+              name: 'Statefulset {#KUBERNETES_STATEFULSET_NAMESPACE}/{#KUBERNETES_STATEFULSET_NAME}: Problem items nodata'
+              priority: HIGH
+              description: 'No data since 900 seconds (by default) for all statefulset items.'
+              manual_close: 'YES'
+              tags:
+                -
+                  tag: KubernetesObject
+                  value: Statefulset
+            -
+              uuid: 0494362e368c4f2db79d8a5150702125
+              expression: 'last(/Template Zabbix Kubernetes Discovery/kubernetes.statefulset.readyReplicas[{#KUBERNETES_STATEFULSET_NAMESPACE},{#KUBERNETES_STATEFULSET_NAME}]) < last(/Template Zabbix Kubernetes Discovery/kubernetes.statefulset.desiredReplicas[{#KUBERNETES_STATEFULSET_NAMESPACE},{#KUBERNETES_STATEFULSET_NAME}])'
+              name: 'Statefulset {#KUBERNETES_STATEFULSET_NAMESPACE}/{#KUBERNETES_STATEFULSET_NAME}: Problem number of replicas'
+              priority: HIGH
+              description: 'Problem on the number of the replicas on the statefulset.'
+              manual_close: 'YES'
+              tags:
+                -
+                  tag: KubernetesObject
+                  value: Statefulset
+          graph_prototypes:
+            -
+              uuid: e8c1076eb6794291a2bff6c8d5208b11
+              name: 'Statefulset {#KUBERNETES_STATEFULSET_NAMESPACE}/{#KUBERNETES_STATEFULSET_NAME}: Graph replicas'
+              graph_items:
+                -
+                  sortorder: '1'
+                  color: 1A7C11
+                  item:
+                    host: 'Template Zabbix Kubernetes Discovery'
+                    key: 'kubernetes.statefulset.availableReplicas[{#KUBERNETES_STATEFULSET_NAMESPACE},{#KUBERNETES_STATEFULSET_NAME}]'
+                -
+                  sortorder: '2'
+                  color: FFEB3B
+                  item:
+                    host: 'Template Zabbix Kubernetes Discovery'
+                    key: 'kubernetes.statefulset.desiredReplicas[{#KUBERNETES_STATEFULSET_NAMESPACE},{#KUBERNETES_STATEFULSET_NAME}]'
+                -
+                  sortorder: '3'
+                  color: 2774A4
+                  item:
+                    host: 'Template Zabbix Kubernetes Discovery'
+                    key: 'kubernetes.statefulset.readyReplicas[{#KUBERNETES_STATEFULSET_NAMESPACE},{#KUBERNETES_STATEFULSET_NAME}]'
+      tags:
+        -
+          tag: Middleware
+          value: Kubernetes
+        -
+          tag: Version
+          value: 1.4.2
+      macros:
+        -
+          macro: '{$KUBERNETES.NODE.PODS.CRITICAL}'
+          value: '95'
+        -
+          macro: '{$KUBERNETES.NODE.PODS.WARNING}'
+          value: '85'
+        -
+          macro: '{$KUBERNETES.TIMEOUT.NODATA}'
+          value: '900'
+        -
+          macro: '{$KUBERNETES.VOLUME.BYTES.CRITICAL}'
+          value: '90'
+        -
+          macro: '{$KUBERNETES.VOLUME.BYTES.WARNING}'
+          value: '85'
+        -
+          macro: '{$KUBERNETES.VOLUME.INODES.CRITICAL}'
+          value: '90'
+        -
+          macro: '{$KUBERNETES.VOLUME.INODES.WARNING}'
+          value: '85'

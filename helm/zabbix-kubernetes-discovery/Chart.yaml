@@ -1,0 +1,16 @@
+apiVersion: v2
+version: 1.4.2
+appVersion: "1.4.2"
+name: zabbix-kubernetes-discovery
+description: Kubernetes monitoring for Zabbix with discovery objects
+annotations:
+  category: Monitoring
+keywords:
+- zabbix
+- kubernetes
+- monitoring
+sources:
+- https://github.com/axians-acsp/zabbix-kubernetes-discovery
+maintainers:
+- name: Axians CSP DevOps
+  email: grp-axianscsp-devops@vinci-energies.com

@@ -1,0 +1,81 @@
+namespace:
+  name: zabbix-monitoring
+
+rbac:
+  create: true
+  name: zabbix-kubernetes-discovery
+  rolebinding: zabbix-kubernetes-discovery
+
+serviceAccount:
+  create: true
+  name: zabbix-kubernetes-discovery
+
+deployment:
+  name: zabbix-kubernetes-discovery
+  image:
+    name: ghcr.io/axians-acsp/zabbix-kubernetes-discovery:v1.4.2
+    pullPolicy: IfNotPresent
+  replicas: 1
+  strategy: Recreate
+
+environment:
+  ZABBIX_ENDPOINT:
+  KUBERNETES_NAME:
+  #KUBECONFIG: "<kubeconfig_base64>"
+
+zabbix:
+  timeout: 5
+  verbose: 'no'
+  debug: 'no'
+
+monitoring:
+  node:
+    exclude_name: ''
+  daemonset:
+    exclude_name: ''
+    exclude_namespace: ''
+  volume:
+    exclude_name: ''
+    exclude_namespace: ''
+  deployment:
+    exclude_name: ''
+    exclude_namespace: ''
+  statefulset:
+    exclude_name: ''
+    exclude_namespace: ''
+  cronjob:
+    exclude_name: ''
+    exclude_namespace: ''
+
+crontab:
+  name: zabbix-kubernetes-discovery
+  node:
+    discovery: '0 * * * *'
+    item: '*/3 * * * *'
+  daemonset:
+    discovery: '0 * * * *'
+    item: '*/3 * * * *'
+  volume:
+    discovery: '0 * * * *'
+    item: '*/3 * * * *'
+  deployment:
+    discovery: '0 * * * *'
+    item: '*/3 * * * *'
+  statefulset:
+    discovery: '0 * * * *'
+    item: '*/3 * * * *'
+  cronjob:
+    discovery: '0 * * * *'
+    item: '*/3 * * * *'
+
+resources:
+  requests:
+    cpu: 50m
+    memory: 128Mi
+  limits:
+    cpu: 1000m
+    memory: 1Gi
+
+nodeSelector: {}
+tolerations: []
+affinity: {}
