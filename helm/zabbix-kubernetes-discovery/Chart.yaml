@@ -10,7 +10,7 @@ keywords:
 - kubernetes
 - monitoring
 sources:
-- https://github.com/axians-acsp/zabbix-kubernetes-discovery
+- https://github.com/djerfy/zabbix-kubernetes-discovery
 maintainers:
-- name: Axians CSP DevOps
-  email: grp-axianscsp-devops@vinci-energies.com
+- name: DJΞRFY
+  email: djerfy@gmail.com

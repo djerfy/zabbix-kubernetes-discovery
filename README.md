@@ -1,20 +1,20 @@
 ![](.github/assets/zabbix-kubernetes-discovery.png)
 
 <p align="center">
-  <a style="text-decoration:none" href="https://github.com/axians-acsp/zabbix-kubernetes-discovery/blob/main/LICENSE.md">
-    <img alt="License" src="https://img.shields.io/github/license/axians-acsp/zabbix-kubernetes-discovery?logo=github&color=0&label=License&style=flat-square">
+  <a style="text-decoration:none" href="https://github.com/djerfy/zabbix-kubernetes-discovery/blob/main/LICENSE.md">
+    <img alt="License" src="https://img.shields.io/github/license/djerfy/zabbix-kubernetes-discovery?logo=github&color=0&label=License&style=flat-square">
   </a>
-  <a style="text-decoration:none" href="https://github.com/axians-acsp/zabbix-kubernetes-discovery/issues">
-    <img alt="Issues" src="https://img.shields.io/github/issues/axians-acsp/zabbix-kubernetes-discovery?logo=github&color=0&label=Issues&style=flat-square">
+  <a style="text-decoration:none" href="https://github.com/djerfy/zabbix-kubernetes-discovery/issues">
+    <img alt="Issues" src="https://img.shields.io/github/issues/djerfy/zabbix-kubernetes-discovery?logo=github&color=0&label=Issues&style=flat-square">
   </a>
-  <a style="text-decoration:none" href="https://github.com/axians-acsp/zabbix-kubernetes-discovery/actions/workflows/docker.yml">
-    <img alt="Pipeline Docker" src="https://img.shields.io/github/workflow/status/axians-acsp/zabbix-kubernetes-discovery/Build%20and%20publish%20Docker?logo=github&color=0&label=Pipeline%20Docker&style=flat-square">
+  <a style="text-decoration:none" href="https://github.com/djerfy/zabbix-kubernetes-discovery/actions/workflows/docker.yml">
+    <img alt="Pipeline Docker" src="https://img.shields.io/github/workflow/status/djerfy/zabbix-kubernetes-discovery/Build%20and%20publish%20Docker?logo=github&color=0&label=Pipeline%20Docker&style=flat-square">
   </a>
-  <a style="text-decoration:none" href="https://github.com/axians-acsp/zabbix-kubernetes-discovery/actions/workflows/helm.yml">
-    <img alt="Pipeline Helm" src="https://img.shields.io/github/workflow/status/axians-acsp/zabbix-kubernetes-discovery/Helm%20Release?logo=github&color=0&label=Pipeline%20Helm&style=flat-square">
+  <a style="text-decoration:none" href="https://github.com/djerfy/zabbix-kubernetes-discovery/actions/workflows/helm.yml">
+    <img alt="Pipeline Helm" src="https://img.shields.io/github/workflow/status/djerfy/zabbix-kubernetes-discovery/Helm%20Release?logo=github&color=0&label=Pipeline%20Helm&style=flat-square">
   </a>
-  <a style="text-decoration:none" href="https://github.com/axians-acsp/zabbix-kubernetes-discovery/releases/tag/v1.4.2">
-    <img alt="Release" src="https://img.shields.io/github/v/release/axians-acsp/zabbix-kubernetes-discovery?logo=github&color=0&label=Release&style=flat-square">
+  <a style="text-decoration:none" href="https://github.com/djerfy/zabbix-kubernetes-discovery/releases/tag/v1.4.2">
+    <img alt="Release" src="https://img.shields.io/github/v/release/djerfy/zabbix-kubernetes-discovery?logo=github&color=0&label=Release&style=flat-square">
   </a>
 </p>
 
@@ -62,12 +62,12 @@ $ helm upgrade --install zabbix-kubernetes-discovery \
 
 ### Install from repo
 
-To install the chart with the release name `zabbix-kubernetes-discovery` from Axians Helm repository:
+To install the chart with the release name `zabbix-kubernetes-discovery` from my Helm repository:
 
 ```bash
-$ helm repo add acsp https://helm.acsp.io
+$ helm repo add djerfy https://djerfy.github.io/helm-charts
 $ helm upgrade --install zabbix-kubernetes-discovery \
-    acsp/zabbix-kubernetes-discovery \
+    djerfy/zabbix-kubernetes-discovery \
     --namespace zabbix-monitoring
     --set namespace.name="zabbix-monitoring" \
     --set environment.ZABBIX_ENDPOINT="zabbix-proxy.example.com" \
