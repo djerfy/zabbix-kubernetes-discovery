@@ -1,7 +1,7 @@
 apiVersion: v2
+name: zabbix-kubernetes-discovery
 version: 1.4.2
 appVersion: "1.4.2"
-name: zabbix-kubernetes-discovery
 description: Kubernetes monitoring for Zabbix with discovery objects
 annotations:
   category: Monitoring
@@ -9,8 +9,12 @@ keywords:
 - zabbix
 - kubernetes
 - monitoring
+- kubernetes
+home: https://djerfy.github.io/helm-charts
+icon: https://assets.zabbix.com/img/logo/zabbix_logo_500x131.png
 sources:
 - https://github.com/djerfy/zabbix-kubernetes-discovery
 maintainers:
 - name: DJΞRFY
   email: djerfy@gmail.com
+  url: https://xorhak.io
