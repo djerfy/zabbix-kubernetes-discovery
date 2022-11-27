@@ -14,7 +14,7 @@ on:
 
 env:
   REGISTRY_URL: ghcr.io
-  IMAGE_USER: axians-acsp
+  IMAGE_USER: djerfy
   IMAGE_NAME: zabbix-kubernetes-discovery
 
 jobs:
