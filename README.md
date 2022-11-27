@@ -13,7 +13,7 @@
   <a style="text-decoration:none" href="https://github.com/djerfy/zabbix-kubernetes-discovery/actions/workflows/helm.yml">
     <img alt="Pipeline Helm" src="https://img.shields.io/github/workflow/status/djerfy/zabbix-kubernetes-discovery/Helm%20Release?logo=github&color=0&label=Pipeline%20Helm&style=flat-square">
   </a>
-  <a style="text-decoration:none" href="https://github.com/djerfy/zabbix-kubernetes-discovery/releases/tag/v1.4.2">
+  <a style="text-decoration:none" href="https://github.com/djerfy/zabbix-kubernetes-discovery/releases/tag/v1.4.3">
     <img alt="Release" src="https://img.shields.io/github/v/release/djerfy/zabbix-kubernetes-discovery?logo=github&color=0&label=Release&style=flat-square">
   </a>
 </p>
