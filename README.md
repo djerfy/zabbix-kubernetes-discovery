@@ -7,7 +7,7 @@
   <a style="text-decoration:none" href="https://github.com/djerfy/zabbix-kubernetes-discovery/issues">
     <img alt="Issues" src="https://img.shields.io/github/issues/djerfy/zabbix-kubernetes-discovery?logo=github&color=0&label=Issues&style=flat-square">
   </a>
-  <a style="text-decoration:none" href="https://github.com/djerfy/zabbix-kubernetes-discovery/actions/workflows/docker.yml">
+  <a style="text-decoration:none" href="https://github.com/djerfy/zabbix-kubernetes-discovery/actions/workflows/docker-main.yml">
     <img alt="Pipeline Docker" src="https://img.shields.io/github/workflow/status/djerfy/zabbix-kubernetes-discovery/Build%20and%20publish%20Docker?logo=github&color=0&label=Pipeline%20Docker&style=flat-square">
   </a>
   <a style="text-decoration:none" href="https://github.com/djerfy/zabbix-kubernetes-discovery/actions/workflows/helm.yml">
