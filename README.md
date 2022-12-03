@@ -8,10 +8,13 @@
     <img alt="Issues" src="https://img.shields.io/github/issues/djerfy/zabbix-kubernetes-discovery?logo=github&color=0&label=Issues&style=flat-square">
   </a>
   <a style="text-decoration:none" href="https://github.com/djerfy/zabbix-kubernetes-discovery/actions/workflows/docker-main.yml">
-    <img alt="Pipeline Docker" src="https://img.shields.io/github/workflow/status/djerfy/zabbix-kubernetes-discovery/Build%20and%20publish%20Docker?logo=github&color=0&label=Pipeline%20Docker&style=flat-square">
+    <img alt="Pipeline Docker" src="https://img.shields.io/github/workflow/status/djerfy/zabbix-kubernetes-discovery/Build%20and%20publish%20(main)?logo=github&color=0&label=Pipeline%20Docker&style=flat-square">
   </a>
   <a style="text-decoration:none" href="https://github.com/djerfy/zabbix-kubernetes-discovery/actions/workflows/helm.yml">
     <img alt="Pipeline Helm" src="https://img.shields.io/github/workflow/status/djerfy/zabbix-kubernetes-discovery/Helm%20Release?logo=github&color=0&label=Pipeline%20Helm&style=flat-square">
+  </a>
+  <a style="text-decoration:none" href="https://github.com/djerfy/zabbix-kubernetes-discovery/actions/workflows/trivy-scan-code.yml">
+    <img alt="Pipeline Helm" src="https://img.shields.io/github/workflow/status/djerfy/zabbix-kubernetes-discovery/Trivy?logo=github&color=0&label=Trivy%20Scan&style=flat-square">
   </a>
   <a style="text-decoration:none" href="https://github.com/djerfy/zabbix-kubernetes-discovery/releases/tag/v1.4.3">
     <img alt="Release" src="https://img.shields.io/github/v/release/djerfy/zabbix-kubernetes-discovery?logo=github&color=0&label=Release&style=flat-square">
