@@ -13,6 +13,7 @@ ARG CONTAINER_USER="zabbix"
 ARG CONTAINER_GROUP="zabbix"
 
 RUN apt-get update && \
+    apt-get upgrade -y && \
     apt-get install -y --no-install-recommends curl iputils-ping python3 python3-pip && \
     rm -rf /var/lib/apt/lists && \
     mkdir -p /app /root/.kube && \
