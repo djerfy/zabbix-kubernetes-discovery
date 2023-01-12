@@ -50,8 +50,6 @@ jobs:
           tags: |
             type=sha,format=short
             type=ref,event=branch
-            type=raw,value=dev
-            type=raw,value=main
       - name: Build and publish
         uses: docker/build-push-action@v3
         with:
