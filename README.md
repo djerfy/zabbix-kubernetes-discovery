@@ -23,6 +23,8 @@
 
 # Zabbix Kubernetes Discovery
 
+[![Artifact Hub](https://img.shields.io/endpoint?url=https://artifacthub.io/badge/repository/djerfy&style=flat-square)](https://artifacthub.io/packages/search?repo=djerfy)
+
 ## Introduction
 
 Kubernetes monitoring for Zabbix with discovery objects:
