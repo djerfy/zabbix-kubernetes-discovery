@@ -90,6 +90,23 @@ $ helm delete -n zabbix-monitoring zabbix-kubernetes-discovery
 
 The command removes all the Kubernetes components associated with the chart and deletes the release.
 
+## Commands
+
+```
+usage: zabbix-kubernetes-discovery.py [-h]
+    [--zabbix-timeout ZABBIX_TIMEOUT]
+    --zabbix-endpoint ZABBIX_ENDPOINT
+    --kubernetes-name KUBERNETES_NAME
+    --monitoring-mode {volume,deployment,daemonset,node,statefulset,cronjob}
+    --monitoring-type {discovery,item,json}
+    [--object-name OBJECT_NAME]
+    [--exclude-name EXCLUDE_NAME]
+    [--exclude-namespace EXCLUDE_NAMESPACE]
+    [--no-wait]
+    [--verbose]
+    [--debug]
+```
+
 ## Zabbix
 
 ### Import template
