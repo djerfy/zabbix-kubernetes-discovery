@@ -1,4 +1,4 @@
-![](.github/assets/zabbix-kubernetes-discovery.png)
+![](https://raw.githubusercontent.com/djerfy/zabbix-kubernetes-discovery/main/.github/assets/zabbix-kubernetes-discovery.png)
 
 <p align="center">
   <a style="text-decoration:none" href="https://github.com/djerfy/zabbix-kubernetes-discovery/blob/main/LICENSE.md">
@@ -121,7 +121,7 @@ After downloading, you need to import it as below:
 4. Select downloaded template file
 5. Confirm import
 
-![zabbix-template-import](.github/assets/zabbix-template-import.png)
+![zabbix-template-import](https://raw.githubusercontent.com/djerfy/zabbix-kubernetes-discovery/main/.github/assets/zabbix-template-import.png)
 
 ### Discovery rules
 
