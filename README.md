@@ -25,6 +25,8 @@
 
 [![Artifact Hub](https://img.shields.io/endpoint?url=https://artifacthub.io/badge/repository/djerfy&style=flat-square)](https://artifacthub.io/packages/search?repo=djerfy)
 
+> :warning: Not ready for Kubernetes v1.25, because `batch/v1beta1` api is removed and replaced by `batch/v1` endpoint. Require a lot of change on this script (pod status changes), in progress and I think good for the next release.
+
 ## Introduction
 
 Kubernetes monitoring for Zabbix with discovery objects:
