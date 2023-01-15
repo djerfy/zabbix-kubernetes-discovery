@@ -1,6 +1,6 @@
 zabbix_export:
-  version: '5.4'
-  date: '2022-08-22T17:13:34Z'
+  version: '6.0'
+  date: '2023-01-15T19:47:09Z'
   groups:
     -
       uuid: 56f8489d42224d24902e80448aa03b3d
@@ -27,44 +27,35 @@ zabbix_export:
           description: 'Discovery of all Cronjob'
           item_prototypes:
             -
-              uuid: 6ed92f4055364aaeb02d2b5b6e868428
-              name: 'Cronjob {#KUBERNETES_CRONJOB_NAMESPACE}/{#KUBERNETES_CRONJOB_NAME}: Last job exit code'
+              uuid: 460f6461b2164ca2b7f742909166a06a
+              name: 'Cronjob {#KUBERNETES_CRONJOB_NAMESPACE}/{#KUBERNETES_CRONJOB_NAME}: Last job message'
               type: TRAP
-              key: 'kubernetes.cronjob.exitcode[{#KUBERNETES_CRONJOB_NAMESPACE},{#KUBERNETES_CRONJOB_NAME}]'
+              key: 'kubernetes.cronjob.message[{#KUBERNETES_CRONJOB_NAMESPACE},{#KUBERNETES_CRONJOB_NAME}]'
               delay: '0'
-              description: 'Last exit code on the cronjob.'
+              trends: '0'
+              value_type: TEXT
+              description: 'Last message on the cronjob.'
               tags:
                 -
                   tag: KubernetesObject
                   value: Cronjob
               trigger_prototypes:
                 -
-                  uuid: 40ce24d68f0d413fa83b4dfd8fbb9105
-                  expression: 'nodata(/Template Zabbix Kubernetes Discovery/kubernetes.cronjob.exitcode[{#KUBERNETES_CRONJOB_NAMESPACE},{#KUBERNETES_CRONJOB_NAME}],{$KUBERNETES.TIMEOUT.NODATA})=1'
-                  name: 'Cronjob {#KUBERNETES_CRONJOB_NAMESPACE}/{#KUBERNETES_CRONJOB_NAME}: Last job exit code nodata'
+                  uuid: 2b5e8aa133cf49749d10a3e0ca0ec728
+                  expression: 'nodata(/Template Zabbix Kubernetes Discovery/kubernetes.cronjob.message[{#KUBERNETES_CRONJOB_NAMESPACE},{#KUBERNETES_CRONJOB_NAME}],{$KUBERNETES.TIMEOUT.NODATA})=1'
+                  name: 'Cronjob {#KUBERNETES_CRONJOB_NAMESPACE}/{#KUBERNETES_CRONJOB_NAME}: Last job message nodata'
                   priority: HIGH
-                  description: 'No data since 900 seconds (by default) for cronjob exitcode item.'
+                  description: 'No data since 900 seconds (by default) for cronjob message item.'
                   manual_close: 'YES'
                   dependencies:
                     -
                       name: 'Cronjob {#KUBERNETES_CRONJOB_NAMESPACE}/{#KUBERNETES_CRONJOB_NAME}: Problem items nodata'
                       expression: |
-                        nodata(/Template Zabbix Kubernetes Discovery/kubernetes.cronjob.exitcode[{#KUBERNETES_CRONJOB_NAMESPACE},{#KUBERNETES_CRONJOB_NAME}],{$KUBERNETES.TIMEOUT.NODATA})=1
+                        nodata(/Template Zabbix Kubernetes Discovery/kubernetes.cronjob.status[{#KUBERNETES_CRONJOB_NAMESPACE},{#KUBERNETES_CRONJOB_NAME}],{$KUBERNETES.TIMEOUT.NODATA})=1
                         and
                         nodata(/Template Zabbix Kubernetes Discovery/kubernetes.cronjob.reason[{#KUBERNETES_CRONJOB_NAMESPACE},{#KUBERNETES_CRONJOB_NAME}],{$KUBERNETES.TIMEOUT.NODATA})=1
                         and
-                        nodata(/Template Zabbix Kubernetes Discovery/kubernetes.cronjob.restart[{#KUBERNETES_CRONJOB_NAMESPACE},{#KUBERNETES_CRONJOB_NAME}],{$KUBERNETES.TIMEOUT.NODATA})=1
-                  tags:
-                    -
-                      tag: KubernetesObject
-                      value: Cronjob
-                -
-                  uuid: dafe30004fd442f3a9344554783f2bcc
-                  expression: 'last(/Template Zabbix Kubernetes Discovery/kubernetes.cronjob.exitcode[{#KUBERNETES_CRONJOB_NAMESPACE},{#KUBERNETES_CRONJOB_NAME}],#3)<>0'
-                  name: 'Cronjob {#KUBERNETES_CRONJOB_NAMESPACE}/{#KUBERNETES_CRONJOB_NAME}: Problem last job exit code'
-                  priority: HIGH
-                  description: 'Problem during the last execution of the cronjob. Exit code is not equal to 0.'
-                  manual_close: 'YES'
+                        nodata(/Template Zabbix Kubernetes Discovery/kubernetes.cronjob.message[{#KUBERNETES_CRONJOB_NAMESPACE},{#KUBERNETES_CRONJOB_NAME}],{$KUBERNETES.TIMEOUT.NODATA})=1
                   tags:
                     -
                       tag: KubernetesObject
@@ -94,59 +85,79 @@ zabbix_export:
                     -
                       name: 'Cronjob {#KUBERNETES_CRONJOB_NAMESPACE}/{#KUBERNETES_CRONJOB_NAME}: Problem items nodata'
                       expression: |
-                        nodata(/Template Zabbix Kubernetes Discovery/kubernetes.cronjob.exitcode[{#KUBERNETES_CRONJOB_NAMESPACE},{#KUBERNETES_CRONJOB_NAME}],{$KUBERNETES.TIMEOUT.NODATA})=1
+                        nodata(/Template Zabbix Kubernetes Discovery/kubernetes.cronjob.status[{#KUBERNETES_CRONJOB_NAMESPACE},{#KUBERNETES_CRONJOB_NAME}],{$KUBERNETES.TIMEOUT.NODATA})=1
                         and
                         nodata(/Template Zabbix Kubernetes Discovery/kubernetes.cronjob.reason[{#KUBERNETES_CRONJOB_NAMESPACE},{#KUBERNETES_CRONJOB_NAME}],{$KUBERNETES.TIMEOUT.NODATA})=1
                         and
-                        nodata(/Template Zabbix Kubernetes Discovery/kubernetes.cronjob.restart[{#KUBERNETES_CRONJOB_NAMESPACE},{#KUBERNETES_CRONJOB_NAME}],{$KUBERNETES.TIMEOUT.NODATA})=1
+                        nodata(/Template Zabbix Kubernetes Discovery/kubernetes.cronjob.message[{#KUBERNETES_CRONJOB_NAMESPACE},{#KUBERNETES_CRONJOB_NAME}],{$KUBERNETES.TIMEOUT.NODATA})=1
                   tags:
                     -
                       tag: KubernetesObject
                       value: Cronjob
             -
-              uuid: 27eab17286d4495a8b4cbd7d3914e538
-              name: 'Cronjob {#KUBERNETES_CRONJOB_NAMESPACE}/{#KUBERNETES_CRONJOB_NAME}: Last job restart count'
+              uuid: 6ed92f4055364aaeb02d2b5b6e868428
+              name: 'Cronjob {#KUBERNETES_CRONJOB_NAMESPACE}/{#KUBERNETES_CRONJOB_NAME}: Last job status'
               type: TRAP
-              key: 'kubernetes.cronjob.restart[{#KUBERNETES_CRONJOB_NAMESPACE},{#KUBERNETES_CRONJOB_NAME}]'
+              key: 'kubernetes.cronjob.status[{#KUBERNETES_CRONJOB_NAMESPACE},{#KUBERNETES_CRONJOB_NAME}]'
               delay: '0'
-              description: 'Last restart count of the cronjob.'
+              description: 'Last status on the cronjob.'
               tags:
                 -
                   tag: KubernetesObject
                   value: Cronjob
               trigger_prototypes:
                 -
-                  uuid: a96ff38033a94036accd8ce8cc803511
-                  expression: 'nodata(/Template Zabbix Kubernetes Discovery/kubernetes.cronjob.restart[{#KUBERNETES_CRONJOB_NAMESPACE},{#KUBERNETES_CRONJOB_NAME}],{$KUBERNETES.TIMEOUT.NODATA})=1'
-                  name: 'Cronjob {#KUBERNETES_CRONJOB_NAMESPACE}/{#KUBERNETES_CRONJOB_NAME}: Last job restart count nodata'
+                  uuid: 40ce24d68f0d413fa83b4dfd8fbb9105
+                  expression: 'nodata(/Template Zabbix Kubernetes Discovery/kubernetes.cronjob.status[{#KUBERNETES_CRONJOB_NAMESPACE},{#KUBERNETES_CRONJOB_NAME}],{$KUBERNETES.TIMEOUT.NODATA})=1'
+                  name: 'Cronjob {#KUBERNETES_CRONJOB_NAMESPACE}/{#KUBERNETES_CRONJOB_NAME}: Last job status nodata'
                   priority: HIGH
-                  description: 'No data since 900 seconds (by default) for cronjob restart count item.'
+                  description: 'No data since 900 seconds (by default) for cronjob status item.'
                   manual_close: 'YES'
                   dependencies:
                     -
                       name: 'Cronjob {#KUBERNETES_CRONJOB_NAMESPACE}/{#KUBERNETES_CRONJOB_NAME}: Problem items nodata'
                       expression: |
-                        nodata(/Template Zabbix Kubernetes Discovery/kubernetes.cronjob.exitcode[{#KUBERNETES_CRONJOB_NAMESPACE},{#KUBERNETES_CRONJOB_NAME}],{$KUBERNETES.TIMEOUT.NODATA})=1
+                        nodata(/Template Zabbix Kubernetes Discovery/kubernetes.cronjob.status[{#KUBERNETES_CRONJOB_NAMESPACE},{#KUBERNETES_CRONJOB_NAME}],{$KUBERNETES.TIMEOUT.NODATA})=1
                         and
                         nodata(/Template Zabbix Kubernetes Discovery/kubernetes.cronjob.reason[{#KUBERNETES_CRONJOB_NAMESPACE},{#KUBERNETES_CRONJOB_NAME}],{$KUBERNETES.TIMEOUT.NODATA})=1
                         and
-                        nodata(/Template Zabbix Kubernetes Discovery/kubernetes.cronjob.restart[{#KUBERNETES_CRONJOB_NAMESPACE},{#KUBERNETES_CRONJOB_NAME}],{$KUBERNETES.TIMEOUT.NODATA})=1
+                        nodata(/Template Zabbix Kubernetes Discovery/kubernetes.cronjob.message[{#KUBERNETES_CRONJOB_NAMESPACE},{#KUBERNETES_CRONJOB_NAME}],{$KUBERNETES.TIMEOUT.NODATA})=1
+                  tags:
+                    -
+                      tag: KubernetesObject
+                      value: Cronjob
+                -
+                  uuid: dafe30004fd442f3a9344554783f2bcc
+                  expression: 'last(/Template Zabbix Kubernetes Discovery/kubernetes.cronjob.status[{#KUBERNETES_CRONJOB_NAMESPACE},{#KUBERNETES_CRONJOB_NAME}],#3)<>0'
+                  name: 'Cronjob {#KUBERNETES_CRONJOB_NAMESPACE}/{#KUBERNETES_CRONJOB_NAME}: Problem last job status'
+                  priority: HIGH
+                  description: 'Problem during the last execution of the cronjob. Status is not complete (0).'
+                  manual_close: 'YES'
+                  dependencies:
+                    -
+                      name: 'Cronjob {#KUBERNETES_CRONJOB_NAMESPACE}/{#KUBERNETES_CRONJOB_NAME}: Problem items nodata'
+                      expression: |
+                        nodata(/Template Zabbix Kubernetes Discovery/kubernetes.cronjob.status[{#KUBERNETES_CRONJOB_NAMESPACE},{#KUBERNETES_CRONJOB_NAME}],{$KUBERNETES.TIMEOUT.NODATA})=1
+                        and
+                        nodata(/Template Zabbix Kubernetes Discovery/kubernetes.cronjob.reason[{#KUBERNETES_CRONJOB_NAMESPACE},{#KUBERNETES_CRONJOB_NAME}],{$KUBERNETES.TIMEOUT.NODATA})=1
+                        and
+                        nodata(/Template Zabbix Kubernetes Discovery/kubernetes.cronjob.message[{#KUBERNETES_CRONJOB_NAMESPACE},{#KUBERNETES_CRONJOB_NAME}],{$KUBERNETES.TIMEOUT.NODATA})=1
                   tags:
                     -
                       tag: KubernetesObject
                       value: Cronjob
           trigger_prototypes:
             -
-              uuid: ff09ba4f9b1a4d29a7e3a1ec545df03d
+              uuid: ae2f3fa641f14fb292697e9f1696ecad
               expression: |
-                nodata(/Template Zabbix Kubernetes Discovery/kubernetes.cronjob.exitcode[{#KUBERNETES_CRONJOB_NAMESPACE},{#KUBERNETES_CRONJOB_NAME}],{$KUBERNETES.TIMEOUT.NODATA})=1
+                nodata(/Template Zabbix Kubernetes Discovery/kubernetes.cronjob.status[{#KUBERNETES_CRONJOB_NAMESPACE},{#KUBERNETES_CRONJOB_NAME}],{$KUBERNETES.TIMEOUT.NODATA})=1
                 and
                 nodata(/Template Zabbix Kubernetes Discovery/kubernetes.cronjob.reason[{#KUBERNETES_CRONJOB_NAMESPACE},{#KUBERNETES_CRONJOB_NAME}],{$KUBERNETES.TIMEOUT.NODATA})=1
                 and
-                nodata(/Template Zabbix Kubernetes Discovery/kubernetes.cronjob.restart[{#KUBERNETES_CRONJOB_NAMESPACE},{#KUBERNETES_CRONJOB_NAME}],{$KUBERNETES.TIMEOUT.NODATA})=1
+                nodata(/Template Zabbix Kubernetes Discovery/kubernetes.cronjob.message[{#KUBERNETES_CRONJOB_NAMESPACE},{#KUBERNETES_CRONJOB_NAME}],{$KUBERNETES.TIMEOUT.NODATA})=1
               name: 'Cronjob {#KUBERNETES_CRONJOB_NAMESPACE}/{#KUBERNETES_CRONJOB_NAME}: Problem items nodata'
               priority: HIGH
-              description: 'No data since 900 seconds (by default) for all cronjob items.'
+              description: 'No data since 900 seconds (by default) for cronjob items.'
               manual_close: 'YES'
               tags:
                 -
@@ -155,20 +166,14 @@ zabbix_export:
           graph_prototypes:
             -
               uuid: 65e11c4d205e463a868381c7dfe0a88e
-              name: 'Cronjob {#KUBERNETES_CRONJOB_NAMESPACE}/{#KUBERNETES_CRONJOB_NAME}: Graphs exitcode and restartcount'
+              name: 'Cronjob {#KUBERNETES_CRONJOB_NAMESPACE}/{#KUBERNETES_CRONJOB_NAME}: Graphs status'
               graph_items:
                 -
                   sortorder: '1'
-                  color: FFFF00
+                  color: 0080FF
                   item:
                     host: 'Template Zabbix Kubernetes Discovery'
-                    key: 'kubernetes.cronjob.exitcode[{#KUBERNETES_CRONJOB_NAMESPACE},{#KUBERNETES_CRONJOB_NAME}]'
-                -
-                  sortorder: '2'
-                  color: F63100
-                  item:
-                    host: 'Template Zabbix Kubernetes Discovery'
-                    key: 'kubernetes.cronjob.restart[{#KUBERNETES_CRONJOB_NAMESPACE},{#KUBERNETES_CRONJOB_NAME}]'
+                    key: 'kubernetes.cronjob.status[{#KUBERNETES_CRONJOB_NAMESPACE},{#KUBERNETES_CRONJOB_NAME}]'
         -
           uuid: 54bdab339ea4474e94739785eda595c7
           name: Daemonset
@@ -1351,7 +1356,7 @@ zabbix_export:
           value: Kubernetes
         -
           tag: Version
-          value: 1.4.4
+          value: 1.4.5
       macros:
         -
           macro: '{$KUBERNETES.NODE.PODS.CRITICAL}'
