@@ -264,7 +264,7 @@ def getCronjob(name=None, exclude_name=None, exclude_namespace=None):
     description: get all or specific cronjob
     return: list
     """
-    kubernetes = client.BatchV1beta1Api()
+    kubernetes = client.BatchV1Api()
 
     cronjobs = []
 
