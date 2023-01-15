@@ -222,68 +222,59 @@ def getStatefulset(name=None, exclude_name=None, exclude_namespace=None):
     return statefulsets
 
 
-def getPodjob(name=None):
-    """
-    description: get all or specific pod from cronjob
-    return: list
-    """
-    kubernetes = client.CoreV1Api()
-
-    pods = []
-
-    for pod in kubernetes.list_pod_for_all_namespaces().items:
-
-        if not pod.metadata.owner_references:
-            continue
-
-        if not "Job" in pod.metadata.owner_references[0].kind:
-            continue
-
-        if name != pod.status.container_statuses[0].name:
-            continue
-
-        json = {
-            "name": pod.metadata.name,
-            "namespace": pod.metadata.namespace,
-            "status": {
-                "restart": pod.status.container_statuses[0].restart_count,
-                "exitcode": pod.status.container_statuses[0].state.terminated.exit_code,
-                "started": datetime.timestamp(pod.status.container_statuses[0].state.terminated.started_at),
-                "finished": datetime.timestamp(pod.status.container_statuses[0].state.terminated.finished_at),
-                "reason": pod.status.container_statuses[0].state.terminated.reason
-            }
-        }
-
-        pods.append(json)
-
-    return pods
-
-
 def getCronjob(name=None, exclude_name=None, exclude_namespace=None):
     """
     description: get all or specific cronjob
     return: list
     """
-    kubernetes = client.BatchV1beta1Api()
+    kubernetes = client.BatchV1Api()
 
     cronjobs = []
 
     for cronjob in kubernetes.list_cron_job_for_all_namespaces().items:
 
-        pods_created = getPodjob(name=cronjob.metadata.name)
-        pods_finished, pod_latest = [], {}
+        related_jobs, job_latest = [], {}
 
-        for pod in pods_created:
-            pods_finished.append(pod['status']['finished'])
+        for job in kubernetes.list_job_for_all_namespaces().items:
 
-        for pod in pods_created:
-            if pod['status']['finished'] == sorted(pods_finished)[-1]:
-                pod_latest = pod
+            if not job.metadata.owner_references:
+                continue
+
+            if not "CronJob" in job.metadata.owner_references[0].kind:
+                continue
+
+            if job.metadata.owner_references[0].name != cronjob.metadata.name:
+                continue
+
+            related_jobs.append(job)
+
+        for related_job in related_jobs:
+
+            if not bool(job_latest):
+                job_latest = related_job
+                continue
+
+            related_job_dt = datetime.timestamp(related_job.status.conditions[0].last_probe_time)
+            job_latest_dt = datetime.timestamp(job_latest.status.conditions[0].last_probe_time)
+
+            if related_job_dt > job_latest_dt:
+                job_latest = related_job
+
+        if job_latest.status.conditions[0].type == "Complete":
+            cronjob_status = "0"
+        else:
+            cronjob_status = "1"
 
         json = {
             "name": cronjob.metadata.name,
             "namespace": cronjob.metadata.namespace,
-            "status": pod_latest
+            "status": cronjob_status,
+            "last_job": {
+                "name": job_latest.metadata.name,
+                "reason": job_latest.status.conditions[0].reason,
+                "message": job_latest.status.conditions[0].message,
+                "status": job_latest.status.conditions[0].type
+            }
         }
 
         if ifObjectMatch(exclude_name, json['name']):

@@ -94,8 +94,8 @@ def zabbixItemCronjob(clustername, cronjobs=[]):
     sender = []
 
     for cronjob in cronjobs:
-        sender.append(ZabbixMetric(clustername, f"kubernetes.cronjob.exitcode[{cronjob['namespace']},{cronjob['name']}]", cronjob['status']['status']['exitcode']),)
-        sender.append(ZabbixMetric(clustername, f"kubernetes.cronjob.restart[{cronjob['namespace']},{cronjob['name']}]", cronjob['status']['status']['restart']),)
-        sender.append(ZabbixMetric(clustername, f"kubernetes.cronjob.reason[{cronjob['namespace']},{cronjob['name']}]", cronjob['status']['status']['reason']),)
+        sender.append(ZabbixMetric(clustername, f"kubernetes.cronjob.status[{cronjob['namespace']},{cronjob['name']}]", cronjob['status']),)
+        sender.append(ZabbixMetric(clustername, f"kubernetes.cronjob.reason[{cronjob['namespace']},{cronjob['name']}]", cronjob['last_job']['status']['reason']),)
+        sender.append(ZabbixMetric(clustername, f"kubernetes.cronjob.message[{cronjob['namespace']},{cronjob['name']}]", cronjob['last_job']['status']['message']),)
 
     return sender
