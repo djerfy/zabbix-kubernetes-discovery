@@ -31,7 +31,8 @@ RUN curl -fsSLO "https://github.com/aptible/supercronic/releases/download/v${SUP
 
 COPY ./src/ /app/
 
-RUN chmod +x /app/*.py && \
+RUN chown ${CONTAINER_USER}:${CONTAINER_GROUP} -R /app && \
+    chmod +x /app/*.py && \
     pip3 install --no-cache-dir -r /app/requirements.txt
 
 USER ${CONTAINER_USER}:${CONTAINER_GROUP}
