@@ -1,0 +1,39 @@
+name: Trivy Scan Image (schedule)
+
+# This workflow uses actions that are not certified by GitHub.
+# They are provided by a third-party and are governed by
+# separate terms of service, privacy policy, and support
+# documentation.
+
+on:
+  schedule:
+    - cron: '30 6 * * *'
+
+env:
+  REGISTRY_URL: ghcr.io
+  IMAGE_USER: djerfy
+  IMAGE_NAME: zabbix-kubernetes-discovery
+  IMAGE_TAG: latest
+
+jobs:
+
+  vulnerability-scanner:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Trivy vulnerability scanner
+        uses: aquasecurity/trivy-action@master
+        if: github.event_name != 'pull_request'
+        with:
+          image-ref: ${{ env.REGISTRY_URL }}/${{ env.IMAGE_USER }}/${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}
+          format: sarif
+          output: trivy-results.sarif
+          exit-code: 1
+          ignore-unfixed: true
+          vuln-type: os,library
+          severity: CRITICAL
+      - name: Trivy upload scan results
+        uses: github/codeql-action/upload-sarif@v2
+        if: github.event_name != 'pull_request'
+        with:
+          sarif_file: trivy-results.sarif
