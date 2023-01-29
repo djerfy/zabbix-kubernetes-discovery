@@ -43,7 +43,7 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
       - name: Get metadata
         id: metadata
-        uses: docker/metadata-action@v3
+        uses: docker/metadata-action@v4
         with:
           images: |
             ${{ env.REGISTRY_URL }}/${{ env.IMAGE_USER }}/${{ env.IMAGE_NAME }}
