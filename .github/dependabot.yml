@@ -8,7 +8,7 @@ updates:
       time: "08:00"
       timezone: "Europe/Paris"
     commit-message:
-      prefix: "dependabot(github-actions):
+      prefix: "dependabot(github-actions): "
     labels:
       - ":game_die: dependencies"
       - ":robot: bot"
@@ -24,7 +24,7 @@ updates:
       time: "08:00"
       timezone: "Europe/Paris"
     commit-message:
-      prefix: "dependabot(python-pip):
+      prefix: "dependabot(python-pip): "
     labels:
       - ":game_die: dependencies"
       - ":robot: bot"
