@@ -1,4 +1,4 @@
-requests==2.28.1
+requests==2.28.2
 kubernetes==25.3.0
 py-zabbix==1.1.7
 urllib3==1.26.14
