@@ -1,0 +1,34 @@
+version: 2
+updates:
+  # github-actions dependencies
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "daily"
+      time: "08:00"
+      timezone: "Europe/Paris"
+    commit-message:
+      prefix: "dependabot(github-actions):
+    labels:
+      - ":game_die: dependencies"
+      - ":robot: bot"
+    assignees:
+      - "djerfy"
+    reviewers:
+      - "djerfy"
+  # python dependencies
+  - package-ecosystem: "pip"
+    directory: "/"
+    schedule:
+      interval: "daily"
+      time: "08:00"
+      timezone: "Europe/Paris"
+    commit-message:
+      prefix: "dependabot(python-pip):
+    labels:
+      - ":game_die: dependencies"
+      - ":robot: bot"
+    assignees:
+      - "djerfy"
+    reviewers:
+      - "djerfy"
