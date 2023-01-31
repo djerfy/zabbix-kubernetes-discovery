@@ -54,7 +54,7 @@ jobs:
             type=semver,pattern=v{{major}}
             type=raw,value=latest
       - name: Build and publish
-        uses: docker/build-push-action@v3
+        uses: docker/build-push-action@v4
         with:
           context: .
           platforms: linux/amd64,linux/arm64
