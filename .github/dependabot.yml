@@ -10,8 +10,8 @@ updates:
     commit-message:
       prefix: "dependabot(github-actions): "
     labels:
-      - "dependencies"
-      - "bot"
+      - ":game_die: dependencies"
+      - ":robot: bot"
     assignees:
       - "djerfy"
     reviewers:
@@ -26,8 +26,8 @@ updates:
     commit-message:
       prefix: "dependabot(python-pip): "
     labels:
-      - "dependencies"
-      - "bot"
+      - ":game_die: dependencies"
+      - ":robot: bot"
     assignees:
       - "djerfy"
     reviewers:
