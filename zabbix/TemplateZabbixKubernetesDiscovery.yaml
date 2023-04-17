@@ -1356,7 +1356,7 @@ zabbix_export:
           value: Kubernetes
         -
           tag: Version
-          value: 1.4.5
+          value: 1.4.6
       macros:
         -
           macro: '{$KUBERNETES.NODE.PODS.CRITICAL}'

@@ -13,7 +13,7 @@ serviceAccount:
 deployment:
   name: zabbix-kubernetes-discovery
   image:
-    name: ghcr.io/djerfy/zabbix-kubernetes-discovery:v1.4.5
+    name: ghcr.io/djerfy/zabbix-kubernetes-discovery:v1.4.6
     pullPolicy: IfNotPresent
   replicas: 1
   strategy: Recreate
