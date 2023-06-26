@@ -237,6 +237,9 @@ def getCronjob(name=None, exclude_name=None, exclude_namespace=None):
 
         for job in kubernetes.list_job_for_all_namespaces().items:
 
+            if not job:
+                continue
+
             if not job.metadata.owner_references:
                 continue
 
@@ -259,6 +262,9 @@ def getCronjob(name=None, exclude_name=None, exclude_namespace=None):
 
             if related_job_dt > job_latest_dt:
                 job_latest = related_job
+
+        if type(job_latest) is dict:
+            continue
 
         if job_latest.status.conditions[0].type == "Complete":
             cronjob_status = "0"
