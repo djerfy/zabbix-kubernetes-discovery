@@ -31,16 +31,17 @@ def ifLabelMatch(match_label=None, object_labels=None):
     return: bool
     """
     if match_label is None or match_label == "" or match_label == "*":
-        return False
+        return None
     
     if object_labels is None or object_labels == "" or object_labels == "*":
-        return False
+        return None
     
     object_labels = str(object_labels).replace("{", "").replace("}", "").replace("'", "").replace(" ", "").split(",")
 
     for label in object_labels:
         k, v = label.split(":")[0], label.split(":")[1]
 
-        if match_label.split("=")[0] == k:
-            if match_label.split("=")[1] == v:
-                return True
+        if match_label.split("=")[0] == k and match_label.split("=")[1] == v:
+            return True
+    
+    return False
