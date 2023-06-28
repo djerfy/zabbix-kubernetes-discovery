@@ -5,7 +5,7 @@ import json, urllib3
 
 urllib3.disable_warnings()
 
-def getNode(name=None, exclude_name=None):
+def getNode(name=None, exclude_name=None, match_label=None):
     """
     description: get all or specific node
     return: list
@@ -32,6 +32,9 @@ def getNode(name=None, exclude_name=None):
             }
         }
 
+        if not ifLabelMatch(match_label, node.metadata.labels):
+            continue
+
         if ifObjectMatch(exclude_name, json['name']):
             continue
 
@@ -46,7 +49,7 @@ def getNode(name=None, exclude_name=None):
     return nodes
 
 
-def getDaemonset(name=None, exclude_name=None, exclude_namespace=None):
+def getDaemonset(name=None, exclude_name=None, exclude_namespace=None, match_label=None):
     """
     description: get all or specific daemonset
     return: list
@@ -72,6 +75,9 @@ def getDaemonset(name=None, exclude_name=None, exclude_namespace=None):
             if json['replicas'][i] is None:
                 json['replicas'][i] = 0
 
+        if not ifLabelMatch(match_label, daemonset.metadata.labels):
+            continue
+
         if ifObjectMatch(exclude_name, json['name']):
             continue
 
@@ -89,7 +95,7 @@ def getDaemonset(name=None, exclude_name=None, exclude_namespace=None):
     return daemonsets
 
 
-def getVolume(name=None, exclude_name=None, exclude_namespace=None):
+def getVolume(name=None, exclude_name=None, exclude_namespace=None, match_label=None):
     """
     description: get all or specific persistent volume claim
     return: list
@@ -114,6 +120,9 @@ def getVolume(name=None, exclude_name=None, exclude_namespace=None):
                 else:
                     volume['namespace'] = volume['pvcRef']['namespace']
                     volume['name'] = volume['pvcRef']['name']
+
+                if not ifLabelMatch(match_label, volume.metadata.labels):
+                    continue
 
                 if ifObjectMatch(exclude_name, volume['name']):
                     continue
@@ -156,8 +165,7 @@ def getDeployment(name=None, exclude_name=None, exclude_namespace=None, match_la
                 "desired": deployment.status.replicas,
                 "ready": deployment.status.ready_replicas,
                 "available": deployment.status.available_replicas
-            },
-            "labels": deployment.metadata.labels
+            }
         }
 
         if not ifLabelMatch(match_label, deployment.metadata.labels):
@@ -184,7 +192,7 @@ def getDeployment(name=None, exclude_name=None, exclude_namespace=None, match_la
     return deployments
 
 
-def getStatefulset(name=None, exclude_name=None, exclude_namespace=None):
+def getStatefulset(name=None, exclude_name=None, exclude_namespace=None, match_label=None):
     """
     description: get all or specific statefulset
     return: list
@@ -204,6 +212,9 @@ def getStatefulset(name=None, exclude_name=None, exclude_namespace=None):
                 "desired": statefulset.status.replicas
             }
         }
+
+        if not ifLabelMatch(match_label, statefulset.metadata.labels):
+            continue
 
         if ifObjectMatch(exclude_name, json['name']):
             continue
@@ -226,7 +237,7 @@ def getStatefulset(name=None, exclude_name=None, exclude_namespace=None):
     return statefulsets
 
 
-def getCronjob(name=None, exclude_name=None, exclude_namespace=None):
+def getCronjob(name=None, exclude_name=None, exclude_namespace=None, match_label=None):
     """
     description: get all or specific cronjob
     return: list
@@ -286,6 +297,9 @@ def getCronjob(name=None, exclude_name=None, exclude_namespace=None):
                 "status": job_latest.status.conditions[0].type
             }
         }
+
+        if not ifLabelMatch(match_label, cronjob.metadata.name):
+            continue
 
         if ifObjectMatch(exclude_name, json['name']):
             continue
