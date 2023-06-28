@@ -31,10 +31,10 @@ def ifLabelMatch(match_label=None, object_labels=None):
     return: bool
     """
     if match_label is None or match_label == "" or match_label == "*":
-        return None
+        return False
     
     if object_labels is None or object_labels == "" or object_labels == "*":
-        return None
+        return False
     
     object_labels = str(object_labels).replace("{", "").replace("}", "").replace("'", "").replace(" ", "").split(",")
 
