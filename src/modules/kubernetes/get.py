@@ -138,7 +138,7 @@ def getVolume(name=None, exclude_name=None, exclude_namespace=None):
     return volumes
 
 
-def getDeployment(name=None, exclude_name=None, exclude_namespace=None):
+def getDeployment(name=None, exclude_name=None, exclude_namespace=None, match_label=None):
     """
     description: get all or specific deployment
     return: list
@@ -156,8 +156,12 @@ def getDeployment(name=None, exclude_name=None, exclude_namespace=None):
                 "desired": deployment.status.replicas,
                 "ready": deployment.status.ready_replicas,
                 "available": deployment.status.available_replicas
-            }
+            },
+            "labels": deployment.metadata.labels
         }
+
+        if not ifLabelMatch(match_label, deployment.metadata.labels):
+            continue
 
         if ifObjectMatch(exclude_name, json['name']):
             continue

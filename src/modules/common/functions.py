@@ -1,4 +1,5 @@
 import re
+import json
 
 def ifObjectMatch(object_list=None, object_name=None):
     """
@@ -24,3 +25,22 @@ def ifObjectMatch(object_list=None, object_name=None):
 
     return False
 
+def ifLabelMatch(match_label=None, object_labels=None):
+    """
+    description: check if the object match a label
+    return: bool
+    """
+    if match_label is None or match_label == "" or match_label == "*":
+        return False
+    
+    if object_labels is None or object_labels == "" or object_labels == "*":
+        return False
+    
+    object_labels = str(object_labels).replace("{", "").replace("}", "").replace("'", "").replace(" ", "").split(",")
+
+    for label in object_labels:
+        k, v = label.split(":")[0], label.split(":")[1]
+
+        if match_label.split("=")[0] == k:
+            if match_label.split("=")[1] == v:
+                return True

@@ -29,6 +29,8 @@ zabbix:
   debug: 'no'
 
 monitoring:
+  match_label: ''
+
   node:
     exclude_name: ''
   daemonset:
