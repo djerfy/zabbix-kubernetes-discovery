@@ -100,6 +100,7 @@ usage: zabbix-kubernetes-discovery.py [-h]
     --monitoring-mode {volume,deployment,daemonset,node,statefulset,cronjob}
     --monitoring-type {discovery,item,json}
     [--object-name OBJECT_NAME]
+    [--match-label KEY=VALUE]
     [--exclude-name EXCLUDE_NAME]
     [--exclude-namespace EXCLUDE_NAMESPACE]
     [--no-wait]
