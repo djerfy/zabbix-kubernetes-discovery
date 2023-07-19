@@ -44,7 +44,7 @@ $ helm delete zabbix-kubernetes-discovery \
 | `serviceAccount.create`                           | boolean | `true`                                                      |
 | `serviceAccount.name`                             | string  | `zabbix-kubernetes-discovery`                               |
 | `deployment.name`                                 | string  | `zabbix-kubernetes-discovery`                               |
-| `deployment.image.name`                           | string  | `ghcr.io/djerfy/zabbix-kubernetes-discovery:v1.4.7`         |
+| `deployment.image.name`                           | string  | `ghcr.io/djerfy/zabbix-kubernetes-discovery:v1.4.8`         |
 | `deployment.image.pullPolicy`                     | string  | `IfNotPresent`                                              |
 | `deployment.replicas`                             | integer | `1`                                                         |
 | `deployment.strategy`                             | string  | `Recreate`                                                  |
@@ -77,6 +77,7 @@ $ helm delete zabbix-kubernetes-discovery \
 | `monitoring.statefulset.exclude_namespace`        | string  | `""`                                                        |
 | `monitoring.cronjob.exclude_name`                 | string  | `""`                                                        |
 | `monitoring.cronjob.exclude_namespace`            | string  | `""`                                                        |
+| `monitoring.match_label`                          | string  | `""`                                                        |
 | `resources.requests.cpu`                          | string  | `50m`                                                       |
 | `resources.requests.memory`                       | string  | `128Mi`                                                     |
 | `resources.limits.cpu`                            | string  | `1000m`                                                     |

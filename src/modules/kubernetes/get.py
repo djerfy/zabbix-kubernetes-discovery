@@ -5,7 +5,7 @@ import json, urllib3
 
 urllib3.disable_warnings()
 
-def getNode(name=None, exclude_name=None):
+def getNode(name=None, exclude_name=None, match_label=None):
     """
     description: get all or specific node
     return: list
@@ -35,6 +35,9 @@ def getNode(name=None, exclude_name=None):
         if ifObjectMatch(exclude_name, json['name']):
             continue
 
+        if match_label is not None and not ifLabelMatch(match_label, node.metadata.labels):
+            continue
+
         if name == json['name']:
             return [json]
 
@@ -46,7 +49,7 @@ def getNode(name=None, exclude_name=None):
     return nodes
 
 
-def getDaemonset(name=None, exclude_name=None, exclude_namespace=None):
+def getDaemonset(name=None, exclude_name=None, exclude_namespace=None, match_label=None):
     """
     description: get all or specific daemonset
     return: list
@@ -78,6 +81,9 @@ def getDaemonset(name=None, exclude_name=None, exclude_namespace=None):
         if ifObjectMatch(exclude_namespace, json['namespace']):
             continue
 
+        if match_label is not None and not ifLabelMatch(match_label, daemonset.metadata.labels):
+            continue
+
         if name == json['name']:
             return [json]
 
@@ -89,7 +95,7 @@ def getDaemonset(name=None, exclude_name=None, exclude_namespace=None):
     return daemonsets
 
 
-def getVolume(name=None, exclude_name=None, exclude_namespace=None):
+def getVolume(name=None, exclude_name=None, exclude_namespace=None, match_label=None):
     """
     description: get all or specific persistent volume claim
     return: list
@@ -121,6 +127,9 @@ def getVolume(name=None, exclude_name=None, exclude_namespace=None):
                 if ifObjectMatch(exclude_namespace, volume['namespace']):
                     continue
 
+                if match_label is not None and not ifLabelMatch(match_label, volume.metadata.labels):
+                    continue
+
                 for i in ["time", "pvcRef"]:
                     del volume[i]
 
@@ -138,7 +147,7 @@ def getVolume(name=None, exclude_name=None, exclude_namespace=None):
     return volumes
 
 
-def getDeployment(name=None, exclude_name=None, exclude_namespace=None):
+def getDeployment(name=None, exclude_name=None, exclude_namespace=None, match_label=None):
     """
     description: get all or specific deployment
     return: list
@@ -165,6 +174,9 @@ def getDeployment(name=None, exclude_name=None, exclude_namespace=None):
         if ifObjectMatch(exclude_namespace, json['namespace']):
             continue
 
+        if match_label is not None and not ifLabelMatch(match_label, deployment.metadata.labels):
+            continue
+
         for i in ["desired", "ready", "available"]:
             if json['replicas'][i] is None:
                 json['replicas'][i] = 0
@@ -180,7 +192,7 @@ def getDeployment(name=None, exclude_name=None, exclude_namespace=None):
     return deployments
 
 
-def getStatefulset(name=None, exclude_name=None, exclude_namespace=None):
+def getStatefulset(name=None, exclude_name=None, exclude_namespace=None, match_label=None):
     """
     description: get all or specific statefulset
     return: list
@@ -207,6 +219,9 @@ def getStatefulset(name=None, exclude_name=None, exclude_namespace=None):
         if ifObjectMatch(exclude_namespace, json['namespace']):
             continue
 
+        if match_label is not None and not ifLabelMatch(match_label, statefulset.metadata.labels):
+            continue
+
         for i in ["desired", "ready", "available"]:
             if json['replicas'][i] is None:
                 json['replicas'][i] = 0
@@ -222,7 +237,7 @@ def getStatefulset(name=None, exclude_name=None, exclude_namespace=None):
     return statefulsets
 
 
-def getCronjob(name=None, exclude_name=None, exclude_namespace=None):
+def getCronjob(name=None, exclude_name=None, exclude_namespace=None, match_label=None):
     """
     description: get all or specific cronjob
     return: list
@@ -287,6 +302,9 @@ def getCronjob(name=None, exclude_name=None, exclude_namespace=None):
             continue
 
         if ifObjectMatch(exclude_namespace, json['namespace']):
+            continue
+
+        if match_label is not None and not ifLabelMatch(match_label, cronjob.metadata.name):
             continue
 
         if name == json['name']:
