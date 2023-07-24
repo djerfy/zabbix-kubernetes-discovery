@@ -304,7 +304,7 @@ def getCronjob(name=None, exclude_name=None, exclude_namespace=None, match_label
         if ifObjectMatch(exclude_namespace, json['namespace']):
             continue
 
-        if match_label is not None and not ifLabelMatch(match_label, cronjob.metadata.name):
+        if match_label is not None and not ifLabelMatch(match_label, cronjob.metadata.labels):
             continue
 
         if name == json['name']:
