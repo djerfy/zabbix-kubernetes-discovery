@@ -29,23 +29,27 @@ zabbix:
   debug: 'no'
 
 monitoring:
-  match_label: ''
-
   node:
+    match_label: ''
     exclude_name: ''
   daemonset:
+    match_label: ''
     exclude_name: ''
     exclude_namespace: ''
   volume:
+    match_label: ''
     exclude_name: ''
     exclude_namespace: ''
   deployment:
+    match_label: ''
     exclude_name: ''
     exclude_namespace: ''
   statefulset:
+    match_label: ''
     exclude_name: ''
     exclude_namespace: ''
   cronjob:
+    match_label: ''
     exclude_name: ''
     exclude_namespace: ''
 
