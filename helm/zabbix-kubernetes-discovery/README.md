@@ -66,18 +66,23 @@ $ helm delete zabbix-kubernetes-discovery \
 | `crontab.statefulset.item`                        | string  | `*/3 * * * *`                                               |
 | `crontab.cronjob.discovery`                       | string  | `0 * * * *`                                                 |
 | `crontab.cronjob.item`                            | string  | `*/3 * * * *`                                               |
+| `monitoring.node.match_label`                     | string  | `""`                                                        |
 | `monitoring.node.exclude_name`                    | string  | `""`                                                        |
+| `monitoring.daemonset.match_label`                | string  | `""`                                                        |
 | `monitoring.daemonset.exclude_name`               | string  | `""`                                                        |
 | `monitoring.daemonset.exclude_namespace`          | string  | `""`                                                        |
+| `monitoring.volume.match_label`                   | string  | `""`                                                        |
 | `monitoring.volume.exclude_name`                  | string  | `""`                                                        |
 | `monitoring.volume.exclude_namespace`             | string  | `""`                                                        |
+| `monitoring.deployment.match_label`               | string  | `""`                                                        |
 | `monitoring.deployment.exclude_name`              | string  | `""`                                                        |
 | `monitoring.deployment.exclude_namespace`         | string  | `""`                                                        |
+| `monitoring.statefulset.match_label`              | string  | `""`                                                        |
 | `monitoring.statefulset.exclude_name`             | string  | `""`                                                        |
 | `monitoring.statefulset.exclude_namespace`        | string  | `""`                                                        |
+| `monitoring.cronjob.match_label`                  | string  | `""`                                                        |
 | `monitoring.cronjob.exclude_name`                 | string  | `""`                                                        |
 | `monitoring.cronjob.exclude_namespace`            | string  | `""`                                                        |
-| `monitoring.match_label`                          | string  | `""`                                                        |
 | `resources.requests.cpu`                          | string  | `50m`                                                       |
 | `resources.requests.memory`                       | string  | `128Mi`                                                     |
 | `resources.limits.cpu`                            | string  | `1000m`                                                     |
