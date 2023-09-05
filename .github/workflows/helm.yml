@@ -16,7 +16,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Publish Helm chart
         uses: stefanprodan/helm-gh-pages@v1.7.0
         if: github.event_name != 'pull_request'
