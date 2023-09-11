@@ -20,4 +20,4 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
       - name: Run labeler
-        uses: crazy-max/ghaction-github-labeler@v4
+        uses: crazy-max/ghaction-github-labeler@v5
