@@ -489,7 +489,7 @@ zabbix_export:
                   value: Deployment
             -
               uuid: 1a2124fb40e3461da08ce6db3eb83f09
-              expression: 'last(/Template Zabbix Kubernetes Discovery/kubernetes.deployment.readyReplicas[{#KUBERNETES_DEPLOYMENT_NAMESPACE},{#KUBERNETES_DEPLOYMENT_NAME}]) < last(/Template Zabbix Kubernetes Discovery/kubernetes.deployment.desiredReplicas[{#KUBERNETES_DEPLOYMENT_NAMESPACE},{#KUBERNETES_DEPLOYMENT_NAME}])'
+              expression: 'last(/Template Zabbix Kubernetes Discovery/kubernetes.deployment.readyReplicas[{#KUBERNETES_DEPLOYMENT_NAMESPACE},{#KUBERNETES_DEPLOYMENT_NAME}],#3) < last(/Template Zabbix Kubernetes Discovery/kubernetes.deployment.desiredReplicas[{#KUBERNETES_DEPLOYMENT_NAMESPACE},{#KUBERNETES_DEPLOYMENT_NAME}],#3)'
               name: 'Deployment {#KUBERNETES_DEPLOYMENT_NAMESPACE}/{#KUBERNETES_DEPLOYMENT_NAME}: Problem number of replicas'
               priority: HIGH
               description: 'Problem on the number of the replicas on the deployment.'
@@ -764,7 +764,7 @@ zabbix_export:
                   value: Node
             -
               uuid: 67aa7708ed7d42fe94688e62af3c3db0
-              expression: 'last(/Template Zabbix Kubernetes Discovery/kubernetes.node.current.pods[{#KUBERNETES_NODE_NAME}]) * 100 / last(/Template Zabbix Kubernetes Discovery/kubernetes.node.allocatable.pods[{#KUBERNETES_NODE_NAME}]) >= {$KUBERNETES.NODE.PODS.CRITICAL}'
+              expression: 'last(/Template Zabbix Kubernetes Discovery/kubernetes.node.current.pods[{#KUBERNETES_NODE_NAME}],#3) * 100 / last(/Template Zabbix Kubernetes Discovery/kubernetes.node.allocatable.pods[{#KUBERNETES_NODE_NAME}],#3) >= {$KUBERNETES.NODE.PODS.CRITICAL}'
               name: 'Node {#KUBERNETES_NODE_NAME}: Problem pods limits critical'
               priority: HIGH
               description: 'Critical pods limits reached on the node.'
@@ -775,7 +775,7 @@ zabbix_export:
                   value: Node
             -
               uuid: ede5beb360544f5ea7cf39cec4e74a4f
-              expression: 'last(/Template Zabbix Kubernetes Discovery/kubernetes.node.current.pods[{#KUBERNETES_NODE_NAME}]) * 100 / last(/Template Zabbix Kubernetes Discovery/kubernetes.node.allocatable.pods[{#KUBERNETES_NODE_NAME}]) >= {$KUBERNETES.NODE.PODS.WARNING}'
+              expression: 'last(/Template Zabbix Kubernetes Discovery/kubernetes.node.current.pods[{#KUBERNETES_NODE_NAME}],#3) * 100 / last(/Template Zabbix Kubernetes Discovery/kubernetes.node.allocatable.pods[{#KUBERNETES_NODE_NAME}],#3) >= {$KUBERNETES.NODE.PODS.WARNING}'
               name: 'Node {#KUBERNETES_NODE_NAME}: Problem pods limits warning'
               priority: WARNING
               description: 'Warning pods limits reached on the node.'
@@ -783,7 +783,7 @@ zabbix_export:
               dependencies:
                 -
                   name: 'Node {#KUBERNETES_NODE_NAME}: Problem pods limits critical'
-                  expression: 'last(/Template Zabbix Kubernetes Discovery/kubernetes.node.current.pods[{#KUBERNETES_NODE_NAME}]) * 100 / last(/Template Zabbix Kubernetes Discovery/kubernetes.node.allocatable.pods[{#KUBERNETES_NODE_NAME}]) >= {$KUBERNETES.NODE.PODS.CRITICAL}'
+                  expression: 'last(/Template Zabbix Kubernetes Discovery/kubernetes.node.current.pods[{#KUBERNETES_NODE_NAME}],#3) * 100 / last(/Template Zabbix Kubernetes Discovery/kubernetes.node.allocatable.pods[{#KUBERNETES_NODE_NAME}],#3) >= {$KUBERNETES.NODE.PODS.CRITICAL}'
               tags:
                 -
                   tag: KubernetesObject
@@ -1090,7 +1090,7 @@ zabbix_export:
           trigger_prototypes:
             -
               uuid: 9fe77735296e4601866193eaaf04857f
-              expression: 'last(/Template Zabbix Kubernetes Discovery/kubernetes.volumeclaim.usedBytes[{#KUBERNETES_PVC_NAMESPACE},{#KUBERNETES_PVC_NAME}]) * 100 / last(/Template Zabbix Kubernetes Discovery/kubernetes.volumeclaim.capacityBytes[{#KUBERNETES_PVC_NAMESPACE},{#KUBERNETES_PVC_NAME}]) >= {$KUBERNETES.VOLUME.BYTES.CRITICAL}'
+              expression: 'last(/Template Zabbix Kubernetes Discovery/kubernetes.volumeclaim.usedBytes[{#KUBERNETES_PVC_NAMESPACE},{#KUBERNETES_PVC_NAME}],#3) * 100 / last(/Template Zabbix Kubernetes Discovery/kubernetes.volumeclaim.capacityBytes[{#KUBERNETES_PVC_NAMESPACE},{#KUBERNETES_PVC_NAME}],#3) >= {$KUBERNETES.VOLUME.BYTES.CRITICAL}'
               name: 'Volume {#KUBERNETES_PVC_NAMESPACE}/{#KUBERNETES_PVC_NAME}: Consumption bytes critical'
               priority: HIGH
               description: 'Critical bytes space consumption on the persistent volume claim.'
@@ -1101,7 +1101,7 @@ zabbix_export:
                   value: PersistentVolumeClaim
             -
               uuid: 380c773b43aa45d881a26cec95165d7c
-              expression: 'last(/Template Zabbix Kubernetes Discovery/kubernetes.volumeclaim.usedBytes[{#KUBERNETES_PVC_NAMESPACE},{#KUBERNETES_PVC_NAME}]) * 100 / last(/Template Zabbix Kubernetes Discovery/kubernetes.volumeclaim.capacityBytes[{#KUBERNETES_PVC_NAMESPACE},{#KUBERNETES_PVC_NAME}]) >= {$KUBERNETES.VOLUME.BYTES.WARNING}'
+              expression: 'last(/Template Zabbix Kubernetes Discovery/kubernetes.volumeclaim.usedBytes[{#KUBERNETES_PVC_NAMESPACE},{#KUBERNETES_PVC_NAME}],#3) * 100 / last(/Template Zabbix Kubernetes Discovery/kubernetes.volumeclaim.capacityBytes[{#KUBERNETES_PVC_NAMESPACE},{#KUBERNETES_PVC_NAME}],#3) >= {$KUBERNETES.VOLUME.BYTES.WARNING}'
               name: 'Volume {#KUBERNETES_PVC_NAMESPACE}/{#KUBERNETES_PVC_NAME}: Consumption bytes warning'
               priority: WARNING
               description: 'Warning bytes space consumption on the persistent volume claim.'
@@ -1109,14 +1109,14 @@ zabbix_export:
               dependencies:
                 -
                   name: 'Volume {#KUBERNETES_PVC_NAMESPACE}/{#KUBERNETES_PVC_NAME}: Consumption bytes critical'
-                  expression: 'last(/Template Zabbix Kubernetes Discovery/kubernetes.volumeclaim.usedBytes[{#KUBERNETES_PVC_NAMESPACE},{#KUBERNETES_PVC_NAME}]) * 100 / last(/Template Zabbix Kubernetes Discovery/kubernetes.volumeclaim.capacityBytes[{#KUBERNETES_PVC_NAMESPACE},{#KUBERNETES_PVC_NAME}]) >= {$KUBERNETES.VOLUME.BYTES.CRITICAL}'
+                  expression: 'last(/Template Zabbix Kubernetes Discovery/kubernetes.volumeclaim.usedBytes[{#KUBERNETES_PVC_NAMESPACE},{#KUBERNETES_PVC_NAME}],#3) * 100 / last(/Template Zabbix Kubernetes Discovery/kubernetes.volumeclaim.capacityBytes[{#KUBERNETES_PVC_NAMESPACE},{#KUBERNETES_PVC_NAME}],#3) >= {$KUBERNETES.VOLUME.BYTES.CRITICAL}'
               tags:
                 -
                   tag: KubernetesObject
                   value: PersistentVolumeClaim
             -
               uuid: 8b33456f4b2e4fcf9dd761f155114bc3
-              expression: 'last(/Template Zabbix Kubernetes Discovery/kubernetes.volumeclaim.inodesUsed[{#KUBERNETES_PVC_NAMESPACE},{#KUBERNETES_PVC_NAME}]) * 100 / last(/Template Zabbix Kubernetes Discovery/kubernetes.volumeclaim.inodes[{#KUBERNETES_PVC_NAMESPACE},{#KUBERNETES_PVC_NAME}]) >= {$KUBERNETES.VOLUME.INODES.CRITICAL}'
+              expression: 'last(/Template Zabbix Kubernetes Discovery/kubernetes.volumeclaim.inodesUsed[{#KUBERNETES_PVC_NAMESPACE},{#KUBERNETES_PVC_NAME}],#3) * 100 / last(/Template Zabbix Kubernetes Discovery/kubernetes.volumeclaim.inodes[{#KUBERNETES_PVC_NAMESPACE},{#KUBERNETES_PVC_NAME}],#3) >= {$KUBERNETES.VOLUME.INODES.CRITICAL}'
               name: 'Volume {#KUBERNETES_PVC_NAMESPACE}/{#KUBERNETES_PVC_NAME}: Consumption inodes critical'
               priority: HIGH
               description: 'Critical inodes consumption on the persistent volume claim.'
@@ -1127,7 +1127,7 @@ zabbix_export:
                   value: PersistentVolumeClaim
             -
               uuid: 99dd7b79e30844bf9b74efc9c69b3bf4
-              expression: 'last(/Template Zabbix Kubernetes Discovery/kubernetes.volumeclaim.inodesUsed[{#KUBERNETES_PVC_NAMESPACE},{#KUBERNETES_PVC_NAME}]) * 100 / last(/Template Zabbix Kubernetes Discovery/kubernetes.volumeclaim.inodes[{#KUBERNETES_PVC_NAMESPACE},{#KUBERNETES_PVC_NAME}]) >= {$KUBERNETES.VOLUME.INODES.WARNING}'
+              expression: 'last(/Template Zabbix Kubernetes Discovery/kubernetes.volumeclaim.inodesUsed[{#KUBERNETES_PVC_NAMESPACE},{#KUBERNETES_PVC_NAME}],#3) * 100 / last(/Template Zabbix Kubernetes Discovery/kubernetes.volumeclaim.inodes[{#KUBERNETES_PVC_NAMESPACE},{#KUBERNETES_PVC_NAME}],#3) >= {$KUBERNETES.VOLUME.INODES.WARNING}'
               name: 'Volume {#KUBERNETES_PVC_NAMESPACE}/{#KUBERNETES_PVC_NAME}: Consumption inodes warning'
               priority: WARNING
               description: 'Warning inodes consumption on the persistent volume claim.'
@@ -1135,7 +1135,7 @@ zabbix_export:
               dependencies:
                 -
                   name: 'Volume {#KUBERNETES_PVC_NAMESPACE}/{#KUBERNETES_PVC_NAME}: Consumption inodes critical'
-                  expression: 'last(/Template Zabbix Kubernetes Discovery/kubernetes.volumeclaim.inodesUsed[{#KUBERNETES_PVC_NAMESPACE},{#KUBERNETES_PVC_NAME}]) * 100 / last(/Template Zabbix Kubernetes Discovery/kubernetes.volumeclaim.inodes[{#KUBERNETES_PVC_NAMESPACE},{#KUBERNETES_PVC_NAME}]) >= {$KUBERNETES.VOLUME.INODES.CRITICAL}'
+                  expression: 'last(/Template Zabbix Kubernetes Discovery/kubernetes.volumeclaim.inodesUsed[{#KUBERNETES_PVC_NAMESPACE},{#KUBERNETES_PVC_NAME}],#3) * 100 / last(/Template Zabbix Kubernetes Discovery/kubernetes.volumeclaim.inodes[{#KUBERNETES_PVC_NAMESPACE},{#KUBERNETES_PVC_NAME}],#3) >= {$KUBERNETES.VOLUME.INODES.CRITICAL}'
               tags:
                 -
                   tag: KubernetesObject
@@ -1318,7 +1318,7 @@ zabbix_export:
                   value: Statefulset
             -
               uuid: 0494362e368c4f2db79d8a5150702125
-              expression: 'last(/Template Zabbix Kubernetes Discovery/kubernetes.statefulset.readyReplicas[{#KUBERNETES_STATEFULSET_NAMESPACE},{#KUBERNETES_STATEFULSET_NAME}]) < last(/Template Zabbix Kubernetes Discovery/kubernetes.statefulset.desiredReplicas[{#KUBERNETES_STATEFULSET_NAMESPACE},{#KUBERNETES_STATEFULSET_NAME}])'
+              expression: 'last(/Template Zabbix Kubernetes Discovery/kubernetes.statefulset.readyReplicas[{#KUBERNETES_STATEFULSET_NAMESPACE},{#KUBERNETES_STATEFULSET_NAME}],#3) < last(/Template Zabbix Kubernetes Discovery/kubernetes.statefulset.desiredReplicas[{#KUBERNETES_STATEFULSET_NAMESPACE},{#KUBERNETES_STATEFULSET_NAME}],#3)'
               name: 'Statefulset {#KUBERNETES_STATEFULSET_NAMESPACE}/{#KUBERNETES_STATEFULSET_NAME}: Problem number of replicas'
               priority: HIGH
               description: 'Problem on the number of the replicas on the statefulset.'
