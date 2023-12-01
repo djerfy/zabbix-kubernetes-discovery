@@ -44,7 +44,7 @@ $ helm delete zabbix-kubernetes-discovery \
 | `serviceAccount.create`                           | boolean | `true`                                                      |
 | `serviceAccount.name`                             | string  | `zabbix-kubernetes-discovery`                               |
 | `deployment.name`                                 | string  | `zabbix-kubernetes-discovery`                               |
-| `deployment.image.name`                           | string  | `ghcr.io/djerfy/zabbix-kubernetes-discovery:v1.4.11`        |
+| `deployment.image.name`                           | string  | `ghcr.io/djerfy/zabbix-kubernetes-discovery:v1.4.12`        |
 | `deployment.image.pullPolicy`                     | string  | `IfNotPresent`                                              |
 | `deployment.replicas`                             | integer | `1`                                                         |
 | `deployment.strategy`                             | string  | `Recreate`                                                  |
