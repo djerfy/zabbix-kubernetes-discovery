@@ -22,7 +22,7 @@ RUN apt-get update && \
     useradd -u 2000 -d /app -s /bin/bash -M -g ${CONTAINER_GROUP} ${CONTAINER_USER}
 
 ARG SUPERCRONIC_VER="0.2.28"
-ARG SUPERCRONIC_SHA="c646d115c152545765b7eea0f5c3591849f6d7c6"
+ARG SUPERCRONIC_SHA="fe1a81a8a5809deebebbd7a209a3b97e542e2bcd"
 
 RUN curl -fsSLO "https://github.com/aptible/supercronic/releases/download/v${SUPERCRONIC_VER}/supercronic-linux-amd64" && \
     echo "${SUPERCRONIC_SHA}  supercronic-linux-amd64" | sha1sum -c - && \
