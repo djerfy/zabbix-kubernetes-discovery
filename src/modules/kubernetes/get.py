@@ -264,6 +264,9 @@ def getCronjob(name=None, exclude_name=None, exclude_namespace=None, match_label
             if job.metadata.owner_references[0].name != cronjob.metadata.name:
                 continue
 
+            if job.status.active is not None:
+                continue
+
             related_jobs.append(job)
 
         for related_job in related_jobs:
