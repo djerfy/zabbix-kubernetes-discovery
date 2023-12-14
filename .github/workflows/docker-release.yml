@@ -79,7 +79,7 @@ jobs:
           vuln-type: os,library
           severity: CRITICAL
       - name: Trivy upload scan results
-        uses: github/codeql-action/upload-sarif@v2
+        uses: github/codeql-action/upload-sarif@v3
         if: github.event_name != 'pull_request'
         with:
           sarif_file: trivy-results.sarif
