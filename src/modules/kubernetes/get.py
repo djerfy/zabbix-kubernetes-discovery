@@ -1,7 +1,7 @@
 from kubernetes import client
 from datetime import datetime
 from modules.common.functions import *
-import json, urllib3
+import json, urllib3, re
 
 urllib3.disable_warnings()
 
@@ -117,9 +117,12 @@ def getVolume(name=None, exclude_name=None, exclude_namespace=None, match_label=
 
                 if not "pvcRef" in volume:
                     continue
-                else:
-                    volume['namespace'] = volume['pvcRef']['namespace']
-                    volume['name'] = volume['pvcRef']['name']
+
+                if volume['pvcRef']['name'].startswith(pod['podRef']['name']) and re.match(r"(.*)-[a-z0-9]{8,10}-[a-z0-9]{5}$", pod['podRef']['name']):
+                    continue
+
+                volume['namespace'] = volume['pvcRef']['namespace']
+                volume['name'] = volume['pvcRef']['name']
 
                 if ifObjectMatch(exclude_name, volume['name']):
                     continue
