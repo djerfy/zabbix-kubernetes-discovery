@@ -1,7 +1,7 @@
 apiVersion: v2
 name: zabbix-kubernetes-discovery
-version: 1.4.12
-appVersion: "1.4.12"
+version: 1.4.13
+appVersion: "1.4.13"
 description: Kubernetes monitoring for Zabbix with discovery objects
 annotations:
   category: Monitoring
