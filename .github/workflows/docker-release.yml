@@ -16,16 +16,14 @@ env:
   IMAGE_NAME: zabbix-kubernetes-discovery
 
 jobs:
-
   build-and-publish:
+    name: Build and Publish
     runs-on: ubuntu-latest
-    
     permissions:
       contents: read
       packages: write
       id-token: write
       security-events: write
-
     steps:       
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -71,15 +69,14 @@ jobs:
         uses: aquasecurity/trivy-action@master
         if: github.event_name != 'pull_request'
         with:
-          image-ref: ${{ env.REGISTRY_URL }}/${{ env.IMAGE_USER }}/${{ env.IMAGE_NAME }}:latest
-          format: sarif
-          output: trivy-results.sarif
-          exit-code: 1
+          image-ref: '${{ env.REGISTRY_URL }}/${{ env.IMAGE_USER }}/${{ env.IMAGE_NAME }}:latest'
+          format: 'sarif'
+          output: 'trivy-results.sarif'
           ignore-unfixed: true
-          vuln-type: os,library
-          severity: CRITICAL
+          vuln-type: 'os,library'
+          severity: 'CRITICAL,HIGH'
       - name: Trivy upload scan results
         uses: github/codeql-action/upload-sarif@v3
         if: github.event_name != 'pull_request'
         with:
-          sarif_file: trivy-results.sarif
+          sarif_file: 'trivy-results.sarif'

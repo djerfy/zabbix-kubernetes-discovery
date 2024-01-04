@@ -11,8 +11,8 @@ on:
       - 'v*.*.*'
 
 jobs:
-
   helm-release:
+    name: Helm Release
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository

@@ -12,6 +12,9 @@ on:
       - 'release/**'
       - 'feature/**'
       - 'bugfix/**'
+    paths-ignore:
+      - '.github/ISSUE_TEMPLATE/*.md'
+      - '*.md'
 
 env:
   REGISTRY_URL: ghcr.io
@@ -19,14 +22,11 @@ env:
   IMAGE_NAME: zabbix-kubernetes-discovery
 
 jobs:
-
   build-and-publish:
     runs-on: ubuntu-latest
-
     permissions:
       contents: read
       packages: write
-
     steps:       
       - name: Checkout repository
         uses: actions/checkout@v4

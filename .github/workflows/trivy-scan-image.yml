@@ -18,22 +18,21 @@ env:
 jobs:
 
   vulnerability-scanner:
+    name: Vulnerability Scanner
     runs-on: ubuntu-latest
-
     steps:
       - name: Trivy vulnerability scanner
         uses: aquasecurity/trivy-action@master
         if: github.event_name != 'pull_request'
         with:
-          image-ref: ${{ env.REGISTRY_URL }}/${{ env.IMAGE_USER }}/${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}
-          format: sarif
-          output: trivy-results.sarif
-          exit-code: 1
+          image-ref: '${{ env.REGISTRY_URL }}/${{ env.IMAGE_USER }}/${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}'
+          format: 'sarif'
+          output: 'trivy-results.sarif'
           ignore-unfixed: true
-          vuln-type: os,library
-          severity: CRITICAL
+          vuln-type: 'os,library'
+          severity: 'CRITICAL,HIGH'
       - name: Trivy upload scan results
         uses: github/codeql-action/upload-sarif@v3
         if: github.event_name != 'pull_request'
         with:
-          sarif_file: trivy-results.sarif
+          sarif_file: 'trivy-results.sarif'

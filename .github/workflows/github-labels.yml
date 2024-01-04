@@ -5,6 +5,10 @@ name: Github Labels
 # separate terms of service, privacy policy, and support
 # documentation.
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 on:
   push:
     branches:
@@ -12,9 +16,11 @@ on:
     paths:
       - '.github/labels.yml'
       - '.github/workflows/labels.yml'
+    workflow_dispatch:
 
 jobs:
   labeler:
+    name: Labeler
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository

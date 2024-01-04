@@ -9,12 +9,11 @@ on:
   push:
 
 jobs:
-
   trivy-code-scan:
+    name: Vulnerability Scanner
     runs-on: ubuntu-latest
     permissions:
       security-events: write
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -22,6 +21,7 @@ jobs:
         uses: aquasecurity/trivy-action@master
         with:
           scan-type: 'fs'
+          scan-ref: '.'
           format: 'table'
           ignore-unfixed: 'false'
           vuln-type: 'os,library'
