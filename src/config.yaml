@@ -2,8 +2,8 @@ zabbix:
   endpoint: localhost
   timeout: 10
   schedule:
-    discovery: 60
-    items: 2
+    discovery: 3600
+    items: 120
 
 kubernetes:
   name: localhost
@@ -45,7 +45,7 @@ monitoring:
     labels:
       include: []
       exclude: []
-  # plugins
+  # optional
   openebs:
     enabled: False
     labels:
