@@ -15,10 +15,6 @@ def kubernetesGetVolumes(config=None):
     volumes = []
 
     for node in kubernetes.list_node().items:
-        if node.spec.taints is not None:
-            if "node.kubernetes.io/not-ready" in str(node.spec.taints):
-                continue
-
         node_info = kubernetes.connect_get_node_proxy_with_path(name=node.metadata.name, path="stats/summary").replace("'", "\"")
         node_json = json.loads(node_info)
 

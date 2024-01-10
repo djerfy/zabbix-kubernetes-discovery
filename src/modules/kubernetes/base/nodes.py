@@ -15,10 +15,6 @@ def kubernetesGetNodes(config=None):
     nodes = []
 
     for node in kubernetes.list_node().items:
-        if node.spec.taints is not None:
-            if "node.kubernetes.io/not-ready" in str(node.spec.taints):
-                continue
-
         node_healthz = kubernetes.connect_get_node_proxy_with_path(name=node.metadata.name, path="healthz")
         node_status  = kubernetes.read_node_status(name=node.metadata.name)
         node_pods    = kubernetes.list_pod_for_all_namespaces(field_selector="spec.nodeName={}".format(node.metadata.name))
