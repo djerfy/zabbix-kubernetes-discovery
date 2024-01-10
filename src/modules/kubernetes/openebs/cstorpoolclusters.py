@@ -16,16 +16,16 @@ def openebsGetCstorpoolclusters(config=None):
 
     for cstorpoolcluster in rawObjects(kubernetes.list_cluster_custom_object(group="cstor.openebs.io", version="v1", plural="cstorpoolclusters")):
         json = {
-            "name": cstorpoolcluster.metadata.name,
-            "namespace": cstorpoolcluster.metadata.namespace,
+            "name": cstorpoolcluster['metadata']['name'],
+            "namespace": cstorpoolcluster['metadata']['namespace'],
             "instances": {
-                "desired": cstorpoolcluster.status.desiredInstances,
-                "healthy": cstorpoolcluster.status.healthyInstances,
-                "provisioned": cstorpoolcluster.status.provisionedInstances
+                "desired": cstorpoolcluster['status']['desiredInstances'],
+                "healthy": cstorpoolcluster['status']['healthyInstances'],
+                "provisioned": cstorpoolcluster['status']['provisionedInstances']
             },
             "version": {
-                "desired": cstorpoolcluster.status.versionDetails.desired,
-                "current": cstorpoolcluster.status.versionDetails.status.current
+                "desired": cstorpoolcluster['status']['versionDetails']['desired'],
+                "current": cstorpoolcluster['status']['versionDetails']['status.current']
             }
         }
 

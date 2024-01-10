@@ -1,1 +1,1 @@
-from modules.kubernetes.openebs.cstorpoolclusters import openebsGetCstorpoolclusters
+from modules.kubernetes.openebs.cstorpoolclusters import baseOpenebsCstorpoolclusters
