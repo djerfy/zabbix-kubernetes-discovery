@@ -14,6 +14,9 @@ def openebsGetCstorpoolclusters(config=None):
 
     cstorpoolclusters = []
 
+    if config['engine'] != "cstor":
+        return cstorpoolclusters
+
     for cstorpoolcluster in rawObjects(kubernetes.list_cluster_custom_object(group="cstor.openebs.io", version="v1", plural="cstorpoolclusters")):
         json = {
             "name": cstorpoolcluster['metadata']['name'],
