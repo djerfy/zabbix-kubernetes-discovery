@@ -5,85 +5,88 @@ import json, urllib3
 
 urllib3.disable_warnings()
 
-def openebsGetCstorpoolinstances(config=None):
+def openebsGetCstorpoolclusters(config=None):
     """
-    description: get cstorpoolinstances data
+    description: get cstorpoolclusters data
     return: list
     """
     kubernetes = client.CustomObjectsApi()
 
-    cstorpoolinstances = []
+    cstorpoolclusters = []
 
     if config['engine'] != "cstor":
-        return cstorpoolinstances
+        return cstorpoolclusters
 
-    for cstorpoolinstance in rawObjects(kubernetes.list_cluster_custom_object(group="cstor.openebs.io", version="v1", plural="cstorpoolinstances")):
+    for cstorpoolcluster in rawObjects(kubernetes.list_cluster_custom_object(group="cstor.openebs.io", version="v1", plural="cstorpoolclusters")):
         json = {
-            "name": cstorpoolinstance['metadata']['name'],
-            "namespace": cstorpoolinstance['metadata']['namespace'],
-            "status": cstorpoolinstance['status'],
+            "name": cstorpoolcluster['metadata']['name'],
+            "namespace": cstorpoolcluster['metadata']['namespace'],
+            "instances": {
+                "desired": cstorpoolcluster['status']['desiredInstances'],
+                "healthy": cstorpoolcluster['status']['healthyInstances'],
+                "provisioned": cstorpoolcluster['status']['provisionedInstances']
+            },
             "version": {
-                "desired": cstorpoolinstance['versionDetails']['desired'],
-                "current": cstorpoolinstance['versionDetails']['status']['current']
+                "desired": cstorpoolcluster['versionDetails']['desired'],
+                "current": cstorpoolcluster['versionDetails']['status']['current']
             }
         }
 
-        if cstorpoolinstance.get("metadata"):
-            if cstorpoolinstance['metadata'].get("labels"):
-                if matchLabels(config['labels']['exclude'], cstorpoolinstance['metadata']['labels']):
+        if cstorpoolcluster.get("metadata"):
+            if cstorpoolcluster['metadata'].get("labels"):
+                if matchLabels(config['labels']['exclude'], cstorpoolcluster['metadata']['labels']):
                     continue
                 if config['labels']['include'] != []:
-                    if not matchLabels(config['labels']['exclude'], cstorpoolinstance['metadata']['labels']):
+                    if not matchLabels(config['labels']['exclude'], cstorpoolcluster['metadata']['labels']):
                         continue
 
-        if any(c['name'] == json['name'] and c['namespace'] == json['namespace'] for c in cstorpoolinstance):
+        if any(c['name'] == json['name'] and c['namespace'] == json['namespace'] for c in cstorpoolclusters):
             continue
 
-        cstorpoolinstances.append(json)
+        cstorpoolclusters.append(json)
 
-    return cstorpoolinstances
+    return cstorpoolclusters
 
-def ZabbixDiscoveryCstorpoolinstances(clustername, cstorpoolinstances=[]):
+def ZabbixDiscoveryCstorpoolclusters(clustername, cstorpoolclusters=[]):
     """
-    description: create a discovery for cstorpoolinstances, per namespace
+    description: create a discovery for cstorpoolclusters, per namespace
     return: class ZabbixMetric
     """
     discovery = {"data":[]}
 
-    for cstorpoolinstance in cstorpoolinstances:
+    for cstorpoolcluster in cstorpoolclusters:
         output = {
-            "{#KUBERNETES_OPENEBS_CSTORPOOLINSTANCE_NAMESPACE}": cstorpoolinstance['namespace'],
-            "{#KUBERNETES_OPENEBS_CSTORPOOLINSTANCE_NAME}": cstorpoolinstance['name']}
+            "{#KUBERNETES_OPENEBS_CSTORPOOLCLUSTER_NAMESPACE}": cstorpoolcluster['namespace'],
+            "{#KUBERNETES_OPENEBS_CSTORPOOLCLUSTER_NAME}": cstorpoolcluster['name']}
         discovery['data'].append(output)
 
-    sender = [ZabbixMetric(clustername, "kubernetes.openebs.cstorpoolinstances.discovery", json.dumps(discovery))]
+    sender = [ZabbixMetric(clustername, "kubernetes.openebs.cstorpoolclusters.discovery", json.dumps(discovery))]
 
     return sender
 
-def ZabbixItemCstorpoolinstances(clustername, cstorpoolinstances=[]):
+def ZabbixItemCstorpoolclusters(clustername, cstorpoolclusters=[]):
     """
-    description: create a item for cstorpoolinstances, per namespace
+    description: create a item for cstorpoolclusters, per namespace
     return: class ZabbixMetric
     """
     sender = []
 
-    for cstorpoolinstance in cstorpoolinstances:
-        sender.append(ZabbixMetric(clustername, f"kubernetes.openebs.cstorpoolinstances.readonly[{cstorpoolinstance['namespace']},{cstorpoolinstance['name']}]", cstorpoolinstance['status']['readOnly']),)
-        sender.append(ZabbixMetric(clustername, f"kubernetes.openebs.cstorpoolinstances.provisionedReplicas[{cstorpoolinstance['namespace']},{cstorpoolinstance['name']}]", cstorpoolinstance['status']['provisionedReplicas']),)
-        sender.append(ZabbixMetric(clustername, f"kubernetes.openebs.cstorpoolinstances.healthyReplicas[{cstorpoolinstance['namespace']},{cstorpoolinstance['name']}]", cstorpoolinstance['status']['healthyReplicas']),)
-        sender.append(ZabbixMetric(clustername, f"kubernetes.openebs.cstorpoolinstances.status[{cstorpoolinstance['namespace']},{cstorpoolinstance['name']}]", cstorpoolinstance['status']['phase']),)
-        sender.append(ZabbixMetric(clustername, f"kubernetes.openebs.cstorpoolinstances.capacity.total[{cstorpoolinstance['namespace']},{cstorpoolinstance['name']}]", cstorpoolinstance['status']['capacity']['total']),)
-        sender.append(ZabbixMetric(clustername, f"kubernetes.openebs.cstorpoolinstances.capacity.free[{cstorpoolinstance['namespace']},{cstorpoolinstance['name']}]", cstorpoolinstance['status']['capacity']['free']),)
-        sender.append(ZabbixMetric(clustername, f"kubernetes.openebs.cstorpoolinstances.capacity.used[{cstorpoolinstance['namespace']},{cstorpoolinstance['name']}]", cstorpoolinstance['status']['capacity']['used']),)
+    for cstorpoolcluster in cstorpoolclusters:
+        sender.append(ZabbixMetric(clustername, f"kubernetes.openebs.cstorpoolclusters.desiredInstances[{cstorpoolcluster['namespace']},{cstorpoolcluster['name']}]", cstorpoolcluster['instances']['desired']),)
+        sender.append(ZabbixMetric(clustername, f"kubernetes.openebs.cstorpoolclusters.healthyInstances[{cstorpoolcluster['namespace']},{cstorpoolcluster['name']}]", cstorpoolcluster['instances']['healthy']),)
+        sender.append(ZabbixMetric(clustername, f"kubernetes.openebs.cstorpoolclusters.provisionedInstances[{cstorpoolcluster['namespace']},{cstorpoolcluster['name']}]", cstorpoolcluster['instances']['provisioned']),)
+        sender.append(ZabbixMetric(clustername, f"kubernetes.openebs.cstorpoolclusters.desiredVersion[{cstorpoolcluster['namespace']},{cstorpoolcluster['name']}]", cstorpoolcluster['version']['desired']),)
+        sender.append(ZabbixMetric(clustername, f"kubernetes.openebs.cstorpoolclusters.currentVersion[{cstorpoolcluster['namespace']},{cstorpoolcluster['name']}]", cstorpoolcluster['version']['current']),)
+
     return sender
 
-def baseOpenebsCstorpoolinstances(mode=None, config=None):
+def baseOpenebsCstorpoolclusters(mode=None, config=None):
     """
-    description: monitoring openebs cstorpoolinstances
+    description: monitoring openebs cstorpoolclusters
     return: class ZabbixMetric
     """
     if mode == "discovery":
-        return ZabbixDiscoveryCstorpoolinstances(config['kubernetes']['name'], openebsGetCstorpoolinstances(config['monitoring']['openebs']))
+        return ZabbixDiscoveryCstorpoolclusters(config['kubernetes']['name'], openebsGetCstorpoolclusters(config['monitoring']['openebs']))
     if mode == "item":
-        return ZabbixItemCstorpoolinstances(config['kubernetes']['name'], openebsGetCstorpoolinstances(config['monitoring']['openebs']))
+        return ZabbixItemCstorpoolclusters(config['kubernetes']['name'], openebsGetCstorpoolclusters(config['monitoring']['openebs']))
     return []
