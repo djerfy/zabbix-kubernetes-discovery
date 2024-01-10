@@ -8,14 +8,15 @@ from pyzabbix import ZabbixSender
 from modules.kubernetes.base import *
 
 parser = argparse.ArgumentParser()
-parser.add_argument("--config-file", "-c", dest="config_file", action="store", required=False, help="Configuration file (default: config.yaml)", default="config.yaml")
-parser.add_argument("--debug", "-d", dest="debug", action="store_true", required=False, help="Enable debug output (default: false)", default=False)
+parser.add_argument("--config-file", dest="config_file", action="store", required=False, help="Configuration file (default: config.yaml)", default="config.yaml")
+parser.add_argument("--log-level", dest="log_level", action="store", required=False, help="Logging output log-level (default: INFO)", default="INFO", choices=["INFO", "WARNING", "ERROR", "DEBUG"])
 args = parser.parse_args()
 
 logging.basicConfig(
-    format="[%(asctime)s] (%(levelname)s) %(name)s.%(funcName)s():%(lineno)d - %(message)s",
     datefmt="%d/%m/%Y %H:%M:%S",
-    level=logging.INFO)
+    format="[%(asctime)s] (%(levelname)s) %(name)s.%(funcName)s():%(lineno)d - %(message)s",
+    level=getattr(logging, args.log_level)
+)
 
 if os.path.exists("/var/run/secrets/kubernetes.io/serviceaccount/token") and not os.getenv('KUBECONFIG'):
     kube_config.load_incluster_config()

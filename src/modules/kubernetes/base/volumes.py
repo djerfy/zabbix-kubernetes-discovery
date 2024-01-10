@@ -53,7 +53,7 @@ def kubernetesGetVolumes(config=None):
                 
                 if "-token-" in volume['name']:
                     continue
-                logging.info(volume)
+
                 volumes.append(volume)
 
     return volumes
