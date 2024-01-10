@@ -1,0 +1,68 @@
+zabbix:
+  endpoint: localhost
+  timeout: 10
+  schedule:
+    discovery: 60
+    items: 2
+
+kubernetes:
+  name: cluster-name
+
+monitoring:
+  # core
+  nodes:
+    enabled: True
+    labels:
+      include: []
+      exclude: []
+  daemonsets:
+    enabled: True
+    labels:
+      include: []
+      exclude: []
+  volumes:
+    enabled: True
+    labels:
+      include: []
+      exclude: []
+  deployments:
+    enabled: True
+    labels:
+      include: []
+      exclude: []
+  statefulsets:
+    enabled: True
+    labels:
+      include: []
+      exclude: []
+  cronjobs:
+    enabled: True
+    labels:
+      include: []
+      exclude: []
+  ingresses:
+    enabled: True
+    labels:
+      include: []
+      exclude: []
+  # plugins
+  openebs:
+    enabled: False
+    labels:
+      include: []
+      exclude: []
+  velero:
+    enabled: True
+    labels:
+      include: []
+      exclude: []
+  trivy:
+    enabled: True
+    labels:
+      include: []
+      exclude: []
+  certs:
+    enabled: True
+    labels:
+      include: []
+      exclude: []
