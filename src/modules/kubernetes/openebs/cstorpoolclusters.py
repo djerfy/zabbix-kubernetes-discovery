@@ -24,8 +24,8 @@ def openebsGetCstorpoolclusters(config=None):
                 "provisioned": cstorpoolcluster['status']['provisionedInstances']
             },
             "version": {
-                "desired": cstorpoolcluster['status']['versionDetails']['desired'],
-                "current": cstorpoolcluster['status']['versionDetails']['status.current']
+                "desired": cstorpoolcluster['versionDetails']['desired'],
+                "current": cstorpoolcluster['versionDetails']['status']['current']
             }
         }
 
