@@ -36,7 +36,7 @@ def openebsGetCstorpoolinstances(config=None):
                     if not matchLabels(config['labels']['exclude'], cstorpoolinstance['metadata']['labels']):
                         continue
 
-        if any(c['name'] == json['name'] and c['namespace'] == json['namespace'] for c in cstorpoolinstance):
+        if any(c['name'] == json['name'] and c['namespace'] == json['namespace'] for c in cstorpoolinstances):
             continue
 
         cstorpoolinstances.append(json)
