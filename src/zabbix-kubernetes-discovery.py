@@ -51,33 +51,33 @@ if __name__ == "__main__":
 
     # cronjobs
     if config['monitoring']['cronjobs']['enabled']:
-        schedule.every(config['zabbix']['schedule']['discovery']).seconds.do(lambda: mainSender(baseCronjobs(mode="discovery", config=config)))         # cronjobs
-        schedule.every(config['zabbix']['schedule']['items']).seconds.do(lambda: mainSender(baseCronjobs(mode="item", config=config)))                   # cronjobs
+        schedule.every(config['zabbix']['schedule']['discovery']).seconds.do(lambda: mainSender(baseCronjobs(mode="discovery", config=config)))
+        schedule.every(config['zabbix']['schedule']['items']).seconds.do(lambda: mainSender(baseCronjobs(mode="item", config=config)))
 
     # daemonsets
     if config['monitoring']['daemonsets']['enabled']:
-        schedule.every(config['zabbix']['schedule']['discovery']).seconds.do(lambda: mainSender(baseDaemonsets(mode="discovery", config=config)))       # daemonsets
-        schedule.every(config['zabbix']['schedule']['items']).seconds.do(lambda: mainSender(baseDaemonsets(mode="item", config=config)))                 # daemonsets
+        schedule.every(config['zabbix']['schedule']['discovery']).seconds.do(lambda: mainSender(baseDaemonsets(mode="discovery", config=config)))
+        schedule.every(config['zabbix']['schedule']['items']).seconds.do(lambda: mainSender(baseDaemonsets(mode="item", config=config)))
 
     # deployments
     if config['monitoring']['deployments']['enabled']:
-        schedule.every(config['zabbix']['schedule']['discovery']).seconds.do(lambda: mainSender(baseDeployments(mode="discovery", config=config)))      # deployments
-        schedule.every(config['zabbix']['schedule']['items']).seconds.do(lambda: mainSender(baseDeployments(mode="item", config=config)))                # deployments
+        schedule.every(config['zabbix']['schedule']['discovery']).seconds.do(lambda: mainSender(baseDeployments(mode="discovery", config=config)))
+        schedule.every(config['zabbix']['schedule']['items']).seconds.do(lambda: mainSender(baseDeployments(mode="item", config=config)))
 
     # nodes
     if config['monitoring']['nodes']['enabled']:
-        schedule.every(config['zabbix']['schedule']['discovery']).seconds.do(lambda: mainSender(baseNodes(mode="discovery", config=config)))            # nodes
-        schedule.every(config['zabbix']['schedule']['items']).seconds.do(lambda: mainSender(baseNodes(mode="item", config=config)))                      # nodes
+        schedule.every(config['zabbix']['schedule']['discovery']).seconds.do(lambda: mainSender(baseNodes(mode="discovery", config=config)))
+        schedule.every(config['zabbix']['schedule']['items']).seconds.do(lambda: mainSender(baseNodes(mode="item", config=config)))
 
     # statefulsets
     if config['monitoring']['statefulsets']['enabled']:
-        schedule.every(config['zabbix']['schedule']['discovery']).seconds.do(lambda: mainSender(baseStatefulsets(mode="discovery", config=config)))     # statefulsets
-        schedule.every(config['zabbix']['schedule']['items']).seconds.do(lambda: mainSender(baseStatefulsets(mode="item", config=config)))               # statefulsets
+        schedule.every(config['zabbix']['schedule']['discovery']).seconds.do(lambda: mainSender(baseStatefulsets(mode="discovery", config=config)))
+        schedule.every(config['zabbix']['schedule']['items']).seconds.do(lambda: mainSender(baseStatefulsets(mode="item", config=config)))
 
     # volumes
     if config['monitoring']['volumes']['enabled']:
-        schedule.every(config['zabbix']['schedule']['discovery']).seconds.do(lambda: mainSender(baseVolumes(mode="discovery", config=config)))          # volumes
-        schedule.every(config['zabbix']['schedule']['items']).seconds.do(lambda: mainSender(baseVolumes(mode="item", config=config)))                    # volumes
+        schedule.every(config['zabbix']['schedule']['discovery']).seconds.do(lambda: mainSender(baseVolumes(mode="discovery", config=config)))
+        schedule.every(config['zabbix']['schedule']['items']).seconds.do(lambda: mainSender(baseVolumes(mode="item", config=config)))
 
     # tasks
     while True:
