@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
-import argparse, sys, os
-import logging, schedule, yaml
+import argparse, sys, os, yaml
+import logging, schedule, threading
 from time import sleep
 from kubernetes import config as kube_config
 from pyzabbix import ZabbixSender
@@ -39,45 +39,52 @@ logging.debug(f"-> Zabbix endpoint: {config['zabbix']['endpoint']}")
 logging.debug(f"-> Zabbix timeout: {config['zabbix']['timeout']}")
 logging.debug(f"-> Cluster name: {config['kubernetes']['name']}")
 
-def mainSender(data):
+def mainSend(data):
     try:
         logging.debug(data)
         zabbix.send(data)
     except Exception as e:
         logging.debug(e)
 
+def mainThread(func):
+    try:
+        func_thread = threading.Thread(target=func)
+        func_thread.start()
+    except Exception as e:
+        logging.error(e)
+
 if __name__ == "__main__":
     logging.info("Application zabbix-kubernetes-discovery started")
 
     # cronjobs
     if config['monitoring']['cronjobs']['enabled']:
-        schedule.every(config['zabbix']['schedule']['discovery']).seconds.do(lambda: mainSender(baseCronjobs(mode="discovery", config=config)))
-        schedule.every(config['zabbix']['schedule']['items']).seconds.do(lambda: mainSender(baseCronjobs(mode="item", config=config)))
+        schedule.every(config['zabbix']['schedule']['discovery']).seconds.do(mainThread, lambda: mainSend(baseCronjobs(mode="discovery", config=config)))
+        schedule.every(config['zabbix']['schedule']['items']).seconds.do(mainThread, lambda: mainSend(baseCronjobs(mode="item", config=config)))
 
     # daemonsets
     if config['monitoring']['daemonsets']['enabled']:
-        schedule.every(config['zabbix']['schedule']['discovery']).seconds.do(lambda: mainSender(baseDaemonsets(mode="discovery", config=config)))
-        schedule.every(config['zabbix']['schedule']['items']).seconds.do(lambda: mainSender(baseDaemonsets(mode="item", config=config)))
+        schedule.every(config['zabbix']['schedule']['discovery']).seconds.do(mainThread, lambda: mainSend(baseDaemonsets(mode="discovery", config=config)))
+        schedule.every(config['zabbix']['schedule']['items']).seconds.do(mainThread, lambda: mainSend(baseDaemonsets(mode="item", config=config)))
 
     # deployments
     if config['monitoring']['deployments']['enabled']:
-        schedule.every(config['zabbix']['schedule']['discovery']).seconds.do(lambda: mainSender(baseDeployments(mode="discovery", config=config)))
-        schedule.every(config['zabbix']['schedule']['items']).seconds.do(lambda: mainSender(baseDeployments(mode="item", config=config)))
+        schedule.every(config['zabbix']['schedule']['discovery']).seconds.do(mainThread, lambda: mainSend(baseDeployments(mode="discovery", config=config)))
+        schedule.every(config['zabbix']['schedule']['items']).seconds.do(mainThread, lambda: mainSend(baseDeployments(mode="item", config=config)))
 
     # nodes
     if config['monitoring']['nodes']['enabled']:
-        schedule.every(config['zabbix']['schedule']['discovery']).seconds.do(lambda: mainSender(baseNodes(mode="discovery", config=config)))
-        schedule.every(config['zabbix']['schedule']['items']).seconds.do(lambda: mainSender(baseNodes(mode="item", config=config)))
+        schedule.every(config['zabbix']['schedule']['discovery']).seconds.do(mainThread, lambda: mainSend(baseNodes(mode="discovery", config=config)))
+        schedule.every(config['zabbix']['schedule']['items']).seconds.do(mainThread, lambda: mainSend(baseNodes(mode="item", config=config)))
 
     # statefulsets
     if config['monitoring']['statefulsets']['enabled']:
-        schedule.every(config['zabbix']['schedule']['discovery']).seconds.do(lambda: mainSender(baseStatefulsets(mode="discovery", config=config)))
-        schedule.every(config['zabbix']['schedule']['items']).seconds.do(lambda: mainSender(baseStatefulsets(mode="item", config=config)))
+        schedule.every(config['zabbix']['schedule']['discovery']).seconds.do(mainThread, lambda: mainSend(baseStatefulsets(mode="discovery", config=config)))
+        schedule.every(config['zabbix']['schedule']['items']).seconds.do(mainThread, lambda: mainSend(baseStatefulsets(mode="item", config=config)))
 
     # volumes
     if config['monitoring']['volumes']['enabled']:
-        schedule.every(config['zabbix']['schedule']['discovery']).seconds.do(lambda: mainSender(baseVolumes(mode="discovery", config=config)))
-        schedule.every(config['zabbix']['schedule']['items']).seconds.do(lambda: mainSender(baseVolumes(mode="item", config=config)))
+        schedule.every(config['zabbix']['schedule']['discovery']).seconds.do(mainThread, lambda: mainSend(baseVolumes(mode="discovery", config=config)))
+        schedule.every(config['zabbix']['schedule']['items']).seconds.do(mainThread, lambda: mainSend(baseVolumes(mode="item", config=config)))
 
     # tasks
     while True:
