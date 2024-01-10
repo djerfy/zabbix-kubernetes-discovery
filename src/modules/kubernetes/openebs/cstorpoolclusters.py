@@ -29,12 +29,13 @@ def openebsGetCstorpoolclusters(config=None):
             }
         }
 
-        if matchLabels(config['labels']['exclude'], cstorpoolcluster.metadata.labels):
-            continue
-
-        if config['labels']['include'] != []:
-            if not matchLabels(config['labels']['exclude'], cstorpoolcluster.metadata.labels):
-                continue
+        if cstorpoolcluster.get("metadata"):
+            if cstorpoolcluster['metadata'].get("labels"):
+                if matchLabels(config['labels']['exclude'], cstorpoolcluster['metadata']['labels']):
+                    continue
+                if config['labels']['include'] != []:
+                    if not matchLabels(config['labels']['exclude'], cstorpoolcluster['metadata']['labels']):
+                        continue
 
         if any(c['name'] == json['name'] and c['namespace'] == json['namespace'] for c in cstorpoolclusters):
             continue
