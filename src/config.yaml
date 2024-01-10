@@ -6,10 +6,10 @@ zabbix:
     items: 2
 
 kubernetes:
-  name: cluster-name
+  name: localhost
 
 monitoring:
-  # core
+  # base
   nodes:
     enabled: True
     labels:
@@ -41,7 +41,7 @@ monitoring:
       include: []
       exclude: []
   ingresses:
-    enabled: True
+    enabled: False
     labels:
       include: []
       exclude: []
