@@ -20,3 +20,14 @@ def matchLabels(match_labels=None, object_labels=None):
                     return True
 
     return False
+
+def rawObjects(data=[]):
+    """
+    description: get objects from raw api, convert items and return only objects
+    return: list
+    """
+    for key, value in data.items():
+        if key == "items":
+            return value
+        
+    return []

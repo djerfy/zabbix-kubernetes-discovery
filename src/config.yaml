@@ -45,24 +45,28 @@ monitoring:
     labels:
       include: []
       exclude: []
-  # optional
+  # openebs
   openebs:
+    enabled: False
+    engine: cstor
+    labels:
+      include: []
+      exclude: []
+  # velero
+  velero:
     enabled: False
     labels:
       include: []
       exclude: []
-  velero:
-    enabled: True
-    labels:
-      include: []
-      exclude: []
+  # trivy
   trivy:
-    enabled: True
+    enabled: False
     labels:
       include: []
       exclude: []
+  # certificates
   certs:
-    enabled: True
+    enabled: False
     labels:
       include: []
       exclude: []

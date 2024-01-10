@@ -6,6 +6,7 @@ from time import sleep
 from kubernetes import config as kube_config
 from pyzabbix import ZabbixSender
 from modules.kubernetes.base import *
+from modules.kubernetes.openebs import *
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--config-file", dest="config_file", action="store", required=False, help="Configuration file (default: config.yaml)", default="config.yaml")
@@ -56,35 +57,40 @@ def mainThread(func):
 if __name__ == "__main__":
     logging.info("Application zabbix-kubernetes-discovery started")
 
-    # cronjobs
+    # cronjobs (base)
     if config['monitoring']['cronjobs']['enabled']:
         schedule.every(config['zabbix']['schedule']['discovery']).seconds.do(mainThread, lambda: mainSend(baseCronjobs(mode="discovery", config=config)))
         schedule.every(config['zabbix']['schedule']['items']).seconds.do(mainThread, lambda: mainSend(baseCronjobs(mode="item", config=config)))
 
-    # daemonsets
+    # daemonsets (base)
     if config['monitoring']['daemonsets']['enabled']:
         schedule.every(config['zabbix']['schedule']['discovery']).seconds.do(mainThread, lambda: mainSend(baseDaemonsets(mode="discovery", config=config)))
         schedule.every(config['zabbix']['schedule']['items']).seconds.do(mainThread, lambda: mainSend(baseDaemonsets(mode="item", config=config)))
 
-    # deployments
+    # deployments (base)
     if config['monitoring']['deployments']['enabled']:
         schedule.every(config['zabbix']['schedule']['discovery']).seconds.do(mainThread, lambda: mainSend(baseDeployments(mode="discovery", config=config)))
         schedule.every(config['zabbix']['schedule']['items']).seconds.do(mainThread, lambda: mainSend(baseDeployments(mode="item", config=config)))
 
-    # nodes
+    # nodes (base)
     if config['monitoring']['nodes']['enabled']:
         schedule.every(config['zabbix']['schedule']['discovery']).seconds.do(mainThread, lambda: mainSend(baseNodes(mode="discovery", config=config)))
         schedule.every(config['zabbix']['schedule']['items']).seconds.do(mainThread, lambda: mainSend(baseNodes(mode="item", config=config)))
 
-    # statefulsets
+    # statefulsets (base)
     if config['monitoring']['statefulsets']['enabled']:
         schedule.every(config['zabbix']['schedule']['discovery']).seconds.do(mainThread, lambda: mainSend(baseStatefulsets(mode="discovery", config=config)))
         schedule.every(config['zabbix']['schedule']['items']).seconds.do(mainThread, lambda: mainSend(baseStatefulsets(mode="item", config=config)))
 
-    # volumes
+    # volumes (base)
     if config['monitoring']['volumes']['enabled']:
         schedule.every(config['zabbix']['schedule']['discovery']).seconds.do(mainThread, lambda: mainSend(baseVolumes(mode="discovery", config=config)))
         schedule.every(config['zabbix']['schedule']['items']).seconds.do(mainThread, lambda: mainSend(baseVolumes(mode="item", config=config)))
+
+    # cstorpoolclusters (openebs)
+    if config['monitoring']['openebs']['enabled']:
+        schedule.every(config['zabbix']['schedule']['discovery']).seconds.do(mainThread, lambda: mainSend(baseOpenebsCstorpoolclusters(mode="discovery", config=config)))
+        schedule.every(config['zabbix']['schedule']['items']).seconds.do(mainThread, lambda: mainSend(baseOpenebsCstorpoolclusters(mode="item", config=config)))
 
     # tasks
     while True:
