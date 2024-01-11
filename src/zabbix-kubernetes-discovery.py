@@ -10,13 +10,15 @@ from modules.kubernetes.openebs import *
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--config-file", dest="config_file", action="store", required=False, help="Configuration file (default: config.yaml)", default="config.yaml")
-parser.add_argument("--log-level", dest="log_level", action="store", required=False, help="Logging output log-level (default: INFO)", default="INFO", choices=["INFO", "WARNING", "ERROR", "DEBUG"])
 args = parser.parse_args()
+
+with open(args.config_file, "r") as f:
+    config = yaml.load(f, Loader=yaml.FullLoader)
 
 logging.basicConfig(
     datefmt="%d/%m/%Y %H:%M:%S",
     format="[%(asctime)s] (%(levelname)s) %(name)s.%(funcName)s():%(lineno)d - %(message)s",
-    level=getattr(logging, args.log_level))
+    level=getattr(logging, config['output']['level']))
 logging = logging.getLogger("main")
 
 if os.path.exists("/var/run/secrets/kubernetes.io/serviceaccount/token") and not os.getenv('KUBECONFIG'):
@@ -29,10 +31,6 @@ else:
     except:
         logging.error("Unable to load Kubernetes credentials")
         sys.exit(1)
-
-with open(args.config_file, "r") as f:
-    config = yaml.load(f, Loader=yaml.FullLoader)
-    logging.debug(f"Configuration file {args.config_file} loaded successfully")
 
 zabbix = ZabbixSender(config['zabbix']['endpoint'])
 zabbix.timeout = int(config['zabbix']['timeout'])

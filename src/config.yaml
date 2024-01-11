@@ -1,12 +1,15 @@
+output:
+  level: INFO
+
+kubernetes:
+  name: localhost
+
 zabbix:
   endpoint: localhost
   timeout: 10
   schedule:
     discovery: 3600
     items: 120
-
-kubernetes:
-  name: localhost
 
 monitoring:
   # base
