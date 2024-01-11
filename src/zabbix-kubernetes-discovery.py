@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 import argparse, sys, os, yaml, queue
-import logging, schedule, threading
+import logging, schedule, threading, psutil
 from time import sleep
 from kubernetes import config as kube_config
 from pyzabbix import ZabbixSender
@@ -16,8 +16,8 @@ args = parser.parse_args()
 logging.basicConfig(
     datefmt="%d/%m/%Y %H:%M:%S",
     format="[%(asctime)s] (%(levelname)s) %(name)s.%(funcName)s():%(lineno)d - %(message)s",
-    level=getattr(logging, args.log_level)
-)
+    level=getattr(logging, args.log_level))
+logging = logging.getLogger("main")
 
 if os.path.exists("/var/run/secrets/kubernetes.io/serviceaccount/token") and not os.getenv('KUBECONFIG'):
     kube_config.load_incluster_config()
@@ -48,13 +48,17 @@ def executeSender(data):
         logging.debug(e)
 
 def executeJobs():
+    p = psutil.Process(os.getpid())
+    logging.debug(f"Program memory used (rss): {p.memory_info().rss / 1024 / 1024} MiB")
+
     while True:
+        logging.debug(f"{jobs_queue.qsize()} job(s) in queue")
         jobs = jobs_queue.get()
         if jobs is not None:
             jobs()
             jobs_queue.task_done()
         else:
-            logging.info("No job in queue")
+            logging.debug("0 job in queue")
 
 if __name__ == "__main__":
     logging.info("Application zabbix-kubernetes-discovery started")
@@ -107,5 +111,6 @@ if __name__ == "__main__":
     # tasks
     while True:
         schedule.run_pending()
+        logging
         sleep(1)
     

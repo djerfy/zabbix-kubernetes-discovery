@@ -1,9 +1,10 @@
 from kubernetes import client
 from pyzabbix import ZabbixMetric
 from modules.common.functions import *
-import json, urllib3
+import json, urllib3, logging
 
 urllib3.disable_warnings()
+logging = logging.getLogger("kubernetes.base.statefulsets")
 
 def kubernetesGetStatefulsets(config=None):
     """
@@ -80,6 +81,7 @@ def baseStatefulsets(mode=None, config=None):
     description: monitoring statefulsets
     return: class ZabbixMetric
     """
+    logging.info(f"Function baseStatefulsets() executed: {mode}")
     if mode == "discovery":
         return zabbixDiscoveryStatefulsets(config['kubernetes']['name'], kubernetesGetStatefulsets(config['monitoring']['statefulsets']))
     if mode == "item":

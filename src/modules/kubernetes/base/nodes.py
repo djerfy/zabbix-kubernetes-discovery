@@ -1,9 +1,10 @@
 from kubernetes import client
 from pyzabbix import ZabbixMetric
 from modules.common.functions import *
-import json, urllib3
+import json, urllib3, logging
 
 urllib3.disable_warnings()
+logging = logging.getLogger("kubernetes.base.nodes")
 
 def kubernetesGetNodes(config=None):
     """
@@ -87,6 +88,7 @@ def baseNodes(mode=None, config=None):
     description: monitoring nodes
     return: class ZabbixMetric
     """
+    logging.info(f"Function baseNodes() executed: {mode}")
     if mode == "discovery":
         return zabbixDiscoveryNodes(config['kubernetes']['name'], kubernetesGetNodes(config['monitoring']['nodes']))
     if mode == "item":

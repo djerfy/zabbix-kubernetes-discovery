@@ -4,6 +4,7 @@ from modules.common.functions import *
 import json, urllib3, re, logging
 
 urllib3.disable_warnings()
+logging = logging.getLogger("kubernetes.base.volumes")
 
 def kubernetesGetVolumes(config=None):
     """
@@ -93,6 +94,7 @@ def baseVolumes(mode=None, config=None):
     description: monitoring volumes
     return: class ZabbixMetric
     """
+    logging.info(f"Function baseVolumes() executed: {mode}")
     if mode == "discovery":
         return zabbixDiscoveryVolumes(config['kubernetes']['name'], kubernetesGetVolumes(config['monitoring']['volumes']))
     if mode == "item":

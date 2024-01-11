@@ -1,9 +1,10 @@
 from kubernetes import client
 from pyzabbix import ZabbixMetric
 from modules.common.functions import *
-import json, urllib3
+import json, urllib3, logging
 
 urllib3.disable_warnings()
+logging = logging.getLogger("kubernetes.base.deployments")
 
 def kubernetesGetDeployments(config=None):
     """
@@ -80,6 +81,7 @@ def baseDeployments(mode=None, config=None):
     description: monitoring deployments
     return: class ZabbixMetric
     """
+    logging.info(f"Function baseDeployments() executed: {mode}")
     if mode == "discovery":
         return zabbixDiscoveryDeployments(config['kubernetes']['name'], kubernetesGetDeployments(config['monitoring']['deployments']))
     if mode == "item":

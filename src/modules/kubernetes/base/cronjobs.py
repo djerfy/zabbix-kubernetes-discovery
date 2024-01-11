@@ -2,9 +2,10 @@ from kubernetes import client
 from datetime import datetime
 from pyzabbix import ZabbixMetric
 from modules.common.functions import *
-import json, urllib3
+import json, urllib3, logging
 
 urllib3.disable_warnings()
+logging = logging.getLogger("kubernetes.base.cronjobs")
 
 def kubernetesGetCronjobs(config=None):
     """
@@ -114,6 +115,7 @@ def baseCronjobs(mode=None, config=None):
     description: monitoring cronjobs
     return: class ZabbixMetric
     """
+    logging.info(f"Function baseCronjobs() executed: {mode}")
     if mode == "discovery":
         return zabbixDiscoveryCronjobs(config['kubernetes']['name'], kubernetesGetCronjobs(config['monitoring']['cronjobs']))
     if mode == "item":

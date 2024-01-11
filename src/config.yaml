@@ -70,3 +70,7 @@ monitoring:
     labels:
       include: []
       exclude: []
+
+metrics:
+  output: DEBUG
+  memory: True

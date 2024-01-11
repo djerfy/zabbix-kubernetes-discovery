@@ -1,9 +1,10 @@
 from kubernetes import client
 from pyzabbix import ZabbixMetric
 from modules.common.functions import *
-import json, urllib3
+import json, urllib3, logging
 
 urllib3.disable_warnings()
+logging = logging.getLogger("kubernetes.base.daemonsets")
 
 def kubernetesGetDaemonsets(config=None):
     """
@@ -82,6 +83,7 @@ def baseDaemonsets(mode=None, config=None):
     description: monitoring daemonsets
     return: class ZabbixMetric
     """
+    logging.info(f"Function baseDaemonsets() executed: {mode}")
     if mode == "discovery":
         return zabbixDiscoveryDaemonsets(config['kubernetes']['name'], kubernetesGetDaemonsets(config['monitoring']['daemonsets']))
     if mode == "item":

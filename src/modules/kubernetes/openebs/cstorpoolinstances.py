@@ -1,9 +1,10 @@
 from kubernetes import client
 from pyzabbix import ZabbixMetric
 from modules.common.functions import *
-import json, urllib3
+import json, urllib3, logging
 
 urllib3.disable_warnings()
+logging = logging.getLogger("kubernetes.openebs.cstorpoolinstances")
 
 def openebsGetCstorpoolinstances(config=None):
     """
@@ -82,6 +83,7 @@ def baseOpenebsCstorpoolinstances(mode=None, config=None):
     description: monitoring openebs cstorpoolinstances
     return: class ZabbixMetric
     """
+    logging.info(f"Function baseOpenebsCstorpoolinstances() executed: {mode}")
     if mode == "discovery":
         return ZabbixDiscoveryCstorpoolinstances(config['kubernetes']['name'], openebsGetCstorpoolinstances(config['monitoring']['openebs']))
     if mode == "item":
