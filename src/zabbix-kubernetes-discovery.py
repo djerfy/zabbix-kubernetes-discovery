@@ -48,12 +48,13 @@ def executeSender(data):
         logging.debug(e)
 
 def executeJobs():
-    try:
+    while True:
         jobs = jobs_queue.get()
-        jobs()
-        jobs_queue.task_done()
-    except Exception as e:
-        logging.error(e)
+        if jobs is not None:
+            jobs()
+            jobs_queue.task_done()
+        else:
+            logging.info("No job in queue")
 
 if __name__ == "__main__":
     logging.info("Application zabbix-kubernetes-discovery started")
@@ -62,42 +63,42 @@ if __name__ == "__main__":
 
     # cronjobs
     if config['monitoring']['cronjobs']['enabled']:
-        schedule.every(config['zabbix']['schedule']['discovery']).seconds.do(jobs_queue.put, executeSender(baseCronjobs(mode="discovery", config=config)))
-        schedule.every(config['zabbix']['schedule']['items']).seconds.do(jobs_queue.put, executeSender(baseCronjobs(mode="item", config=config)))
+        schedule.every(config['zabbix']['schedule']['discovery']).seconds.do(jobs_queue.put, lambda: executeSender(baseCronjobs(mode="discovery", config=config)))
+        schedule.every(config['zabbix']['schedule']['items']).seconds.do(jobs_queue.put, lambda: executeSender(baseCronjobs(mode="item", config=config)))
 
     # daemonsets
     if config['monitoring']['daemonsets']['enabled']:
-        schedule.every(config['zabbix']['schedule']['discovery']).seconds.do(jobs_queue.put, executeSender(baseDaemonsets(mode="discovery", config=config)))
-        schedule.every(config['zabbix']['schedule']['items']).seconds.do(jobs_queue.put, executeSender(baseDaemonsets(mode="item", config=config)))
+        schedule.every(config['zabbix']['schedule']['discovery']).seconds.do(jobs_queue.put, lambda: executeSender(baseDaemonsets(mode="discovery", config=config)))
+        schedule.every(config['zabbix']['schedule']['items']).seconds.do(jobs_queue.put, lambda: executeSender(baseDaemonsets(mode="item", config=config)))
 
     # deployments
     if config['monitoring']['deployments']['enabled']:
-        schedule.every(config['zabbix']['schedule']['discovery']).seconds.do(jobs_queue.put, executeSender(baseDeployments(mode="discovery", config=config)))
-        schedule.every(config['zabbix']['schedule']['items']).seconds.do(jobs_queue.put, executeSender(baseDeployments(mode="item", config=config)))
+        schedule.every(config['zabbix']['schedule']['discovery']).seconds.do(jobs_queue.put, lambda: executeSender(baseDeployments(mode="discovery", config=config)))
+        schedule.every(config['zabbix']['schedule']['items']).seconds.do(jobs_queue.put, lambda: executeSender(baseDeployments(mode="item", config=config)))
 
     # nodes
     if config['monitoring']['nodes']['enabled']:
-        schedule.every(config['zabbix']['schedule']['discovery']).seconds.do(jobs_queue.put, executeSender(baseNodes(mode="discovery", config=config)))
-        schedule.every(config['zabbix']['schedule']['items']).seconds.do(jobs_queue.put, executeSender(baseNodes(mode="item", config=config)))
+        schedule.every(config['zabbix']['schedule']['discovery']).seconds.do(jobs_queue.put, lambda: executeSender(baseNodes(mode="discovery", config=config)))
+        schedule.every(config['zabbix']['schedule']['items']).seconds.do(jobs_queue.put, lambda: executeSender(baseNodes(mode="item", config=config)))
 
     # statefulsets
     if config['monitoring']['statefulsets']['enabled']:
-        schedule.every(config['zabbix']['schedule']['discovery']).seconds.do(jobs_queue.put, executeSender(baseStatefulsets(mode="discovery", config=config)))
-        schedule.every(config['zabbix']['schedule']['items']).seconds.do(jobs_queue.put, executeSender(baseStatefulsets(mode="item", config=config)))
+        schedule.every(config['zabbix']['schedule']['discovery']).seconds.do(jobs_queue.put, lambda: executeSender(baseStatefulsets(mode="discovery", config=config)))
+        schedule.every(config['zabbix']['schedule']['items']).seconds.do(jobs_queue.put, lambda: executeSender(baseStatefulsets(mode="item", config=config)))
 
     # volumes
     if config['monitoring']['volumes']['enabled']:
-        schedule.every(config['zabbix']['schedule']['discovery']).seconds.do(jobs_queue.put, executeSender(baseVolumes(mode="discovery", config=config)))
-        schedule.every(config['zabbix']['schedule']['items']).seconds.do(jobs_queue.put, executeSender(baseVolumes(mode="item", config=config)))
+        schedule.every(config['zabbix']['schedule']['discovery']).seconds.do(jobs_queue.put, lambda: executeSender(baseVolumes(mode="discovery", config=config)))
+        schedule.every(config['zabbix']['schedule']['items']).seconds.do(jobs_queue.put, lambda: executeSender(baseVolumes(mode="item", config=config)))
 
     # openebs
     if config['monitoring']['openebs']['enabled']:
         # cstorpoolclusters
-        schedule.every(config['zabbix']['schedule']['discovery']).seconds.do(jobs_queue.put, executeSender(baseOpenebsCstorpoolclusters(mode="discovery", config=config)))
-        schedule.every(config['zabbix']['schedule']['items']).seconds.do(jobs_queue.put, executeSender(baseOpenebsCstorpoolclusters(mode="item", config=config)))
+        schedule.every(config['zabbix']['schedule']['discovery']).seconds.do(jobs_queue.put, lambda: executeSender(baseOpenebsCstorpoolclusters(mode="discovery", config=config)))
+        schedule.every(config['zabbix']['schedule']['items']).seconds.do(jobs_queue.put, lambda: executeSender(baseOpenebsCstorpoolclusters(mode="item", config=config)))
         # cstorpoolinstances
-        schedule.every(config['zabbix']['schedule']['discovery']).seconds.do(jobs_queue.put, executeSender(baseOpenebsCstorpoolinstances(mode="discovery", config=config)))
-        schedule.every(config['zabbix']['schedule']['items']).seconds.do(jobs_queue.put, executeSender(baseOpenebsCstorpoolinstances(mode="item", config=config)))
+        schedule.every(config['zabbix']['schedule']['discovery']).seconds.do(jobs_queue.put, lambda: executeSender(baseOpenebsCstorpoolinstances(mode="discovery", config=config)))
+        schedule.every(config['zabbix']['schedule']['items']).seconds.do(jobs_queue.put, lambda: executeSender(baseOpenebsCstorpoolinstances(mode="item", config=config)))
 
     # thread
     thread = threading.Thread(target=executeJobs)
