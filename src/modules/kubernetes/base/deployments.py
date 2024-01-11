@@ -56,7 +56,7 @@ def zabbixDiscoveryDeployments(config):
         output = {
             "{#KUBERNETES_DEPLOYMENT_NAMESPACE}": deployment['namespace'],
             "{#KUBERNETES_DEPLOYMENT_NAME}": deployment['name']}
-        discovery['data'].append(output)
+        discovery['data'].append([output])
 
     return [config['kubernetes']['name'], "kubernetes.deployments.discovery", json.dumps(discovery)]
 

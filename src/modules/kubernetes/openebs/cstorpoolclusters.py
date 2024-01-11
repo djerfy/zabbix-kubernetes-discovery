@@ -58,7 +58,7 @@ def zabbixDiscoveryCstorpoolclusters(config):
         output = {
             "{#KUBERNETES_OPENEBS_CSTORPOOLCLUSTER_NAMESPACE}": cstorpoolcluster['namespace'],
             "{#KUBERNETES_OPENEBS_CSTORPOOLCLUSTER_NAME}": cstorpoolcluster['name']}
-        discovery['data'].append(output)
+        discovery['data'].append([output])
 
     return [config['kubernetes']['name'], "kubernetes.openebs.cstorpoolclusters.discovery", json.dumps(discovery)]
 

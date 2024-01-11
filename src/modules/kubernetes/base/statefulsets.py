@@ -56,7 +56,7 @@ def zabbixDiscoveryStatefulsets(config):
         output = {
             "{#KUBERNETES_STATEFULSET_NAMESPACE}": statefulset['namespace'],
             "{#KUBERNETES_STATEFULSET_NAME}": statefulset['name']}
-        discovery['data'].append(output)
+        discovery['data'].append([output])
 
     return [config['kubernetes']['name'], "kubernetes.statefulsets.discovery", json.dumps(discovery)]
 

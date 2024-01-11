@@ -65,7 +65,7 @@ def zabbixDiscoveryVolumes(config):
         output = {
             "{#KUBERNETES_PVC_NAMESPACE}": volume['namespace'],
             "{#KUBERNETES_PVC_NAME}": volume['name']}
-        discovery['data'].append(output)
+        discovery['data'].append([output])
 
     return [config['kubernetes']['name'], "kubernetes.volumes.discovery", json.dumps(discovery)]
 
