@@ -26,8 +26,8 @@ def kubernetesGetDeployments(config):
             }
         }
 
-        if deployment.metadata:
-            if deployment.metadata.labels:
+        if hasattr(deployment, 'metadata'):
+            if hasattr(deployment.metadata, 'labels'):
                 if matchLabels(config['monitoring']['deployments']['labels']['exclude'], deployment.metadata.labels):
                     continue
                 if config['monitoring']['deployments']['labels']['include'] != []:

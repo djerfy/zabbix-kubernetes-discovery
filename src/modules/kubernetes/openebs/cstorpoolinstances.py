@@ -14,7 +14,7 @@ def openebsGetCstorpoolinstances(config):
 
     cstorpoolinstances = []
 
-    if config['engine'] != "cstor":
+    if config['monitoring']['openebs']['engine'] != "cstor":
         return cstorpoolinstances
 
     for cstorpoolinstance in rawObjects(kubernetes.list_cluster_custom_object(group="cstor.openebs.io", version="v1", plural="cstorpoolinstances")):

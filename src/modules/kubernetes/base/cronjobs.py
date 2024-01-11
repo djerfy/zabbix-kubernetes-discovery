@@ -67,8 +67,8 @@ def kubernetesGetCronjobs(config):
             }
         }
 
-        if cronjob.metadata:
-            if cronjob.metadata.labels:
+        if hasattr(cronjob, 'metadata'):
+            if hasattr(cronjob.metadata, 'labels'):
                 if matchLabels(config['monitoring']['cronjobs']['labels']['exclude'], cronjob.metadata.labels):
                     continue
                 if config['monitoring']['cronjobs']['labels']['include'] != []:

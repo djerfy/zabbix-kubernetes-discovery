@@ -33,8 +33,8 @@ def kubernetesGetVolumes(config):
                 volume['namespace'] = volume['pvcRef']['namespace']
                 volume['name'] = volume['pvcRef']['name']
 
-                if volume.metadata:
-                    if volume.metadata.labels:
+                if hasattr(volume, 'metadata'):
+                    if hasattr(volume.metadata, 'labels'):
                         if matchLabels(config['monitoring']['volumes']['labels']['exclude'], volume.metadata.labels):
                             continue
                         if config['monitoring']['volumes']['labels']['include'] != []:

@@ -32,8 +32,8 @@ def kubernetesGetNodes(config):
             }
         }
 
-        if node.metadata:
-            if node.metadata.labels:
+        if hasattr(node, 'metadata'):
+            if hasattr(node.metadata, 'labels'):
                 if matchLabels(config['monitoring']['nodes']['labels']['exclude'], node.metadata.labels):
                     continue
                 if config['monitoring']['nodes']['labels']['include'] != []:

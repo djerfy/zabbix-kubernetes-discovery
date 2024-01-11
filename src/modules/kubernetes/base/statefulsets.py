@@ -26,8 +26,8 @@ def kubernetesGetStatefulsets(config):
             }
         }
 
-        if statefulset.metadata:
-            if statefulset.metadata.labels:
+        if hasattr(statefulset, 'metadata'):
+            if hasattr(statefulset.metadata, 'labels'):
                 if matchLabels(config['monitoring']['statefulsets']['labels']['exclude'], statefulset.metadata.labels):
                     continue
                 if config['monitoring']['statefulsets']['labels']['include'] != []:

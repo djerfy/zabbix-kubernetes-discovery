@@ -31,8 +31,8 @@ def kubernetesGetDaemonsets(config):
             if json['replicas'][i] is None:
                 json['replicas'][i] = 0
 
-        if daemonset.metadata:
-            if daemonset.metadata.labels:
+        if hasattr(daemonset, 'metadata'):
+            if hasattr(daemonset.metadata, 'labels'):
                 if matchLabels(config['monitoring']['daemonsets']['labels']['exclude'], daemonset.metadata.labels):
                     continue
                 if config['monitoring']['daemonsets']['labels']['include'] != []:

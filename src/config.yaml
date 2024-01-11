@@ -1,5 +1,5 @@
 output:
-  level: DEBUG
+  level: INFO
 
 kubernetes:
   name: localhost
@@ -19,27 +19,27 @@ monitoring:
       include: []
       exclude: []
   daemonsets:
-    enabled: True
+    enabled: False
     labels:
       include: []
       exclude: []
   volumes:
-    enabled: True
+    enabled: False
     labels:
       include: []
       exclude: []
   deployments:
-    enabled: True
+    enabled: False
     labels:
       include: []
       exclude: []
   statefulsets:
-    enabled: True
+    enabled: False
     labels:
       include: []
       exclude: []
   cronjobs:
-    enabled: True
+    enabled: False
     labels:
       include: []
       exclude: []
