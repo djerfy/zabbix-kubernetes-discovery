@@ -57,9 +57,9 @@ def zabbixDiscoveryDaemonsets(config):
         output = {
             "{#KUBERNETES_DAEMONSET_NAMESPACE}": daemonset['namespace'],
             "{#KUBERNETES_DAEMONSET_NAME}": daemonset['name']}
-        discovery['data'].append([output])
+        discovery['data'].append(output)
 
-    return [config['kubernetes']['name'], "kubernetes.daemonsets.discovery", json.dumps(discovery)]
+    return [[config['kubernetes']['name'], "kubernetes.daemonsets.discovery", json.dumps(discovery)]]
 
 def zabbixItemsDaemonsets(config):
     """

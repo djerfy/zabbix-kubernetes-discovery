@@ -90,9 +90,9 @@ def zabbixDiscoveryCronjobs(config):
         output = {
             "{#KUBERNETES_CRONJOB_NAMESPACE}": cronjob['namespace'],
             "{#KUBERNETES_CRONJOB_NAME}": cronjob['name']}
-        discovery['data'].append([output])
+        discovery['data'].append(output)
 
-    return [config['kubernetes']['name'], "kubernetes.cronjobs.discovery", json.dumps(discovery)]
+    return [[config['kubernetes']['name'], "kubernetes.cronjobs.discovery", json.dumps(discovery)]]
 
 def zabbixItemsCronjobs(config):
     """

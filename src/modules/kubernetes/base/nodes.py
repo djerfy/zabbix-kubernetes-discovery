@@ -56,9 +56,9 @@ def zabbixDiscoveryNodes(config):
 
     for node in kubernetesGetNodes(config):
         output = {"{#KUBERNETES_NODE_NAME}": node['name']}
-        discovery['data'].append([output])
+        discovery['data'].append(output)
 
-    return [config['kubernetes']['name'], "kubernetes.nodes.discovery", json.dumps(discovery)]
+    return [[config['kubernetes']['name'], "kubernetes.nodes.discovery", json.dumps(discovery)]]
 
 def zabbixItemsNodes(config):
     """
