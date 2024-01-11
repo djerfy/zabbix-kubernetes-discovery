@@ -31,11 +31,11 @@ def kubernetesGetDaemonsets(config):
             if json['replicas'][i] is None:
                 json['replicas'][i] = 0
 
-        if daemonset.get("metadata"):
-            if daemonset['metadata'].get("labels"):
+        if daemonset.metadata:
+            if daemonset.metadata.labels:
                 if matchLabels(config['monitoring']['daemonsets']['labels']['exclude'], daemonset.metadata.labels):
                     continue
-                if config['labels']['include'] != []:
+                if config['monitoring']['daemonsets']['labels']['include'] != []:
                     if not matchLabels(config['monitoring']['daemonsets']['labels']['include'], daemonset.metadata.labels):
                         continue
 

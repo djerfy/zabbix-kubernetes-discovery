@@ -26,11 +26,11 @@ def kubernetesGetDeployments(config):
             }
         }
 
-        if deployment.get("metadata"):
-            if deployment['metadata'].get("labels"):
+        if deployment.metadata:
+            if deployment.metadata.labels:
                 if matchLabels(config['monitoring']['deployments']['labels']['exclude'], deployment.metadata.labels):
                     continue
-                if config['labels']['include'] != []:
+                if config['monitoring']['deployments']['labels']['include'] != []:
                     if not matchLabels(config['monitoring']['deployments']['labels']['include'], deployment.metadata.labels):
                         continue
 
