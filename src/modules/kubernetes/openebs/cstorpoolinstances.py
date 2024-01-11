@@ -32,7 +32,7 @@ def openebsGetCstorpoolinstances(config):
             if cstorpoolinstance['metadata'].get("labels"):
                 if matchLabels(config['monitoring']['openebs']['labels']['exclude'], cstorpoolinstance['metadata']['labels']):
                     continue
-                if config['labels']['include'] != []:
+                if config['monitoring']['openebs']['labels']['include'] != []:
                     if not matchLabels(config['monitoring']['openebs']['labels']['exclude'], cstorpoolinstance['metadata']['labels']):
                         continue
 
