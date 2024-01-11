@@ -48,10 +48,8 @@ def executeSender(data):
         logging.debug(e)
 
 def executeJobs():
-    p = psutil.Process(os.getpid())
-    logging.debug(f"Program memory used (rss): {p.memory_info().rss / 1024 / 1024} MiB")
-
     while True:
+        logging.debug(f"Program memory used (rss): {round(psutil.Process(os.getpid()).memory_info().rss / 1024 / 1024)} MiB")
         logging.debug(f"{jobs_queue.qsize()} job(s) in queue")
         jobs = jobs_queue.get()
         if jobs is not None:
