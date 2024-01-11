@@ -68,8 +68,8 @@ def zabbixItemsDeployments(config):
     items = []
 
     for deployment in kubernetesGetDeployments(config):
-        items.append(config['kubernetes']['name'], f"kubernetes.deployment.availableReplicas[{deployment['namespace']},{deployment['name']}]", deployment['replicas']['available'])
-        items.append(config['kubernetes']['name'], f"kubernetes.deployment.readyReplicas[{deployment['namespace']},{deployment['name']}]", deployment['replicas']['ready'])
-        items.append(config['kubernetes']['name'], f"kubernetes.deployment.desiredReplicas[{deployment['namespace']},{deployment['name']}]", deployment['replicas']['desired'])
+        items.append([config['kubernetes']['name'], f"kubernetes.deployment.availableReplicas[{deployment['namespace']},{deployment['name']}]", deployment['replicas']['available']])
+        items.append([config['kubernetes']['name'], f"kubernetes.deployment.readyReplicas[{deployment['namespace']},{deployment['name']}]", deployment['replicas']['ready']])
+        items.append([config['kubernetes']['name'], f"kubernetes.deployment.desiredReplicas[{deployment['namespace']},{deployment['name']}]", deployment['replicas']['desired']])
 
     return items

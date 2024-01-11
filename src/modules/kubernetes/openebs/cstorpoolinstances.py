@@ -66,12 +66,12 @@ def zabbixItemsCstorpoolinstances(config):
     items = []
 
     for cstorpoolinstance in openebsGetCstorpoolinstances(config):
-        items.append(config['kubernetes']['name'], f"kubernetes.openebs.cstorpoolinstances.readonly[{cstorpoolinstance['namespace']},{cstorpoolinstance['name']}]", cstorpoolinstance['status']['readOnly'])
-        items.append(config['kubernetes']['name'], f"kubernetes.openebs.cstorpoolinstances.provisionedReplicas[{cstorpoolinstance['namespace']},{cstorpoolinstance['name']}]", cstorpoolinstance['status']['provisionedReplicas'])
-        items.append(config['kubernetes']['name'], f"kubernetes.openebs.cstorpoolinstances.healthyReplicas[{cstorpoolinstance['namespace']},{cstorpoolinstance['name']}]", cstorpoolinstance['status']['healthyReplicas'])
-        items.append(config['kubernetes']['name'], f"kubernetes.openebs.cstorpoolinstances.status[{cstorpoolinstance['namespace']},{cstorpoolinstance['name']}]", cstorpoolinstance['status']['phase'])
-        items.append(config['kubernetes']['name'], f"kubernetes.openebs.cstorpoolinstances.capacity.total[{cstorpoolinstance['namespace']},{cstorpoolinstance['name']}]", cstorpoolinstance['status']['capacity']['total'])
-        items.append(config['kubernetes']['name'], f"kubernetes.openebs.cstorpoolinstances.capacity.free[{cstorpoolinstance['namespace']},{cstorpoolinstance['name']}]", cstorpoolinstance['status']['capacity']['free'])
-        items.append(config['kubernetes']['name'], f"kubernetes.openebs.cstorpoolinstances.capacity.used[{cstorpoolinstance['namespace']},{cstorpoolinstance['name']}]", cstorpoolinstance['status']['capacity']['used'])
+        items.append([config['kubernetes']['name'], f"kubernetes.openebs.cstorpoolinstances.readonly[{cstorpoolinstance['namespace']},{cstorpoolinstance['name']}]", cstorpoolinstance['status']['readOnly']])
+        items.append([config['kubernetes']['name'], f"kubernetes.openebs.cstorpoolinstances.provisionedReplicas[{cstorpoolinstance['namespace']},{cstorpoolinstance['name']}]", cstorpoolinstance['status']['provisionedReplicas']])
+        items.append([config['kubernetes']['name'], f"kubernetes.openebs.cstorpoolinstances.healthyReplicas[{cstorpoolinstance['namespace']},{cstorpoolinstance['name']}]", cstorpoolinstance['status']['healthyReplicas']])
+        items.append([config['kubernetes']['name'], f"kubernetes.openebs.cstorpoolinstances.status[{cstorpoolinstance['namespace']},{cstorpoolinstance['name']}]", cstorpoolinstance['status']['phase']])
+        items.append([config['kubernetes']['name'], f"kubernetes.openebs.cstorpoolinstances.capacity.total[{cstorpoolinstance['namespace']},{cstorpoolinstance['name']}]", cstorpoolinstance['status']['capacity']['total']])
+        items.append([config['kubernetes']['name'], f"kubernetes.openebs.cstorpoolinstances.capacity.free[{cstorpoolinstance['namespace']},{cstorpoolinstance['name']}]", cstorpoolinstance['status']['capacity']['free']])
+        items.append([config['kubernetes']['name'], f"kubernetes.openebs.cstorpoolinstances.capacity.used[{cstorpoolinstance['namespace']},{cstorpoolinstance['name']}]", cstorpoolinstance['status']['capacity']['used']])
 
     return items

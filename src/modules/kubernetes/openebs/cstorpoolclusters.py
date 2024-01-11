@@ -70,10 +70,10 @@ def zabbixItemsCstorpoolclusters(config):
     items = []
 
     for cstorpoolcluster in openebsGetCstorpoolclusters(config):
-        items.append(config['kubernetes']['name'], f"kubernetes.openebs.cstorpoolclusters.desiredInstances[{cstorpoolcluster['namespace']},{cstorpoolcluster['name']}]", cstorpoolcluster['instances']['desired'])
-        items.append(config['kubernetes']['name'], f"kubernetes.openebs.cstorpoolclusters.healthyInstances[{cstorpoolcluster['namespace']},{cstorpoolcluster['name']}]", cstorpoolcluster['instances']['healthy'])
-        items.append(config['kubernetes']['name'], f"kubernetes.openebs.cstorpoolclusters.provisionedInstances[{cstorpoolcluster['namespace']},{cstorpoolcluster['name']}]", cstorpoolcluster['instances']['provisioned'])
-        items.append(config['kubernetes']['name'], f"kubernetes.openebs.cstorpoolclusters.desiredVersion[{cstorpoolcluster['namespace']},{cstorpoolcluster['name']}]", cstorpoolcluster['version']['desired'])
-        items.append(config['kubernetes']['name'], f"kubernetes.openebs.cstorpoolclusters.currentVersion[{cstorpoolcluster['namespace']},{cstorpoolcluster['name']}]", cstorpoolcluster['version']['current'])
+        items.append([config['kubernetes']['name'], f"kubernetes.openebs.cstorpoolclusters.desiredInstances[{cstorpoolcluster['namespace']},{cstorpoolcluster['name']}]", cstorpoolcluster['instances']['desired']])
+        items.append([config['kubernetes']['name'], f"kubernetes.openebs.cstorpoolclusters.healthyInstances[{cstorpoolcluster['namespace']},{cstorpoolcluster['name']}]", cstorpoolcluster['instances']['healthy']])
+        items.append([config['kubernetes']['name'], f"kubernetes.openebs.cstorpoolclusters.provisionedInstances[{cstorpoolcluster['namespace']},{cstorpoolcluster['name']}]", cstorpoolcluster['instances']['provisioned']])
+        items.append([config['kubernetes']['name'], f"kubernetes.openebs.cstorpoolclusters.desiredVersion[{cstorpoolcluster['namespace']},{cstorpoolcluster['name']}]", cstorpoolcluster['version']['desired']])
+        items.append([config['kubernetes']['name'], f"kubernetes.openebs.cstorpoolclusters.currentVersion[{cstorpoolcluster['namespace']},{cstorpoolcluster['name']}]", cstorpoolcluster['version']['current']])
 
     return items

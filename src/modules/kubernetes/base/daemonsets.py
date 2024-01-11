@@ -69,9 +69,9 @@ def zabbixItemsDaemonsets(config):
     items = []
 
     for daemonset in kubernetesGetDaemonsets(config):
-        items.append(config['kubernetes']['name'], f"kubernetes.daemonset.desiredReplicas[{daemonset['namespace']},{daemonset['name']}]", daemonset['replicas']['desired'])
-        items.append(config['kubernetes']['name'], f"kubernetes.daemonset.currentReplicas[{daemonset['namespace']},{daemonset['name']}]", daemonset['replicas']['current'])
-        items.append(config['kubernetes']['name'], f"kubernetes.daemonset.availableReplicas[{daemonset['namespace']},{daemonset['name']}]", daemonset['replicas']['available'])
-        items.append(config['kubernetes']['name'], f"kubernetes.daemonset.readyReplicas[{daemonset['namespace']},{daemonset['name']}]", daemonset['replicas']['ready'])
+        items.append([config['kubernetes']['name'], f"kubernetes.daemonset.desiredReplicas[{daemonset['namespace']},{daemonset['name']}]", daemonset['replicas']['desired']])
+        items.append([config['kubernetes']['name'], f"kubernetes.daemonset.currentReplicas[{daemonset['namespace']},{daemonset['name']}]", daemonset['replicas']['current']])
+        items.append([config['kubernetes']['name'], f"kubernetes.daemonset.availableReplicas[{daemonset['namespace']},{daemonset['name']}]", daemonset['replicas']['available']])
+        items.append([config['kubernetes']['name'], f"kubernetes.daemonset.readyReplicas[{daemonset['namespace']},{daemonset['name']}]", daemonset['replicas']['ready']])
 
     return items

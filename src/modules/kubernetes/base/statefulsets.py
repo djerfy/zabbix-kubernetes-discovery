@@ -68,8 +68,8 @@ def zabbixItemsStatefulsets(config):
     items = []
 
     for statefulset in kubernetesGetStatefulsets(config):
-        items.append(config['kubernetes']['name'], f"kubernetes.statefulset.availableReplicas[{statefulset['namespace']},{statefulset['name']}]", statefulset['replicas']['available'])
-        items.append(config['kubernetes']['name'], f"kubernetes.statefulset.readyReplicas[{statefulset['namespace']},{statefulset['name']}]", statefulset['replicas']['ready'])
-        items.append(config['kubernetes']['name'], f"kubernetes.statefulset.desiredReplicas[{statefulset['namespace']},{statefulset['name']}]", statefulset['replicas']['desired'])
+        items.append([config['kubernetes']['name'], f"kubernetes.statefulset.availableReplicas[{statefulset['namespace']},{statefulset['name']}]", statefulset['replicas']['available']])
+        items.append([config['kubernetes']['name'], f"kubernetes.statefulset.readyReplicas[{statefulset['namespace']},{statefulset['name']}]", statefulset['replicas']['ready']])
+        items.append([config['kubernetes']['name'], f"kubernetes.statefulset.desiredReplicas[{statefulset['namespace']},{statefulset['name']}]", statefulset['replicas']['desired']])
 
     return items

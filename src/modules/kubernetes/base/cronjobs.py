@@ -102,8 +102,8 @@ def zabbixItemsCronjobs(config):
     items = []
 
     for cronjob in kubernetesGetCronjobs(config):
-        items.append(config['kubernetes']['name'], f"kubernetes.cronjob.status[{cronjob['namespace']},{cronjob['name']}]", cronjob['status'])
-        items.append(config['kubernetes']['name'], f"kubernetes.cronjob.reason[{cronjob['namespace']},{cronjob['name']}]", cronjob['last_job']['reason'])
-        items.append(config['kubernetes']['name'], f"kubernetes.cronjob.message[{cronjob['namespace']},{cronjob['name']}]", cronjob['last_job']['message'])
+        items.append([config['kubernetes']['name'], f"kubernetes.cronjob.status[{cronjob['namespace']},{cronjob['name']}]", cronjob['status']])
+        items.append([config['kubernetes']['name'], f"kubernetes.cronjob.reason[{cronjob['namespace']},{cronjob['name']}]", cronjob['last_job']['reason']])
+        items.append([config['kubernetes']['name'], f"kubernetes.cronjob.message[{cronjob['namespace']},{cronjob['name']}]", cronjob['last_job']['message']])
 
     return items

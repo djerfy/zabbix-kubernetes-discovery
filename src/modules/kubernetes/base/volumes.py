@@ -77,11 +77,11 @@ def zabbixItemsVolumes(config):
     items = []
 
     for volume in kubernetesGetVolumes(config): 
-        items.append(config['kubernetes']['name'], f"kubernetes.volumeclaim.availableBytes[{volume['namespace']},{volume['name']}]", volume['availableBytes'])
-        items.append(config['kubernetes']['name'], f"kubernetes.volumeclaim.capacityBytes[{volume['namespace']},{volume['name']}]", volume['capacityBytes'])
-        items.append(config['kubernetes']['name'], f"kubernetes.volumeclaim.usedBytes[{volume['namespace']},{volume['name']}]", volume['usedBytes'])
-        items.append(config['kubernetes']['name'], f"kubernetes.volumeclaim.inodesFree[{volume['namespace']},{volume['name']}]", volume['inodesFree'])
-        items.append(config['kubernetes']['name'], f"kubernetes.volumeclaim.inodes[{volume['namespace']},{volume['name']}]", volume['inodes'])
-        items.append(config['kubernetes']['name'], f"kubernetes.volumeclaim.inodesUsed[{volume['namespace']},{volume['name']}]", volume['inodesUsed'])
+        items.append([config['kubernetes']['name'], f"kubernetes.volumeclaim.availableBytes[{volume['namespace']},{volume['name']}]", volume['availableBytes']])
+        items.append([config['kubernetes']['name'], f"kubernetes.volumeclaim.capacityBytes[{volume['namespace']},{volume['name']}]", volume['capacityBytes']])
+        items.append([config['kubernetes']['name'], f"kubernetes.volumeclaim.usedBytes[{volume['namespace']},{volume['name']}]", volume['usedBytes']])
+        items.append([config['kubernetes']['name'], f"kubernetes.volumeclaim.inodesFree[{volume['namespace']},{volume['name']}]", volume['inodesFree']])
+        items.append([config['kubernetes']['name'], f"kubernetes.volumeclaim.inodes[{volume['namespace']},{volume['name']}]", volume['inodes']])
+        items.append([config['kubernetes']['name'], f"kubernetes.volumeclaim.inodesUsed[{volume['namespace']},{volume['name']}]", volume['inodesUsed']])
 
     return items

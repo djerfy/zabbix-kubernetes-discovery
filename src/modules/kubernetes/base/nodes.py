@@ -68,15 +68,15 @@ def zabbixItemsNodes(config):
     items = []
 
     for node in kubernetesGetNodes(config):
-        items.append(config['kubernetes']['name'], f"kubernetes.node.healthz[{node['name']}]", node['status'])
-        items.append(config['kubernetes']['name'], f"kubernetes.node.capacity.cpu[{node['name']}]", node['capacity']['cpu'])
-        items.append(config['kubernetes']['name'], f"kubernetes.node.capacity.memory[{node['name']}]", node['capacity']['memory'])
-        items.append(config['kubernetes']['name'], f"kubernetes.node.capacity.pods[{node['name']}]", node['capacity']['pods'])
-        items.append(config['kubernetes']['name'], f"kubernetes.node.allocatable.cpu[{node['name']}]", node['allocatable']['cpu'])
-        items.append(config['kubernetes']['name'], f"kubernetes.node.allocatable.memory[{node['name']}]", node['allocatable']['memory'])
-        items.append(config['kubernetes']['name'], f"kubernetes.node.allocatable.pods[{node['name']}]", node['allocatable']['pods'])
-        items.append(config['kubernetes']['name'], f"kubernetes.node.current.pods[{node['name']}]", node['current']['pods'])
-        items.append(config['kubernetes']['name'], f"kubernetes.node.current.podsUsed[{node['name']}]", node['current']['pods_used'])
-        items.append(config['kubernetes']['name'], f"kubernetes.node.current.podsFree[{node['name']}]", node['current']['pods_free'])
+        items.append([config['kubernetes']['name'], f"kubernetes.node.healthz[{node['name']}]", node['status']])
+        items.append([config['kubernetes']['name'], f"kubernetes.node.capacity.cpu[{node['name']}]", node['capacity']['cpu']])
+        items.append([config['kubernetes']['name'], f"kubernetes.node.capacity.memory[{node['name']}]", node['capacity']['memory']])
+        items.append([config['kubernetes']['name'], f"kubernetes.node.capacity.pods[{node['name']}]", node['capacity']['pods']])
+        items.append([config['kubernetes']['name'], f"kubernetes.node.allocatable.cpu[{node['name']}]", node['allocatable']['cpu']])
+        items.append([config['kubernetes']['name'], f"kubernetes.node.allocatable.memory[{node['name']}]", node['allocatable']['memory']])
+        items.append([config['kubernetes']['name'], f"kubernetes.node.allocatable.pods[{node['name']}]", node['allocatable']['pods']])
+        items.append([config['kubernetes']['name'], f"kubernetes.node.current.pods[{node['name']}]", node['current']['pods']])
+        items.append([config['kubernetes']['name'], f"kubernetes.node.current.podsUsed[{node['name']}]", node['current']['pods_used']])
+        items.append([config['kubernetes']['name'], f"kubernetes.node.current.podsFree[{node['name']}]", node['current']['pods_free']])
 
     return items
