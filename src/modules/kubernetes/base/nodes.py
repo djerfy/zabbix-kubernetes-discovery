@@ -1,12 +1,11 @@
 from kubernetes import client
-from pyzabbix import ZabbixMetric
 from modules.common.functions import *
 import json, urllib3, logging
 
 urllib3.disable_warnings()
 logging = logging.getLogger("kubernetes.base.nodes")
 
-def kubernetesGetNodes(config=None):
+def kubernetesGetNodes(config):
     """
     description: get nodes data
     return: list
@@ -33,12 +32,13 @@ def kubernetesGetNodes(config=None):
             }
         }
 
-        if matchLabels(config['labels']['exclude'], node.metadata.labels):
-            continue
-
-        if config['labels']['include'] != []:
-            if not matchLabels(config['labels']['include'], node.metadata.labels):
-                continue
+        if node.get("metadata"):
+            if node['metadata'].get("labels"):
+                if matchLabels(config['monitoring']['nodes']['labels']['exclude'], node.metadata.labels):
+                    continue
+                if config['labels']['include'] != []:
+                    if not matchLabels(config['monitoring']['nodes']['labels']['include'], node.metadata.labels):
+                        continue
 
         if any(n['name'] == json['name'] for n in nodes):
             continue
@@ -47,50 +47,36 @@ def kubernetesGetNodes(config=None):
 
     return nodes
 
-def zabbixDiscoveryNodes(clustername, nodes=[]):
+def zabbixDiscoveryNodes(config):
     """
     description: create a discovery for node
-    return: class ZabbixMetric
+    return: dict
     """
     discovery = {"data":[]}
 
-    for node in nodes:
+    for node in kubernetesGetNodes(config):
         output = {"{#KUBERNETES_NODE_NAME}": node['name']}
         discovery['data'].append(output)
 
-    sender = [ZabbixMetric(clustername, "kubernetes.node.discovery", json.dumps(discovery))]
+    return [config['kubernetes']['name'], "kubernetes.nodes.discovery", json.dumps(discovery)]
 
-    return sender
-
-def zabbixItemNodes(clustername, nodes=[]):
+def zabbixItemsNodes(config):
     """
     description: create a item for node
-    return: class ZabbixMetric
+    return: list
     """
-    sender = []
+    items = []
 
-    for node in nodes:
-        sender.append(ZabbixMetric(clustername, f"kubernetes.node.healthz[{node['name']}]", node['status']),)
-        sender.append(ZabbixMetric(clustername, f"kubernetes.node.capacity.cpu[{node['name']}]", node['capacity']['cpu']),)
-        sender.append(ZabbixMetric(clustername, f"kubernetes.node.capacity.memory[{node['name']}]", node['capacity']['memory']),)
-        sender.append(ZabbixMetric(clustername, f"kubernetes.node.capacity.pods[{node['name']}]", node['capacity']['pods']),)
-        sender.append(ZabbixMetric(clustername, f"kubernetes.node.allocatable.cpu[{node['name']}]", node['allocatable']['cpu']),)
-        sender.append(ZabbixMetric(clustername, f"kubernetes.node.allocatable.memory[{node['name']}]", node['allocatable']['memory']),)
-        sender.append(ZabbixMetric(clustername, f"kubernetes.node.allocatable.pods[{node['name']}]", node['allocatable']['pods']),)
-        sender.append(ZabbixMetric(clustername, f"kubernetes.node.current.pods[{node['name']}]", node['current']['pods']),)
-        sender.append(ZabbixMetric(clustername, f"kubernetes.node.current.podsUsed[{node['name']}]", node['current']['pods_used']),)
-        sender.append(ZabbixMetric(clustername, f"kubernetes.node.current.podsFree[{node['name']}]", node['current']['pods_free']),)
+    for node in kubernetesGetNodes(config):
+        items.append(config['kubernetes']['name'], f"kubernetes.node.healthz[{node['name']}]", node['status'])
+        items.append(config['kubernetes']['name'], f"kubernetes.node.capacity.cpu[{node['name']}]", node['capacity']['cpu'])
+        items.append(config['kubernetes']['name'], f"kubernetes.node.capacity.memory[{node['name']}]", node['capacity']['memory'])
+        items.append(config['kubernetes']['name'], f"kubernetes.node.capacity.pods[{node['name']}]", node['capacity']['pods'])
+        items.append(config['kubernetes']['name'], f"kubernetes.node.allocatable.cpu[{node['name']}]", node['allocatable']['cpu'])
+        items.append(config['kubernetes']['name'], f"kubernetes.node.allocatable.memory[{node['name']}]", node['allocatable']['memory'])
+        items.append(config['kubernetes']['name'], f"kubernetes.node.allocatable.pods[{node['name']}]", node['allocatable']['pods'])
+        items.append(config['kubernetes']['name'], f"kubernetes.node.current.pods[{node['name']}]", node['current']['pods'])
+        items.append(config['kubernetes']['name'], f"kubernetes.node.current.podsUsed[{node['name']}]", node['current']['pods_used'])
+        items.append(config['kubernetes']['name'], f"kubernetes.node.current.podsFree[{node['name']}]", node['current']['pods_free'])
 
-    return sender
-
-def baseNodes(mode=None, config=None):
-    """
-    description: monitoring nodes
-    return: class ZabbixMetric
-    """
-    logging.info(f"Function baseNodes() executed: {mode}")
-    if mode == "discovery":
-        return zabbixDiscoveryNodes(config['kubernetes']['name'], kubernetesGetNodes(config['monitoring']['nodes']))
-    if mode == "item":
-        return zabbixItemNodes(config['kubernetes']['name'], kubernetesGetNodes(config['monitoring']['nodes']))
-    return []
+    return items

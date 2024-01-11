@@ -1,5 +1,5 @@
 output:
-  level: INFO
+  level: DEBUG
 
 kubernetes:
   name: localhost
@@ -9,7 +9,7 @@ zabbix:
   timeout: 10
   schedule:
     discovery: 3600
-    items: 120
+    items: 3
 
 monitoring:
   # base

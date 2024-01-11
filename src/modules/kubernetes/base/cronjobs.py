@@ -1,13 +1,12 @@
 from kubernetes import client
 from datetime import datetime
-from pyzabbix import ZabbixMetric
 from modules.common.functions import *
 import json, urllib3, logging
 
 urllib3.disable_warnings()
 logging = logging.getLogger("kubernetes.base.cronjobs")
 
-def kubernetesGetCronjobs(config=None):
+def kubernetesGetCronjobs(config):
     """
     description: get cronjobs data
     return: list
@@ -68,56 +67,43 @@ def kubernetesGetCronjobs(config=None):
             }
         }
 
-        if matchLabels(config['labels']['exclude'], cronjob.metadata.labels):
-            continue
-
-        if config['labels']['include'] != []:
-            if not matchLabels(config['labels']['include'], cronjob.metadata.labels):
-                continue
+        if cronjob.get("metadata"):
+            if cronjob['metadata'].get("labels"):
+                if matchLabels(config['monitoring']['cronjobs']['labels']['exclude'], cronjob.metadata.labels):
+                    continue
+                if config['labels']['include'] != []:
+                    if not matchLabels(config['monitoring']['cronjobs']['labels']['include'], cronjob.metadata.labels):
+                        continue
 
         cronjobs.append(json)
 
     return cronjobs
 
-def zabbixDiscoveryCronjobs(clustername, cronjobs=[]):
+def zabbixDiscoveryCronjobs(config):
     """
     description: create a discovery for cronjob, per namespace
-    return: class ZabbixMetric
+    return: dict
     """
     discovery = {"data":[]}
 
-    for cronjob in cronjobs:
+    for cronjob in kubernetesGetCronjobs(config):
         output = {
             "{#KUBERNETES_CRONJOB_NAMESPACE}": cronjob['namespace'],
             "{#KUBERNETES_CRONJOB_NAME}": cronjob['name']}
         discovery['data'].append(output)
 
-    sender = [ZabbixMetric(clustername, "kubernetes.cronjob.discovery", json.dumps(discovery))]
+    return [config['kubernetes']['name'], "kubernetes.cronjobs.discovery", json.dumps(discovery)]
 
-    return sender
-
-def zabbixItemCronjobs(clustername, cronjobs=[]):
+def zabbixItemsCronjobs(config):
     """
     description: create a item for cronjob, per namespace
-    return: class ZabbixResponse
+    return: list
     """
-    sender = []
+    items = []
 
-    for cronjob in cronjobs:
-        sender.append(ZabbixMetric(clustername, f"kubernetes.cronjob.status[{cronjob['namespace']},{cronjob['name']}]", cronjob['status']),)
-        sender.append(ZabbixMetric(clustername, f"kubernetes.cronjob.reason[{cronjob['namespace']},{cronjob['name']}]", cronjob['last_job']['reason']),)
-        sender.append(ZabbixMetric(clustername, f"kubernetes.cronjob.message[{cronjob['namespace']},{cronjob['name']}]", cronjob['last_job']['message']),)
+    for cronjob in kubernetesGetCronjobs(config):
+        items.append(config['kubernetes']['name'], f"kubernetes.cronjob.status[{cronjob['namespace']},{cronjob['name']}]", cronjob['status'])
+        items.append(config['kubernetes']['name'], f"kubernetes.cronjob.reason[{cronjob['namespace']},{cronjob['name']}]", cronjob['last_job']['reason'])
+        items.append(config['kubernetes']['name'], f"kubernetes.cronjob.message[{cronjob['namespace']},{cronjob['name']}]", cronjob['last_job']['message'])
 
-    return sender
-
-def baseCronjobs(mode=None, config=None):
-    """
-    description: monitoring cronjobs
-    return: class ZabbixMetric
-    """
-    logging.info(f"Function baseCronjobs() executed: {mode}")
-    if mode == "discovery":
-        return zabbixDiscoveryCronjobs(config['kubernetes']['name'], kubernetesGetCronjobs(config['monitoring']['cronjobs']))
-    if mode == "item":
-        return zabbixItemCronjobs(config['kubernetes']['name'], kubernetesGetCronjobs(config['monitoring']['cronjobs']))
-    return []
+    return items

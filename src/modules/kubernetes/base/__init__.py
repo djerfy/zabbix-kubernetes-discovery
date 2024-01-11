@@ -1,6 +1,6 @@
-from modules.kubernetes.base.nodes import baseNodes
-from modules.kubernetes.base.cronjobs import baseCronjobs
-from modules.kubernetes.base.volumes import baseVolumes
-from modules.kubernetes.base.statefulsets import baseStatefulsets
-from modules.kubernetes.base.deployments import baseDeployments
-from modules.kubernetes.base.daemonsets import baseDaemonsets
+from modules.kubernetes.base.cronjobs import zabbixDiscoveryCronjobs, zabbixItemsCronjobs
+from modules.kubernetes.base.daemonsets import zabbixDiscoveryDaemonsets, zabbixItemsDaemonsets
+from modules.kubernetes.base.deployments import zabbixDiscoveryDeployments, zabbixItemsDeployments
+from modules.kubernetes.base.nodes import zabbixDiscoveryNodes, zabbixItemsNodes
+from modules.kubernetes.base.statefulsets import zabbixDiscoveryStatefulsets, zabbixItemsStatefulsets
+from modules.kubernetes.base.volumes import zabbixDiscoveryVolumes, zabbixItemsVolumes

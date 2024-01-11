@@ -1,12 +1,11 @@
 from kubernetes import client
-from pyzabbix import ZabbixMetric
 from modules.common.functions import *
 import json, urllib3, re, logging
 
 urllib3.disable_warnings()
 logging = logging.getLogger("kubernetes.base.volumes")
 
-def kubernetesGetVolumes(config=None):
+def kubernetesGetVolumes(config):
     """
     description: get volumes data
     return: list
@@ -35,11 +34,11 @@ def kubernetesGetVolumes(config=None):
                 volume['name'] = volume['pvcRef']['name']
 
                 if volume.get("metadata"):
-                    if volume.metadata.get("labels"):
-                        if matchLabels(config['labels']['exclude'], volume.metadata.labels):
+                    if volume['metadata'].get("labels"):
+                        if matchLabels(config['monitoring']['volumes']['labels']['exclude'], volume.metadata.labels):
                             continue
                         if config['labels']['include'] != []:
-                            if not matchLabels(config['labels']['include'], volume.metadata.labels):
+                            if not matchLabels(config['monitoring']['volumes']['labels']['include'], volume.metadata.labels):
                                 continue
 
                 for i in ["time", "pvcRef"]:
@@ -55,48 +54,34 @@ def kubernetesGetVolumes(config=None):
 
     return volumes
 
-def zabbixDiscoveryVolumes(clustername, volumes=[]):
+def zabbixDiscoveryVolumes(config):
     """
     description: create a discovery for persistent volume claim, per namespace
-    return: class ZabbixMetric
+    return: dict
     """
     discovery = {"data":[]}
 
-    for volume in volumes:
+    for volume in kubernetesGetVolumes(config):
         output = {
             "{#KUBERNETES_PVC_NAMESPACE}": volume['namespace'],
             "{#KUBERNETES_PVC_NAME}": volume['name']}
         discovery['data'].append(output)
 
-    sender = [ZabbixMetric(clustername, "kubernetes.pvc.discovery", json.dumps(discovery))]
+    return [config['kubernetes']['name'], "kubernetes.volumes.discovery", json.dumps(discovery)]
 
-    return sender
-
-def zabbixItemVolumes(clustername, volumes=[]):
+def zabbixItemsVolumes(config):
     """
     description: create a item for persistent volume claim, per namespace
-    return: class ZabbixMetric
+    return: list
     """
-    sender = []
+    items = []
 
-    for volume in volumes: 
-        sender.append(ZabbixMetric(clustername, f"kubernetes.volumeclaim.availableBytes[{volume['namespace']},{volume['name']}]", volume['availableBytes']),)
-        sender.append(ZabbixMetric(clustername, f"kubernetes.volumeclaim.capacityBytes[{volume['namespace']},{volume['name']}]", volume['capacityBytes']),)
-        sender.append(ZabbixMetric(clustername, f"kubernetes.volumeclaim.usedBytes[{volume['namespace']},{volume['name']}]", volume['usedBytes']),)
-        sender.append(ZabbixMetric(clustername, f"kubernetes.volumeclaim.inodesFree[{volume['namespace']},{volume['name']}]", volume['inodesFree']),)
-        sender.append(ZabbixMetric(clustername, f"kubernetes.volumeclaim.inodes[{volume['namespace']},{volume['name']}]", volume['inodes']),)
-        sender.append(ZabbixMetric(clustername, f"kubernetes.volumeclaim.inodesUsed[{volume['namespace']},{volume['name']}]", volume['inodesUsed']),)
+    for volume in kubernetesGetVolumes(config): 
+        items.append(config['kubernetes']['name'], f"kubernetes.volumeclaim.availableBytes[{volume['namespace']},{volume['name']}]", volume['availableBytes'])
+        items.append(config['kubernetes']['name'], f"kubernetes.volumeclaim.capacityBytes[{volume['namespace']},{volume['name']}]", volume['capacityBytes'])
+        items.append(config['kubernetes']['name'], f"kubernetes.volumeclaim.usedBytes[{volume['namespace']},{volume['name']}]", volume['usedBytes'])
+        items.append(config['kubernetes']['name'], f"kubernetes.volumeclaim.inodesFree[{volume['namespace']},{volume['name']}]", volume['inodesFree'])
+        items.append(config['kubernetes']['name'], f"kubernetes.volumeclaim.inodes[{volume['namespace']},{volume['name']}]", volume['inodes'])
+        items.append(config['kubernetes']['name'], f"kubernetes.volumeclaim.inodesUsed[{volume['namespace']},{volume['name']}]", volume['inodesUsed'])
 
-    return sender
-
-def baseVolumes(mode=None, config=None):
-    """
-    description: monitoring volumes
-    return: class ZabbixMetric
-    """
-    logging.info(f"Function baseVolumes() executed: {mode}")
-    if mode == "discovery":
-        return zabbixDiscoveryVolumes(config['kubernetes']['name'], kubernetesGetVolumes(config['monitoring']['volumes']))
-    if mode == "item":
-        return zabbixItemVolumes(config['kubernetes']['name'], kubernetesGetVolumes(config['monitoring']['volumes']))
-    return []
+    return items

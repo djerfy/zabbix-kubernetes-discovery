@@ -1,12 +1,11 @@
 from kubernetes import client
-from pyzabbix import ZabbixMetric
 from modules.common.functions import *
 import json, urllib3, logging
 
 urllib3.disable_warnings()
 logging = logging.getLogger("kubernetes.base.daemonsets")
 
-def kubernetesGetDaemonsets(config=None):
+def kubernetesGetDaemonsets(config):
     """
     description: get daemonsets data
     return: list
@@ -32,12 +31,13 @@ def kubernetesGetDaemonsets(config=None):
             if json['replicas'][i] is None:
                 json['replicas'][i] = 0
 
-        if matchLabels(config['labels']['exclude'], daemonset.metadata.labels):
-            continue
-
-        if config['labels']['include'] != []:
-            if not matchLabels(config['labels']['include'], daemonset.metadata.labels):
-                continue
+        if daemonset.get("metadata"):
+            if daemonset['metadata'].get("labels"):
+                if matchLabels(config['monitoring']['daemonsets']['labels']['exclude'], daemonset.metadata.labels):
+                    continue
+                if config['labels']['include'] != []:
+                    if not matchLabels(config['monitoring']['daemonsets']['labels']['include'], daemonset.metadata.labels):
+                        continue
 
         if any(d['name'] == json['name'] and d['namespace'] == json['namespace'] for d in daemonsets):
             continue
@@ -46,46 +46,32 @@ def kubernetesGetDaemonsets(config=None):
 
     return daemonsets
 
-def zabbixDiscoveryDaemonsets(clustername, daemonsets=[]):
+def zabbixDiscoveryDaemonsets(config):
     """
     description: create a discovery for daemonset, per namespace
-    return: class ZabbixMetric
+    return: dict
     """
     discovery = {"data":[]}
 
-    for daemonset in daemonsets:
+    for daemonset in kubernetesGetDaemonsets(config):
         output = {
             "{#KUBERNETES_DAEMONSET_NAMESPACE}": daemonset['namespace'],
             "{#KUBERNETES_DAEMONSET_NAME}": daemonset['name']}
         discovery['data'].append(output)
 
-    sender = [ZabbixMetric(clustername, "kubernetes.daemonset.discovery", json.dumps(discovery))]
+    return [config['kubernetes']['name'], "kubernetes.daemonsets.discovery", json.dumps(discovery)]
 
-    return sender
-
-def zabbixItemDaemonsets(clustername, daemonsets=[]):
+def zabbixItemsDaemonsets(config):
     """
     description: create a item for daemonset, per namespace
-    return: class ZabbixMetric
+    return: list
     """
-    sender = []
+    items = []
 
-    for daemonset in daemonsets:
-        sender.append(ZabbixMetric(clustername, f"kubernetes.daemonset.desiredReplicas[{daemonset['namespace']},{daemonset['name']}]", daemonset['replicas']['desired']),)
-        sender.append(ZabbixMetric(clustername, f"kubernetes.daemonset.currentReplicas[{daemonset['namespace']},{daemonset['name']}]", daemonset['replicas']['current']),)
-        sender.append(ZabbixMetric(clustername, f"kubernetes.daemonset.availableReplicas[{daemonset['namespace']},{daemonset['name']}]", daemonset['replicas']['available']),)
-        sender.append(ZabbixMetric(clustername, f"kubernetes.daemonset.readyReplicas[{daemonset['namespace']},{daemonset['name']}]", daemonset['replicas']['ready']),)
+    for daemonset in kubernetesGetDaemonsets(config):
+        items.append(config['kubernetes']['name'], f"kubernetes.daemonset.desiredReplicas[{daemonset['namespace']},{daemonset['name']}]", daemonset['replicas']['desired'])
+        items.append(config['kubernetes']['name'], f"kubernetes.daemonset.currentReplicas[{daemonset['namespace']},{daemonset['name']}]", daemonset['replicas']['current'])
+        items.append(config['kubernetes']['name'], f"kubernetes.daemonset.availableReplicas[{daemonset['namespace']},{daemonset['name']}]", daemonset['replicas']['available'])
+        items.append(config['kubernetes']['name'], f"kubernetes.daemonset.readyReplicas[{daemonset['namespace']},{daemonset['name']}]", daemonset['replicas']['ready'])
 
-    return sender
-
-def baseDaemonsets(mode=None, config=None):
-    """
-    description: monitoring daemonsets
-    return: class ZabbixMetric
-    """
-    logging.info(f"Function baseDaemonsets() executed: {mode}")
-    if mode == "discovery":
-        return zabbixDiscoveryDaemonsets(config['kubernetes']['name'], kubernetesGetDaemonsets(config['monitoring']['daemonsets']))
-    if mode == "item":
-        return zabbixItemDaemonsets(config['kubernetes']['name'], kubernetesGetDaemonsets(config['monitoring']['daemonsets']))
-    return []
+    return items

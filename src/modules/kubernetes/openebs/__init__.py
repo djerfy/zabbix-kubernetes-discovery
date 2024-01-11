@@ -1,2 +1,2 @@
-from modules.kubernetes.openebs.cstorpoolclusters import baseOpenebsCstorpoolclusters
-from modules.kubernetes.openebs.cstorpoolinstances import baseOpenebsCstorpoolinstances
+from modules.kubernetes.openebs.cstorpoolclusters import zabbixDiscoveryCstorpoolclusters, zabbixItemsCstorpoolclusters
+from modules.kubernetes.openebs.cstorpoolinstances import zabbixDiscoveryCstorpoolinstances, zabbixItemsCstorpoolinstances

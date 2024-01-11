@@ -1,12 +1,11 @@
 from kubernetes import client
-from pyzabbix import ZabbixMetric
 from modules.common.functions import *
-import json, urllib3, logging
+import urllib3, logging
 
 urllib3.disable_warnings()
 logging = logging.getLogger("kubernetes.openebs.cstorpoolinstances")
 
-def openebsGetCstorpoolinstances(config=None):
+def openebsGetCstorpoolinstances(config):
     """
     description: get cstorpoolinstances data
     return: list
@@ -31,10 +30,10 @@ def openebsGetCstorpoolinstances(config=None):
 
         if cstorpoolinstance.get("metadata"):
             if cstorpoolinstance['metadata'].get("labels"):
-                if matchLabels(config['labels']['exclude'], cstorpoolinstance['metadata']['labels']):
+                if matchLabels(config['monitoring']['openebs']['labels']['exclude'], cstorpoolinstance['metadata']['labels']):
                     continue
                 if config['labels']['include'] != []:
-                    if not matchLabels(config['labels']['exclude'], cstorpoolinstance['metadata']['labels']):
+                    if not matchLabels(config['monitoring']['openebs']['labels']['exclude'], cstorpoolinstance['metadata']['labels']):
                         continue
 
         if any(c['name'] == json['name'] and c['namespace'] == json['namespace'] for c in cstorpoolinstances):
@@ -44,48 +43,35 @@ def openebsGetCstorpoolinstances(config=None):
 
     return cstorpoolinstances
 
-def ZabbixDiscoveryCstorpoolinstances(clustername, cstorpoolinstances=[]):
+def zabbixDiscoveryCstorpoolinstances(config):
     """
     description: create a discovery for cstorpoolinstances, per namespace
-    return: class ZabbixMetric
+    return: dict
     """
     discovery = {"data":[]}
 
-    for cstorpoolinstance in cstorpoolinstances:
+    for cstorpoolinstance in openebsGetCstorpoolinstances(config):
         output = {
             "{#KUBERNETES_OPENEBS_CSTORPOOLINSTANCE_NAMESPACE}": cstorpoolinstance['namespace'],
             "{#KUBERNETES_OPENEBS_CSTORPOOLINSTANCE_NAME}": cstorpoolinstance['name']}
         discovery['data'].append(output)
 
-    sender = [ZabbixMetric(clustername, "kubernetes.openebs.cstorpoolinstances.discovery", json.dumps(discovery))]
+    return [config['kubernetes']['name'], "kubernetes.openebs.cstorpoolinstances.discovery", json.dumps(discovery)]
 
-    return sender
-
-def ZabbixItemCstorpoolinstances(clustername, cstorpoolinstances=[]):
+def zabbixItemsCstorpoolinstances(config):
     """
     description: create a item for cstorpoolinstances, per namespace
-    return: class ZabbixMetric
+    return: list
     """
-    sender = []
+    items = []
 
-    for cstorpoolinstance in cstorpoolinstances:
-        sender.append(ZabbixMetric(clustername, f"kubernetes.openebs.cstorpoolinstances.readonly[{cstorpoolinstance['namespace']},{cstorpoolinstance['name']}]", cstorpoolinstance['status']['readOnly']),)
-        sender.append(ZabbixMetric(clustername, f"kubernetes.openebs.cstorpoolinstances.provisionedReplicas[{cstorpoolinstance['namespace']},{cstorpoolinstance['name']}]", cstorpoolinstance['status']['provisionedReplicas']),)
-        sender.append(ZabbixMetric(clustername, f"kubernetes.openebs.cstorpoolinstances.healthyReplicas[{cstorpoolinstance['namespace']},{cstorpoolinstance['name']}]", cstorpoolinstance['status']['healthyReplicas']),)
-        sender.append(ZabbixMetric(clustername, f"kubernetes.openebs.cstorpoolinstances.status[{cstorpoolinstance['namespace']},{cstorpoolinstance['name']}]", cstorpoolinstance['status']['phase']),)
-        sender.append(ZabbixMetric(clustername, f"kubernetes.openebs.cstorpoolinstances.capacity.total[{cstorpoolinstance['namespace']},{cstorpoolinstance['name']}]", cstorpoolinstance['status']['capacity']['total']),)
-        sender.append(ZabbixMetric(clustername, f"kubernetes.openebs.cstorpoolinstances.capacity.free[{cstorpoolinstance['namespace']},{cstorpoolinstance['name']}]", cstorpoolinstance['status']['capacity']['free']),)
-        sender.append(ZabbixMetric(clustername, f"kubernetes.openebs.cstorpoolinstances.capacity.used[{cstorpoolinstance['namespace']},{cstorpoolinstance['name']}]", cstorpoolinstance['status']['capacity']['used']),)
-    return sender
+    for cstorpoolinstance in openebsGetCstorpoolinstances(config):
+        items.append(config['kubernetes']['name'], f"kubernetes.openebs.cstorpoolinstances.readonly[{cstorpoolinstance['namespace']},{cstorpoolinstance['name']}]", cstorpoolinstance['status']['readOnly'])
+        items.append(config['kubernetes']['name'], f"kubernetes.openebs.cstorpoolinstances.provisionedReplicas[{cstorpoolinstance['namespace']},{cstorpoolinstance['name']}]", cstorpoolinstance['status']['provisionedReplicas'])
+        items.append(config['kubernetes']['name'], f"kubernetes.openebs.cstorpoolinstances.healthyReplicas[{cstorpoolinstance['namespace']},{cstorpoolinstance['name']}]", cstorpoolinstance['status']['healthyReplicas'])
+        items.append(config['kubernetes']['name'], f"kubernetes.openebs.cstorpoolinstances.status[{cstorpoolinstance['namespace']},{cstorpoolinstance['name']}]", cstorpoolinstance['status']['phase'])
+        items.append(config['kubernetes']['name'], f"kubernetes.openebs.cstorpoolinstances.capacity.total[{cstorpoolinstance['namespace']},{cstorpoolinstance['name']}]", cstorpoolinstance['status']['capacity']['total'])
+        items.append(config['kubernetes']['name'], f"kubernetes.openebs.cstorpoolinstances.capacity.free[{cstorpoolinstance['namespace']},{cstorpoolinstance['name']}]", cstorpoolinstance['status']['capacity']['free'])
+        items.append(config['kubernetes']['name'], f"kubernetes.openebs.cstorpoolinstances.capacity.used[{cstorpoolinstance['namespace']},{cstorpoolinstance['name']}]", cstorpoolinstance['status']['capacity']['used'])
 
-def baseOpenebsCstorpoolinstances(mode=None, config=None):
-    """
-    description: monitoring openebs cstorpoolinstances
-    return: class ZabbixMetric
-    """
-    logging.info(f"Function baseOpenebsCstorpoolinstances() executed: {mode}")
-    if mode == "discovery":
-        return ZabbixDiscoveryCstorpoolinstances(config['kubernetes']['name'], openebsGetCstorpoolinstances(config['monitoring']['openebs']))
-    if mode == "item":
-        return ZabbixItemCstorpoolinstances(config['kubernetes']['name'], openebsGetCstorpoolinstances(config['monitoring']['openebs']))
-    return []
+    return items

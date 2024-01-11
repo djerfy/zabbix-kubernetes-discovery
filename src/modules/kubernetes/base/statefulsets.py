@@ -1,12 +1,11 @@
 from kubernetes import client
-from pyzabbix import ZabbixMetric
 from modules.common.functions import *
 import json, urllib3, logging
 
 urllib3.disable_warnings()
 logging = logging.getLogger("kubernetes.base.statefulsets")
 
-def kubernetesGetStatefulsets(config=None):
+def kubernetesGetStatefulsets(config):
     """
     description: get statefulsets data
     return: list
@@ -27,12 +26,13 @@ def kubernetesGetStatefulsets(config=None):
             }
         }
 
-        if matchLabels(config['labels']['exclude'], statefulset.metadata.labels):
-            continue
-
-        if config['labels']['include'] != []:
-            if not matchLabels(config['labels']['include'], statefulset.metadata.labels):
-                continue
+        if statefulset.get("metadata"):
+            if statefulset['metadata'].get("labels"):
+                if matchLabels(config['monitoring']['statefulsets']['labels']['exclude'], statefulset.metadata.labels):
+                    continue
+                if config['labels']['include'] != []:
+                    if not matchLabels(config['monitoring']['statefulsets']['labels']['include'], statefulset.metadata.labels):
+                        continue
 
         for i in ["desired", "ready", "available"]:
             if json['replicas'][i] is None:
@@ -45,45 +45,31 @@ def kubernetesGetStatefulsets(config=None):
 
     return statefulsets
 
-def zabbixDiscoveryStatefulsets(clustername, statefulsets=[]):
+def zabbixDiscoveryStatefulsets(config):
     """
     description: create a discovery for statefulset, per namespace
-    return: class ZabbixMetric
+    return: dict
     """
     discovery = {"data":[]}
 
-    for statefulset in statefulsets:
+    for statefulset in kubernetesGetStatefulsets(config):
         output = {
             "{#KUBERNETES_STATEFULSET_NAMESPACE}": statefulset['namespace'],
             "{#KUBERNETES_STATEFULSET_NAME}": statefulset['name']}
         discovery['data'].append(output)
 
-    sender = [ZabbixMetric(clustername, "kubernetes.statefulset.discovery", json.dumps(discovery))]
+    return [config['kubernetes']['name'], "kubernetes.statefulsets.discovery", json.dumps(discovery)]
 
-    return sender
-
-def zabbixItemStatefulsets(clustername, statefulsets=[]):
+def zabbixItemsStatefulsets(config):
     """
     description: create a item for statefulset, per namespace
-    return: class ZabbixResponse
+    return: list
     """
-    sender = []
+    items = []
 
-    for statefulset in statefulsets:
-        sender.append(ZabbixMetric(clustername, f"kubernetes.statefulset.availableReplicas[{statefulset['namespace']},{statefulset['name']}]", statefulset['replicas']['available']),)
-        sender.append(ZabbixMetric(clustername, f"kubernetes.statefulset.readyReplicas[{statefulset['namespace']},{statefulset['name']}]", statefulset['replicas']['ready']),)
-        sender.append(ZabbixMetric(clustername, f"kubernetes.statefulset.desiredReplicas[{statefulset['namespace']},{statefulset['name']}]", statefulset['replicas']['desired']),)
+    for statefulset in kubernetesGetStatefulsets(config):
+        items.append(config['kubernetes']['name'], f"kubernetes.statefulset.availableReplicas[{statefulset['namespace']},{statefulset['name']}]", statefulset['replicas']['available'])
+        items.append(config['kubernetes']['name'], f"kubernetes.statefulset.readyReplicas[{statefulset['namespace']},{statefulset['name']}]", statefulset['replicas']['ready'])
+        items.append(config['kubernetes']['name'], f"kubernetes.statefulset.desiredReplicas[{statefulset['namespace']},{statefulset['name']}]", statefulset['replicas']['desired'])
 
-    return sender
-
-def baseStatefulsets(mode=None, config=None):
-    """
-    description: monitoring statefulsets
-    return: class ZabbixMetric
-    """
-    logging.info(f"Function baseStatefulsets() executed: {mode}")
-    if mode == "discovery":
-        return zabbixDiscoveryStatefulsets(config['kubernetes']['name'], kubernetesGetStatefulsets(config['monitoring']['statefulsets']))
-    if mode == "item":
-        return zabbixItemStatefulsets(config['kubernetes']['name'], kubernetesGetStatefulsets(config['monitoring']['statefulsets']))
-    return []
+    return items

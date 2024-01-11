@@ -1,12 +1,11 @@
 from kubernetes import client
-from pyzabbix import ZabbixMetric
 from modules.common.functions import *
 import json, urllib3, logging
 
 urllib3.disable_warnings()
 logging = logging.getLogger("kubernetes.base.deployments")
 
-def kubernetesGetDeployments(config=None):
+def kubernetesGetDeployments(config):
     """
     description: get deployments data
     return: list
@@ -27,12 +26,13 @@ def kubernetesGetDeployments(config=None):
             }
         }
 
-        if matchLabels(config['labels']['exclude'], deployment.metadata.labels):
-            continue
-
-        if config['labels']['include'] != []:
-            if not matchLabels(config['labels']['include'], deployment.metadata.labels):
-                continue
+        if deployment.get("metadata"):
+            if deployment['metadata'].get("labels"):
+                if matchLabels(config['monitoring']['deployments']['labels']['exclude'], deployment.metadata.labels):
+                    continue
+                if config['labels']['include'] != []:
+                    if not matchLabels(config['monitoring']['deployments']['labels']['include'], deployment.metadata.labels):
+                        continue
 
         for i in ["desired", "ready", "available"]:
             if json['replicas'][i] is None:
@@ -45,45 +45,31 @@ def kubernetesGetDeployments(config=None):
 
     return deployments
 
-def zabbixDiscoveryDeployments(clustername, deployments=[]):
+def zabbixDiscoveryDeployments(config):
     """
     description: create a discovery for deployment, per namespace
-    return: class ZabbixMetric
+    return: dict
     """
     discovery = {"data":[]}
 
-    for deployment in deployments:
+    for deployment in kubernetesGetDeployments(config):
         output = {
             "{#KUBERNETES_DEPLOYMENT_NAMESPACE}": deployment['namespace'],
             "{#KUBERNETES_DEPLOYMENT_NAME}": deployment['name']}
         discovery['data'].append(output)
 
-    sender = [ZabbixMetric(clustername, "kubernetes.deployment.discovery", json.dumps(discovery))]
+    return [config['kubernetes']['name'], "kubernetes.deployments.discovery", json.dumps(discovery)]
 
-    return sender
-
-def zabbixItemDeployments(clustername, deployments=[]):
+def zabbixItemsDeployments(config):
     """
     description: create a item for deployment, per namespace
-    return: class ZabbixResponse
+    return: list
     """
-    sender = []
+    items = []
 
-    for deployment in deployments:
-        sender.append(ZabbixMetric(clustername, f"kubernetes.deployment.availableReplicas[{deployment['namespace']},{deployment['name']}]", deployment['replicas']['available']),)
-        sender.append(ZabbixMetric(clustername, f"kubernetes.deployment.readyReplicas[{deployment['namespace']},{deployment['name']}]", deployment['replicas']['ready']),)
-        sender.append(ZabbixMetric(clustername, f"kubernetes.deployment.desiredReplicas[{deployment['namespace']},{deployment['name']}]", deployment['replicas']['desired']),)
+    for deployment in kubernetesGetDeployments(config):
+        items.append(config['kubernetes']['name'], f"kubernetes.deployment.availableReplicas[{deployment['namespace']},{deployment['name']}]", deployment['replicas']['available'])
+        items.append(config['kubernetes']['name'], f"kubernetes.deployment.readyReplicas[{deployment['namespace']},{deployment['name']}]", deployment['replicas']['ready'])
+        items.append(config['kubernetes']['name'], f"kubernetes.deployment.desiredReplicas[{deployment['namespace']},{deployment['name']}]", deployment['replicas']['desired'])
 
-    return sender
-
-def baseDeployments(mode=None, config=None):
-    """
-    description: monitoring deployments
-    return: class ZabbixMetric
-    """
-    logging.info(f"Function baseDeployments() executed: {mode}")
-    if mode == "discovery":
-        return zabbixDiscoveryDeployments(config['kubernetes']['name'], kubernetesGetDeployments(config['monitoring']['deployments']))
-    if mode == "item":
-        return zabbixItemDeployments(config['kubernetes']['name'], kubernetesGetDeployments(config['monitoring']['deployments']))
-    return []
+    return items
