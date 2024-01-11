@@ -40,8 +40,12 @@ logging.debug(f"-> Cluster name: {config['kubernetes']['name']}")
 
 def executeSender(data):
     try:
-        logging.debug(data)
-        zabbix.send_value(data)
+        for d in data:
+            if len(d) != 3:
+                logging.error(f"Invalid zabbix format: {d}")
+            host, key, value = d[0], d[1], d[2]
+            logging.info(f"host={host} key={key} value={value}")
+            zabbix.send_value(host, key, value)
     except Exception as e:
         logging.error(e)
 
