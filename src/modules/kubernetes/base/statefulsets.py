@@ -54,11 +54,11 @@ def zabbixDiscoveryStatefulsets(config):
 
     for statefulset in kubernetesGetStatefulsets(config):
         output = {
-            "{#KUBERNETES_STATEFULSET_NAMESPACE}": statefulset['namespace'],
-            "{#KUBERNETES_STATEFULSET_NAME}": statefulset['name']}
+            "{#KUBERNETES_BASE_STATEFULSETS_NAMESPACE}": statefulset['namespace'],
+            "{#KUBERNETES_BASE_STATEFULSETS_NAME}": statefulset['name']}
         discovery['data'].append(output)
 
-    return [[config['kubernetes']['name'], "kubernetes.statefulsets.discovery", json.dumps(discovery)]]
+    return [[config['kubernetes']['name'], "kubernetes.base.statefulsets.discovery", json.dumps(discovery)]]
 
 def zabbixItemsStatefulsets(config):
     """
@@ -68,8 +68,8 @@ def zabbixItemsStatefulsets(config):
     items = []
 
     for statefulset in kubernetesGetStatefulsets(config):
-        items.append([config['kubernetes']['name'], f"kubernetes.statefulset.availableReplicas[{statefulset['namespace']},{statefulset['name']}]", statefulset['replicas']['available']])
-        items.append([config['kubernetes']['name'], f"kubernetes.statefulset.readyReplicas[{statefulset['namespace']},{statefulset['name']}]", statefulset['replicas']['ready']])
-        items.append([config['kubernetes']['name'], f"kubernetes.statefulset.desiredReplicas[{statefulset['namespace']},{statefulset['name']}]", statefulset['replicas']['desired']])
+        items.append([config['kubernetes']['name'], f"kubernetes.base.statefulsets.availableReplicas[{statefulset['namespace']},{statefulset['name']}]", statefulset['replicas']['available']])
+        items.append([config['kubernetes']['name'], f"kubernetes.base.statefulsets.readyReplicas[{statefulset['namespace']},{statefulset['name']}]", statefulset['replicas']['ready']])
+        items.append([config['kubernetes']['name'], f"kubernetes.base.statefulsets.desiredReplicas[{statefulset['namespace']},{statefulset['name']}]", statefulset['replicas']['desired']])
 
     return items

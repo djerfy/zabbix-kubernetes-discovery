@@ -88,11 +88,11 @@ def zabbixDiscoveryCronjobs(config):
 
     for cronjob in kubernetesGetCronjobs(config):
         output = {
-            "{#KUBERNETES_CRONJOB_NAMESPACE}": cronjob['namespace'],
-            "{#KUBERNETES_CRONJOB_NAME}": cronjob['name']}
+            "{#KUBERNETES_BASE_CRONJOBS_NAMESPACE}": cronjob['namespace'],
+            "{#KUBERNETES_BASE_CRONJOBS_NAME}": cronjob['name']}
         discovery['data'].append(output)
 
-    return [[config['kubernetes']['name'], "kubernetes.cronjobs.discovery", json.dumps(discovery)]]
+    return [[config['kubernetes']['name'], "kubernetes.base.cronjobs.discovery", json.dumps(discovery)]]
 
 def zabbixItemsCronjobs(config):
     """
@@ -102,8 +102,8 @@ def zabbixItemsCronjobs(config):
     items = []
 
     for cronjob in kubernetesGetCronjobs(config):
-        items.append([config['kubernetes']['name'], f"kubernetes.cronjob.status[{cronjob['namespace']},{cronjob['name']}]", cronjob['status']])
-        items.append([config['kubernetes']['name'], f"kubernetes.cronjob.reason[{cronjob['namespace']},{cronjob['name']}]", cronjob['last_job']['reason']])
-        items.append([config['kubernetes']['name'], f"kubernetes.cronjob.message[{cronjob['namespace']},{cronjob['name']}]", cronjob['last_job']['message']])
+        items.append([config['kubernetes']['name'], f"kubernetes.base.cronjobs.status[{cronjob['namespace']},{cronjob['name']}]", cronjob['status']])
+        items.append([config['kubernetes']['name'], f"kubernetes.base.cronjobs.reason[{cronjob['namespace']},{cronjob['name']}]", cronjob['last_job']['reason']])
+        items.append([config['kubernetes']['name'], f"kubernetes.base.cronjobs.message[{cronjob['namespace']},{cronjob['name']}]", cronjob['last_job']['message']])
 
     return items

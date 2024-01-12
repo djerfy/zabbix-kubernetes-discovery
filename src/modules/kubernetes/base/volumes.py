@@ -63,11 +63,11 @@ def zabbixDiscoveryVolumes(config):
 
     for volume in kubernetesGetVolumes(config):
         output = {
-            "{#KUBERNETES_PVC_NAMESPACE}": volume['namespace'],
-            "{#KUBERNETES_PVC_NAME}": volume['name']}
+            "{#KUBERNETES_BASE_VOLUMES_NAMESPACE}": volume['namespace'],
+            "{#KUBERNETES_BASE_VOLUMES_NAME}": volume['name']}
         discovery['data'].append(output)
 
-    return [[config['kubernetes']['name'], "kubernetes.volumes.discovery", json.dumps(discovery)]]
+    return [[config['kubernetes']['name'], "kubernetes.base.volumes.discovery", json.dumps(discovery)]]
 
 def zabbixItemsVolumes(config):
     """
@@ -77,11 +77,11 @@ def zabbixItemsVolumes(config):
     items = []
 
     for volume in kubernetesGetVolumes(config): 
-        items.append([config['kubernetes']['name'], f"kubernetes.volumeclaim.availableBytes[{volume['namespace']},{volume['name']}]", volume['availableBytes']])
-        items.append([config['kubernetes']['name'], f"kubernetes.volumeclaim.capacityBytes[{volume['namespace']},{volume['name']}]", volume['capacityBytes']])
-        items.append([config['kubernetes']['name'], f"kubernetes.volumeclaim.usedBytes[{volume['namespace']},{volume['name']}]", volume['usedBytes']])
-        items.append([config['kubernetes']['name'], f"kubernetes.volumeclaim.inodesFree[{volume['namespace']},{volume['name']}]", volume['inodesFree']])
-        items.append([config['kubernetes']['name'], f"kubernetes.volumeclaim.inodes[{volume['namespace']},{volume['name']}]", volume['inodes']])
-        items.append([config['kubernetes']['name'], f"kubernetes.volumeclaim.inodesUsed[{volume['namespace']},{volume['name']}]", volume['inodesUsed']])
+        items.append([config['kubernetes']['name'], f"kubernetes.base.volumes.availableBytes[{volume['namespace']},{volume['name']}]", volume['availableBytes']])
+        items.append([config['kubernetes']['name'], f"kubernetes.base.volumes.capacityBytes[{volume['namespace']},{volume['name']}]", volume['capacityBytes']])
+        items.append([config['kubernetes']['name'], f"kubernetes.base.volumes.usedBytes[{volume['namespace']},{volume['name']}]", volume['usedBytes']])
+        items.append([config['kubernetes']['name'], f"kubernetes.base.volumes.inodesFree[{volume['namespace']},{volume['name']}]", volume['inodesFree']])
+        items.append([config['kubernetes']['name'], f"kubernetes.base.volumes.inodes[{volume['namespace']},{volume['name']}]", volume['inodes']])
+        items.append([config['kubernetes']['name'], f"kubernetes.base.volumes.inodesUsed[{volume['namespace']},{volume['name']}]", volume['inodesUsed']])
 
     return items

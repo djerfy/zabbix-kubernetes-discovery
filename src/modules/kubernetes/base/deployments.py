@@ -54,11 +54,11 @@ def zabbixDiscoveryDeployments(config):
 
     for deployment in kubernetesGetDeployments(config):
         output = {
-            "{#KUBERNETES_DEPLOYMENT_NAMESPACE}": deployment['namespace'],
-            "{#KUBERNETES_DEPLOYMENT_NAME}": deployment['name']}
+            "{#KUBERNETES_BASE_DEPLOYMENTS_NAMESPACE}": deployment['namespace'],
+            "{#KUBERNETES_BASE_DEPLOYMENTS_NAME}": deployment['name']}
         discovery['data'].append(output)
 
-    return [[config['kubernetes']['name'], "kubernetes.deployments.discovery", json.dumps(discovery)]]
+    return [[config['kubernetes']['name'], "kubernetes.base.deployments.discovery", json.dumps(discovery)]]
 
 def zabbixItemsDeployments(config):
     """
@@ -68,8 +68,8 @@ def zabbixItemsDeployments(config):
     items = []
 
     for deployment in kubernetesGetDeployments(config):
-        items.append([config['kubernetes']['name'], f"kubernetes.deployment.availableReplicas[{deployment['namespace']},{deployment['name']}]", deployment['replicas']['available']])
-        items.append([config['kubernetes']['name'], f"kubernetes.deployment.readyReplicas[{deployment['namespace']},{deployment['name']}]", deployment['replicas']['ready']])
-        items.append([config['kubernetes']['name'], f"kubernetes.deployment.desiredReplicas[{deployment['namespace']},{deployment['name']}]", deployment['replicas']['desired']])
+        items.append([config['kubernetes']['name'], f"kubernetes.base.deployments.availableReplicas[{deployment['namespace']},{deployment['name']}]", deployment['replicas']['available']])
+        items.append([config['kubernetes']['name'], f"kubernetes.base.deployments.readyReplicas[{deployment['namespace']},{deployment['name']}]", deployment['replicas']['ready']])
+        items.append([config['kubernetes']['name'], f"kubernetes.base.deployments.desiredReplicas[{deployment['namespace']},{deployment['name']}]", deployment['replicas']['desired']])
 
     return items

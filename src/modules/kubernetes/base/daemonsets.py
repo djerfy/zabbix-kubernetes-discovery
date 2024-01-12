@@ -55,11 +55,11 @@ def zabbixDiscoveryDaemonsets(config):
 
     for daemonset in kubernetesGetDaemonsets(config):
         output = {
-            "{#KUBERNETES_DAEMONSET_NAMESPACE}": daemonset['namespace'],
-            "{#KUBERNETES_DAEMONSET_NAME}": daemonset['name']}
+            "{#KUBERNETES_BASE_DAEMONSETS_NAMESPACE}": daemonset['namespace'],
+            "{#KUBERNETES_BASE_DAEMONSETS_NAME}": daemonset['name']}
         discovery['data'].append(output)
 
-    return [[config['kubernetes']['name'], "kubernetes.daemonsets.discovery", json.dumps(discovery)]]
+    return [[config['kubernetes']['name'], "kubernetes.base.daemonsets.discovery", json.dumps(discovery)]]
 
 def zabbixItemsDaemonsets(config):
     """
@@ -69,9 +69,9 @@ def zabbixItemsDaemonsets(config):
     items = []
 
     for daemonset in kubernetesGetDaemonsets(config):
-        items.append([config['kubernetes']['name'], f"kubernetes.daemonset.desiredReplicas[{daemonset['namespace']},{daemonset['name']}]", daemonset['replicas']['desired']])
-        items.append([config['kubernetes']['name'], f"kubernetes.daemonset.currentReplicas[{daemonset['namespace']},{daemonset['name']}]", daemonset['replicas']['current']])
-        items.append([config['kubernetes']['name'], f"kubernetes.daemonset.availableReplicas[{daemonset['namespace']},{daemonset['name']}]", daemonset['replicas']['available']])
-        items.append([config['kubernetes']['name'], f"kubernetes.daemonset.readyReplicas[{daemonset['namespace']},{daemonset['name']}]", daemonset['replicas']['ready']])
+        items.append([config['kubernetes']['name'], f"kubernetes.base.daemonsets.desiredReplicas[{daemonset['namespace']},{daemonset['name']}]", daemonset['replicas']['desired']])
+        items.append([config['kubernetes']['name'], f"kubernetes.base.daemonsets.currentReplicas[{daemonset['namespace']},{daemonset['name']}]", daemonset['replicas']['current']])
+        items.append([config['kubernetes']['name'], f"kubernetes.base.daemonsets.availableReplicas[{daemonset['namespace']},{daemonset['name']}]", daemonset['replicas']['available']])
+        items.append([config['kubernetes']['name'], f"kubernetes.base.daemonsets.readyReplicas[{daemonset['namespace']},{daemonset['name']}]", daemonset['replicas']['ready']])
 
     return items
