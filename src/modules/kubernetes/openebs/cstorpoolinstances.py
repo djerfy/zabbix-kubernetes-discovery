@@ -16,8 +16,13 @@ def openebsGetCstorpoolinstances(config):
 
     if config['monitoring']['openebs']['engine'] != "cstor":
         return cstorpoolinstances
+    
+    try:
+        objects = kubernetes.list_cluster_custom_object(group="cstor.openebs.io", version="v1", plural="cstorpoolinstances")
+    except Exception:
+        return cstorpoolinstances
 
-    for cstorpoolinstance in rawObjects(kubernetes.list_cluster_custom_object(group="cstor.openebs.io", version="v1", plural="cstorpoolinstances")):
+    for cstorpoolinstance in rawObjects(objects):
         json = {
             "name": cstorpoolinstance['metadata']['name'],
             "namespace": cstorpoolinstance['metadata']['namespace'],
