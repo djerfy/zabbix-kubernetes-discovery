@@ -1,0 +1,1 @@
+from modules.kubernetes.trivy.vulnerabilityreports import trivyGetVulnerabilityreports

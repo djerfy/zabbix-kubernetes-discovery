@@ -1,0 +1,75 @@
+output:
+  level: INFO
+
+kubernetes:
+  name: localhost
+
+zabbix:
+  endpoint: localhost
+  timeout: 10
+  schedule:
+    discovery: 3600
+    items: 3
+
+monitoring:
+  # base
+  nodes:
+    enabled: True
+    labels:
+      include: []
+      exclude: []
+  daemonsets:
+    enabled: False
+    labels:
+      include: []
+      exclude: []
+  volumes:
+    enabled: False
+    labels:
+      include: []
+      exclude: []
+  deployments:
+    enabled: False
+    labels:
+      include: []
+      exclude: []
+  statefulsets:
+    enabled: False
+    labels:
+      include: []
+      exclude: []
+  cronjobs:
+    enabled: False
+    labels:
+      include: []
+      exclude: []
+  ingresses:
+    enabled: False
+    labels:
+      include: []
+      exclude: []
+  # openebs
+  openebs:
+    enabled: False
+    engine: cstor
+    labels:
+      include: []
+      exclude: []
+  # velero
+  velero:
+    enabled: False
+    labels:
+      include: []
+      exclude: []
+  # trivy
+  trivy:
+    enabled: False
+    labels:
+      include: []
+      exclude: []
+  # certificates
+  certs:
+    enabled: False
+    labels:
+      include: []
+      exclude: []

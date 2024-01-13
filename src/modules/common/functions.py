@@ -1,48 +1,33 @@
 import re
 import json
 
-def ifObjectMatch(object_list=None, object_name=None):
+def matchLabels(match_labels=None, object_labels=None):
     """
-    description: check if the object is in list
+    description: check if the object match labels
     return: bool
     """
-    if object_list is None or object_list == "" or object_list == "*":
-        return False
+    for i in [match_labels, object_labels]:
+        if i is None or i == [] or i == "" or i == "*":
+            return False
 
-    if object_name is None or object_name == "" or object_name == "*":
-        return False
-
-    if type(object_list) == str:
-        object_list = object_list.split(",")
-
-    if type(object_list) != list:
-        return False
-
-    reg_list = map(re.compile, object_list)
-
-    if any(reg.match(object_name) for reg in reg_list):
-        return True
-
-    return False
-
-def ifLabelMatch(match_label=None, object_labels=None):
-    """
-    description: check if the object match a label
-    return: bool
-    """
-    if match_label is None or match_label == "" or match_label == "*":
-        return False
-    
-    if object_labels is None or object_labels == "" or object_labels == "*":
-        return False
-    
     object_labels = str(object_labels).replace("{", "").replace("}", "").replace("'", "").replace(" ", "").split(",")
 
-    for label in object_labels:
-        k, v = label.split(":")[0], label.split(":")[1]
-
-        for separator in ["=", ":"]:
-            if match_label.split(separator)[0] == k and match_label.split(separator)[1] == v:
-                return True
+    for object_label in object_labels:
+        key, value = object_label.split(":")[0], object_label.split(":")[1]
+        for match_label in match_labels:
+            for separator in ["=", ":"]:
+                if match_label.split(separator)[0] == key and match_label.split(separator)[1] == value:
+                    return True
 
     return False
+
+def rawObjects(data=[]):
+    """
+    description: get objects from raw api, convert items and return only objects
+    return: list
+    """
+    for key, value in data.items():
+        if key == "items":
+            return value
+        
+    return []
