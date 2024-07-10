@@ -13,7 +13,7 @@ serviceAccount:
 deployment:
   name: zabbix-kubernetes-discovery
   image:
-    name: ghcr.io/djerfy/zabbix-kubernetes-discovery:v1.4.13
+    name: ghcr.io/djerfy/zabbix-kubernetes-discovery:v1.4.14
     pullPolicy: IfNotPresent
   replicas: 1
   strategy: Recreate
@@ -31,25 +31,36 @@ zabbix:
 monitoring:
   node:
     match_label: ''
+    include_name: ''
     exclude_name: ''
   daemonset:
     match_label: ''
+    include_name: ''
+    include_namespace: ''
     exclude_name: ''
     exclude_namespace: ''
   volume:
     match_label: ''
+    include_name: ''
+    include_namespace: ''
     exclude_name: ''
     exclude_namespace: ''
   deployment:
     match_label: ''
+    include_name: ''
+    include_namespace: ''
     exclude_name: ''
     exclude_namespace: ''
   statefulset:
     match_label: ''
+    include_name: ''
+    include_namespace: ''
     exclude_name: ''
     exclude_namespace: ''
   cronjob:
     match_label: ''
+    include_name: ''
+    include_namespace: ''
     exclude_name: ''
     exclude_namespace: ''
 
