@@ -64,9 +64,9 @@ if __name__ == "__main__":
             print("JSON output (node): {}".format(
                 getNode(
                     args.object_name,
+                    args.match_label,
                     args.include_name,
-                    args.exclude_name,
-                    args.match_label
+                    args.exclude_name
                 )
             ))
         if args.monitoring_type == "discovery":
@@ -76,9 +76,9 @@ if __name__ == "__main__":
                         args.kubernetes_name,
                         getNode(
                             args.object_name,
+                            args.match_label,
                             args.include_name,
-                            args.exclude_name,
-                            args.match_label
+                            args.exclude_name
                         )
                     )
                 )
@@ -89,9 +89,9 @@ if __name__ == "__main__":
                     args.kubernetes_name,
                     getNode(
                         args.object_name,
+                        args.match_label,
                         args.include_name,
-                        args.exclude_name,
-                        args.match_label
+                        args.exclude_name
                     )
                 ))
             ))
@@ -102,11 +102,11 @@ if __name__ == "__main__":
             print("JSON output (daemonset): {}".format(
                 getDaemonset(
                     args.object_name,
+                    args.match_label,
                     args.include_name,
                     args.include_namespace,
                     args.exclude_name,
-                    args.exclude_namespace,
-                    args.match_label
+                    args.exclude_namespace
                 )
             ))
         if args.monitoring_type == "discovery":
@@ -116,11 +116,11 @@ if __name__ == "__main__":
                         args.kubernetes_name,
                         getDaemonset(
                             args.object_name,
+                            args.match_label,
                             args.include_name,
                             args.include_namespace,
                             args.exclude_name,
-                            args.exclude_namespace,
-                            args.match_label
+                            args.exclude_namespace
                         )
                     )
                 )
@@ -132,11 +132,11 @@ if __name__ == "__main__":
                         args.kubernetes_name,
                         getDaemonset(
                             args.object_name,
+                            args.match_label,
                             args.include_name,
                             args.include_namespace,
                             args.exclude_name,
-                            args.exclude_namespace,
-                            args.match_label
+                            args.exclude_namespace
                         )
                     )
                 )
@@ -148,11 +148,11 @@ if __name__ == "__main__":
             print("JSON output (volume): {}".format(
                 getVolume(
                     args.object_name,
+                    args.match_label,
                     args.include_name,
                     args.include_namespace,
                     args.exclude_name,
-                    args.exclude_namespace,
-                    args.match_label
+                    args.exclude_namespace
                 )
             ))
         if args.monitoring_type == "discovery":
@@ -162,11 +162,11 @@ if __name__ == "__main__":
                         args.kubernetes_name,
                         getVolume(
                             args.object_name,
+                            args.match_label,
                             args.include_name,
                             args.include_namespace,
                             args.exclude_name,
-                            args.exclude_namespace,
-                            args.match_label
+                            args.exclude_namespace
                         )
                     )
                 )
@@ -178,11 +178,11 @@ if __name__ == "__main__":
                         args.kubernetes_name,
                         getVolume(
                             args.object_name,
+                            args.match_label,
                             args.include_name,
                             args.include_namespace,
                             args.exclude_name,
-                            args.exclude_namespace,
-                            args.match_label
+                            args.exclude_namespace
                         )
                     )
                 )
@@ -194,11 +194,11 @@ if __name__ == "__main__":
             print("JSON output (deployment): {}".format(
                 getDeployment(
                     args.object_name,
+                    args.match_label,
                     args.include_name,
                     args.include_namespace,
                     args.exclude_name,
-                    args.exclude_namespace,
-                    args.match_label
+                    args.exclude_namespace
                 )
             ))
         if args.monitoring_type == "discovery":
@@ -208,11 +208,11 @@ if __name__ == "__main__":
                         args.kubernetes_name,
                         getDeployment(
                             args.object_name,
+                            args.match_label,
                             args.include_name,
                             args.include_namespace,
                             args.exclude_name,
-                            args.exclude_namespace,
-                            args.match_label
+                            args.exclude_namespace
                         )
                     )
                 )
@@ -224,11 +224,11 @@ if __name__ == "__main__":
                         args.kubernetes_name,
                         getDeployment(
                             args.object_name,
+                            args.match_label,
                             args.include_name,
                             args.include_namespace,
                             args.exclude_name,
-                            args.exclude_namespace,
-                            args.match_label
+                            args.exclude_namespace
                         )
                     )
                 )
@@ -240,11 +240,11 @@ if __name__ == "__main__":
             print("JSON output (statefulset): {}".format(
                 getStatefulset(
                     args.object_name,
+                    args.match_label,
                     args.include_name,
                     args.include_namespace,
                     args.exclude_name,
-                    args.exclude_namespace,
-                    args.match_label
+                    args.exclude_namespace
                 )
             ))
         if args.monitoring_type == "discovery":
@@ -254,11 +254,11 @@ if __name__ == "__main__":
                         args.kubernetes_name,
                         getStatefulset(
                             args.object_name,
+                            args.match_label,
                             args.include_name,
                             args.include_namespace,
                             args.exclude_name,
-                            args.exclude_namespace,
-                            args.match_label
+                            args.exclude_namespace
                         )
                     )
                 )
@@ -270,11 +270,11 @@ if __name__ == "__main__":
                         args.kubernetes_name,
                         getStatefulset(
                             args.object_name,
+                            args.match_label,
                             args.include_name,
                             args.include_namespace,
                             args.exclude_name,
-                            args.exclude_namespace,
-                            args.match_label
+                            args.exclude_namespace
                         )
                     )
                 )
@@ -286,11 +286,11 @@ if __name__ == "__main__":
             print("JSON output (cronjob): {}".format(
                 getCronjob(
                     args.object_name,
+                    args.match_label,
                     args.include_name,
                     args.include_namespace,
                     args.exclude_name,
-                    args.exclude_namespace,
-                    args.match_label
+                    args.exclude_namespace
                 )
             ))
         if args.monitoring_type == "discovery":
@@ -300,11 +300,11 @@ if __name__ == "__main__":
                         args.kubernetes_name,
                         getCronjob(
                             args.object_name,
+                            args.match_label,
                             args.include_name,
                             args.include_namespace,
                             args.exclude_name,
-                            args.exclude_namespace,
-                            args.match_label
+                            args.exclude_namespace
                         )
                     )
                 )
@@ -316,11 +316,11 @@ if __name__ == "__main__":
                         args.kubernetes_name,
                         getCronjob(
                             args.object_name,
+                            args.match_label,
                             args.include_name,
                             args.include_namespace,
                             args.exclude_name,
-                            args.exclude_namespace,
-                            args.match_label
+                            args.exclude_namespace
                         )
                     )
                 )
