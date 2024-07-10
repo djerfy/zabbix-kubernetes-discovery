@@ -37,13 +37,13 @@ def getNode(
             }
         }
 
-        if match_label is not None and not ifLabelMatch(match_label, node.metadata.labels):
+        if match_label and not ifLabelMatch(match_label, node.metadata.labels):
             continue
 
-        if not ifObjectMatch(include_name, json['name']):
+        if include_name and not ifObjectMatch(include_name, json['name']):
             continue
 
-        if ifObjectMatch(exclude_name, json['name']):
+        if exclude_name and ifObjectMatch(exclude_name, json['name']):
             continue
 
         if name == json['name']:
@@ -90,19 +90,19 @@ def getDaemonset(
             if json['replicas'][i] is None:
                 json['replicas'][i] = 0
 
-        if match_label is not None and not ifLabelMatch(match_label, daemonset.metadata.labels):
+        if match_label and not ifLabelMatch(match_label, daemonset.metadata.labels):
             continue
 
-        if not ifObjectMatch(include_name, json['name']):
+        if include_name and not ifObjectMatch(include_name, json['name']):
             continue
 
-        if not ifObjectMatch(include_namespace, json['namespace']):
+        if include_namespace and not ifObjectMatch(include_namespace, json['namespace']):
             continue
 
-        if ifObjectMatch(exclude_name, json['name']):
+        if exclude_name and ifObjectMatch(exclude_name, json['name']):
             continue
 
-        if ifObjectMatch(exclude_namespace, json['namespace']):
+        if exclude_namespace and ifObjectMatch(exclude_namespace, json['namespace']):
             continue
 
         if name == json['name']:
@@ -152,19 +152,19 @@ def getVolume(
                 volume['namespace'] = volume['pvcRef']['namespace']
                 volume['name'] = volume['pvcRef']['name']
 
-                if match_label is not None and not ifLabelMatch(match_label, volume.metadata.labels):
+                if match_label and not ifLabelMatch(match_label, volume.metadata.labels):
                     continue
 
-                if not ifObjectMatch(include_name, volume['name']):
+                if include_name and not ifObjectMatch(include_name, volume['name']):
                     continue
 
-                if not ifObjectMatch(include_namespace, volume['namespace']):
+                if include_namespace and not ifObjectMatch(include_namespace, volume['namespace']):
                     continue
 
-                if ifObjectMatch(exclude_name, volume['name']):
+                if exclude_name and ifObjectMatch(exclude_name, volume['name']):
                     continue
 
-                if ifObjectMatch(exclude_namespace, volume['namespace']):
+                if exclude_namespace and ifObjectMatch(exclude_namespace, volume['namespace']):
                     continue
 
                 for i in ["time", "pvcRef"]:
@@ -212,19 +212,19 @@ def getDeployment(
             }
         }
 
-        if match_label is not None and not ifLabelMatch(match_label, deployment.metadata.labels):
+        if match_label and not ifLabelMatch(match_label, deployment.metadata.labels):
             continue
 
-        if not ifObjectMatch(include_name, json['name']):
+        if include_name and not ifObjectMatch(include_name, json['name']):
             continue
 
-        if not ifObjectMatch(include_namespace, json['namespace']):
+        if include_namespace and not ifObjectMatch(include_namespace, json['namespace']):
             continue
 
-        if ifObjectMatch(exclude_name, json['name']):
+        if exclude_name and ifObjectMatch(exclude_name, json['name']):
             continue
 
-        if ifObjectMatch(exclude_namespace, json['namespace']):
+        if exclude_namespace and ifObjectMatch(exclude_namespace, json['namespace']):
             continue
 
         for i in ["desired", "ready", "available"]:
@@ -270,19 +270,19 @@ def getStatefulset(
             }
         }
 
-        if match_label is not None and not ifLabelMatch(match_label, statefulset.metadata.labels):
+        if match_label and not ifLabelMatch(match_label, statefulset.metadata.labels):
             continue
 
-        if not ifObjectMatch(include_name, json['name']):
+        if include_name and not ifObjectMatch(include_name, json['name']):
             continue
 
-        if not ifObjectMatch(include_namespace, json['namespace']):
+        if include_namespace and not ifObjectMatch(include_namespace, json['namespace']):
             continue
 
-        if ifObjectMatch(exclude_name, json['name']):
+        if exclude_name and ifObjectMatch(exclude_name, json['name']):
             continue
 
-        if ifObjectMatch(exclude_namespace, json['namespace']):
+        if exclude_namespace and ifObjectMatch(exclude_namespace, json['namespace']):
             continue
 
         for i in ["desired", "ready", "available"]:
@@ -371,19 +371,19 @@ def getCronjob(
             }
         }
 
-        if match_label is not None and not ifLabelMatch(match_label, cronjob.metadata.labels):
+        if match_label and not ifLabelMatch(match_label, cronjob.metadata.labels):
             continue
 
-        if not ifObjectMatch(include_name, json['name']):
+        if include_name and not ifObjectMatch(include_name, json['name']):
             continue
 
-        if not ifObjectMatch(include_namespace, json['namespace']):
+        if include_namespace and not ifObjectMatch(include_namespace, json['namespace']):
             continue
 
-        if ifObjectMatch(exclude_name, json['name']):
+        if exclude_name and ifObjectMatch(exclude_name, json['name']):
             continue
 
-        if ifObjectMatch(exclude_namespace, json['namespace']):
+        if exclude_namespace and ifObjectMatch(exclude_namespace, json['namespace']):
             continue
 
         if name == json['name']:
