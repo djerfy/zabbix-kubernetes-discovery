@@ -54,18 +54,18 @@ $ helm delete zabbix-kubernetes-discovery \
 | `zabbix.verbose`                                  | string  | `no`                                                        |
 | `zabbix.debug`                                    | string  | `no`                                                        |
 | `crontab.name`                                    | string  | `zabbix-kubernetes-discovery`                               |
-| `crontab.node.discovery`                          | string  | `0 * * * *`                                                 |
-| `crontab.node.item`                               | string  | `*/3 * * * *`                                               |
-| `crontab.daemonset.discovery`                     | string  | `0 * * * *`                                                 |
-| `crontab.daemonset.item`                          | string  | `*/3 * * * *`                                               |
-| `crontab.volume.discovery`                        | string  | `0 * * * *`                                                 |
-| `crontab.volume.item`                             | string  | `*/3 * * * *`                                               |
-| `crontab.deployment.discovery`                    | string  | `0 * * * *`                                                 |
-| `crontab.deployment.item`                         | string  | `*/3 * * * *`                                               |
-| `crontab.statefulset.discovery`                   | string  | `0 * * * *`                                                 |
-| `crontab.statefulset.item`                        | string  | `*/3 * * * *`                                               |
-| `crontab.cronjob.discovery`                       | string  | `0 * * * *`                                                 |
-| `crontab.cronjob.item`                            | string  | `*/3 * * * *`                                               |
+| `crontab.node.discovery`                          | string  | `*/30 * * * *`                                                 |
+| `crontab.node.item`                               | string  | `*/2 * * * *`                                               |
+| `crontab.daemonset.discovery`                     | string  | `*/30 * * * *`                                                 |
+| `crontab.daemonset.item`                          | string  | `*/2 * * * *`                                               |
+| `crontab.volume.discovery`                        | string  | `*/30 * * * *`                                                 |
+| `crontab.volume.item`                             | string  | `*/2 * * * *`                                               |
+| `crontab.deployment.discovery`                    | string  | `*/30 * * * *`                                                 |
+| `crontab.deployment.item`                         | string  | `*/2 * * * *`                                               |
+| `crontab.statefulset.discovery`                   | string  | `*/30 * * * *`                                                 |
+| `crontab.statefulset.item`                        | string  | `*/2 * * * *`                                               |
+| `crontab.cronjob.discovery`                       | string  | `*/30 * * * *`                                                 |
+| `crontab.cronjob.item`                            | string  | `*/2 * * * *`                                               |
 | `monitoring.node.match_label`                     | string  | `""`                                                        |
 | `monitoring.node.include_name`                    | string  | `""`                                                        |
 | `monitoring.node.exclude_name`                    | string  | `""`                                                        |

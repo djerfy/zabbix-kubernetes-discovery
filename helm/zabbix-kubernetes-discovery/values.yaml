@@ -67,23 +67,23 @@ monitoring:
 crontab:
   name: zabbix-kubernetes-discovery
   node:
-    discovery: '0 * * * *'
-    item: '*/3 * * * *'
+    discovery: '*/30 * * * *'
+    item: '*/2 * * * *'
   daemonset:
-    discovery: '0 * * * *'
-    item: '*/3 * * * *'
+    discovery: '*/30 * * * *'
+    item: '*/2 * * * *'
   volume:
-    discovery: '0 * * * *'
-    item: '*/3 * * * *'
+    discovery: '*/30 * * * *'
+    item: '*/2 * * * *'
   deployment:
-    discovery: '0 * * * *'
-    item: '*/3 * * * *'
+    discovery: '*/30 * * * *'
+    item: '*/2 * * * *'
   statefulset:
-    discovery: '0 * * * *'
-    item: '*/3 * * * *'
+    discovery: '*/30 * * * *'
+    item: '*/2 * * * *'
   cronjob:
-    discovery: '0 * * * *'
-    item: '*/3 * * * *'
+    discovery: '*/30 * * * *'
+    item: '*/2 * * * *'
 
 resources:
   requests:
