@@ -16,7 +16,7 @@
   <a style="text-decoration:none" href="https://github.com/djerfy/zabbix-kubernetes-discovery/actions/workflows/trivy-scan-code.yml">
     <img alt="Pipeline Helm" src="https://img.shields.io/github/actions/workflow/status/djerfy/zabbix-kubernetes-discovery/trivy-scan-code.yml?logo=github&color=0&label=Trivy%20Scan&style=flat-square">
   </a>
-  <a style="text-decoration:none" href="https://github.com/djerfy/zabbix-kubernetes-discovery/releases/tag/v1.4.16">
+  <a style="text-decoration:none" href="https://github.com/djerfy/zabbix-kubernetes-discovery/releases/tag/v1.4.17">
     <img alt="Release" src="https://img.shields.io/github/v/release/djerfy/zabbix-kubernetes-discovery?logo=github&color=0&label=Release&style=flat-square">
   </a>
 </p>
