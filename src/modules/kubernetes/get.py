@@ -152,8 +152,11 @@ def getVolume(
                 volume['namespace'] = volume['pvcRef']['namespace']
                 volume['name'] = volume['pvcRef']['name']
 
-                if match_label and not ifLabelMatch(match_label, volume.metadata.labels):
-                    continue
+                if match_label:
+                    volume_object = kubernetes.read_namespaced_persistent_volume_claim(name=volume['name'], namespace=volume['namespace']).to_dict()
+                    volume['metadata'], volume['metadata']['labels'] = {}, json.dumps(volume_object.get('metadata', {}).get('labels', {}))
+                    if not ifLabelMatch(match_label, volume['metadata']['labels']):
+                        continue
 
                 if include_name and not ifObjectMatch(include_name, volume['name']):
                     continue
