@@ -39,9 +39,11 @@ def ifLabelMatch(match_label=None, object_labels=None):
     object_labels = str(object_labels).replace("{", "").replace("}", "").replace("'", "").replace(" ", "").split(",")
 
     for label in object_labels:
-        k, v = label.split(":")[0], label.split(":")[1]
+        k, v = label.split(":")[0].replace('"', ''), label.split(":")[1].replace('"', '')
 
         for separator in ["=", ":"]:
+            if len(match_label.split(separator)) != 2:
+                continue
             if match_label.split(separator)[0] == k and match_label.split(separator)[1] == v:
                 return True
 
