@@ -1,4 +1,4 @@
-FROM ubuntu:22.04
+FROM ubuntu:24.04
 
 LABEL description="Zabbix Kubernetes Discovery" \
       maintainer="DJΞRFY <djerfy@gmail.com>" \
@@ -21,8 +21,8 @@ RUN apt-get update && \
     groupadd -g 2000 ${CONTAINER_GROUP} && \
     useradd -u 2000 -d /app -s /bin/bash -M -g ${CONTAINER_GROUP} ${CONTAINER_USER}
 
-ARG SUPERCRONIC_VER="0.2.28"
-ARG SUPERCRONIC_SHA="fe1a81a8a5809deebebbd7a209a3b97e542e2bcd"
+ARG SUPERCRONIC_VER="0.2.31"
+ARG SUPERCRONIC_SHA="fb4242e9d28528a76b70d878dbf69fe8d94ba7d2"
 
 RUN curl -fsSLO "https://github.com/aptible/supercronic/releases/download/v${SUPERCRONIC_VER}/supercronic-linux-amd64" && \
     echo "${SUPERCRONIC_SHA}  supercronic-linux-amd64" | sha1sum -c - && \
