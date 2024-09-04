@@ -14,12 +14,18 @@ ARG CONTAINER_GROUP="zabbix"
 
 RUN apt-get update && \
     apt-get upgrade -y && \
-    apt-get install -y --no-install-recommends curl iputils-ping python3 python3-pip && \
+    apt-get install -y --no-install-recommends \
+        curl \
+        iputils-ping \
+        python3 \
+        python3-pip \
+        python3-venv && \
     rm -rf /var/lib/apt/lists && \
     mkdir -p /app /root/.kube && \
     touch /app/crontab && \
     groupadd -g 2000 ${CONTAINER_GROUP} && \
-    useradd -u 2000 -d /app -s /bin/bash -M -g ${CONTAINER_GROUP} ${CONTAINER_USER}
+    useradd -u 2000 -d /app -s /bin/bash -M -g ${CONTAINER_GROUP} ${CONTAINER_USER} && \
+    python3 -m venv venv
 
 ARG SUPERCRONIC_VER="0.2.31"
 ARG SUPERCRONIC_SHA="fb4242e9d28528a76b70d878dbf69fe8d94ba7d2"
@@ -33,7 +39,7 @@ COPY ./src/ /app/
 
 RUN chown ${CONTAINER_USER}:${CONTAINER_GROUP} -R /app && \
     chmod +x /app/*.py && \
-    pip3 install --no-cache-dir -r /app/requirements.txt
+    /app/venv/bin/pip3 install --no-cache-dir -r /app/requirements.txt
 
 USER ${CONTAINER_USER}:${CONTAINER_GROUP}
 
