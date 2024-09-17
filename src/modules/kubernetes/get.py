@@ -3,7 +3,9 @@ from datetime import datetime
 from modules.common.functions import *
 import json, urllib3, re
 
+
 urllib3.disable_warnings()
+
 
 def getNode(
     name=None,
@@ -395,3 +397,58 @@ def getCronjob(
         cronjobs.append(json)
 
     return cronjobs
+
+
+def getSystempod(
+    include_name=None,
+    exclude_name=None,
+):
+    """
+    description: get all or specific system pod in kube-system namespace
+    return: list
+    """
+    kubernetes = client.CoreV1Api()
+
+    nodes, pods, pods_filtered, apps = [], [], [], {}
+
+    for node in kubernetes.list_node().items:
+        if "node-role.kubernetes.io/control-plane" in node.metadata.labels:
+            if not node.spec.unschedulable or node.spec.unschedulable is False:
+                nodes.append(node.metadata.name)
+
+    for pod in kubernetes.list_namespaced_pod(namespace='kube-system').items:
+
+        json = {
+            "name": pod.metadata.name,
+            "status": pod.status.phase
+        }
+
+        for node in nodes:
+
+            if exclude_name:
+                if ifObjectMatch(exclude_name, json['name']):
+                    continue
+
+            if include_name:
+                if not ifObjectMatch(include_name, json['name']):
+                    continue
+
+            if not node in json['name']:
+                continue
+
+            if not any(p['name'] == json['name'] for p in pods):
+                pods.append(json)
+    
+    for app in [
+        "etcd",
+        "kube-apiserver",
+        "kube-controller-manager",
+        "kube-scheduler"
+    ]:
+        apps['name'] = app
+        apps['namespace'] = "kube-system"
+        apps['desired'] = len(nodes)
+        apps['running'] = len([p for p in pods if p['name'].startswith(app)])
+        pods_filtered.append(apps)
+
+    return pods_filtered

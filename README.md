@@ -35,6 +35,7 @@ Kubernetes monitoring for Zabbix with discovery objects:
 * StatefulSets
 * Cronjobs
 * PersistentVolumeClaims
+* SystemPods
 
 Works with 2 variables only by default:
 
@@ -97,7 +98,7 @@ usage: zabbix-kubernetes-discovery.py [-h]
     [--zabbix-timeout ZABBIX_TIMEOUT]
     --zabbix-endpoint ZABBIX_ENDPOINT
     --kubernetes-name KUBERNETES_NAME
-    --monitoring-mode {volume,deployment,daemonset,node,statefulset,cronjob}
+    --monitoring-mode {volume,deployment,daemonset,node,statefulset,cronjob,systempod}
     --monitoring-type {discovery,item,json}
     [--object-name OBJECT_NAME]
     [--match-label KEY=VALUE]
@@ -225,6 +226,12 @@ After downloading, you need to import it as below:
   * Graphs: 2
     * `Volume {#KUBERNETES_PVC_NAME}: Graph bytes`
     * `Volume {#KUBERNETES_PVC_NAME}: Graph inodes`
+* Systempod
+  * Items: 2
+    * `Systempod {#KUBERNETES_SYSTEMPOD_NAME}: Desired pod`
+    * `Systempod {#KUBERNETES_SYSTEMPOD_NAME}: Running pod`
+  * Graphs: 1
+    * `Systempod {#KUBERNETES_SYSTEMPOD_NAME}: Pod`
 
 ## Development
 

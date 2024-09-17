@@ -54,18 +54,27 @@ $ helm delete zabbix-kubernetes-discovery \
 | `zabbix.verbose`                                  | string  | `no`                                                        |
 | `zabbix.debug`                                    | string  | `no`                                                        |
 | `crontab.name`                                    | string  | `zabbix-kubernetes-discovery`                               |
-| `crontab.node.discovery`                          | string  | `*/30 * * * *`                                                 |
+| `crontab.node.enabled`                            | string  | `true`                                                      |
+| `crontab.node.discovery`                          | string  | `*/30 * * * *`                                              |
 | `crontab.node.item`                               | string  | `*/2 * * * *`                                               |
-| `crontab.daemonset.discovery`                     | string  | `*/30 * * * *`                                                 |
+| `crontab.daemonset.enabled`                       | string  | `true`                                                      |
+| `crontab.daemonset.discovery`                     | string  | `*/30 * * * *`                                              |
 | `crontab.daemonset.item`                          | string  | `*/2 * * * *`                                               |
-| `crontab.volume.discovery`                        | string  | `*/30 * * * *`                                                 |
+| `crontab.volume.enabled`                          | string  | `true`                                                      |
+| `crontab.volume.discovery`                        | string  | `*/30 * * * *`                                              |
 | `crontab.volume.item`                             | string  | `*/2 * * * *`                                               |
-| `crontab.deployment.discovery`                    | string  | `*/30 * * * *`                                                 |
+| `crontab.deployment.enabled`                      | string  | `true`                                                      |
+| `crontab.deployment.discovery`                    | string  | `*/30 * * * *`                                              |
 | `crontab.deployment.item`                         | string  | `*/2 * * * *`                                               |
-| `crontab.statefulset.discovery`                   | string  | `*/30 * * * *`                                                 |
+| `crontab.statefulset.enabled`                     | string  | `true`                                                      |
+| `crontab.statefulset.discovery`                   | string  | `*/30 * * * *`                                              |
 | `crontab.statefulset.item`                        | string  | `*/2 * * * *`                                               |
-| `crontab.cronjob.discovery`                       | string  | `*/30 * * * *`                                                 |
+| `crontab.cronjob.enabled`                         | string  | `true`                                                      |
+| `crontab.cronjob.discovery`                       | string  | `*/30 * * * *`                                              |
 | `crontab.cronjob.item`                            | string  | `*/2 * * * *`                                               |
+| `crontab.systempod.enabled`                       | string  | `true`                                                      |
+| `crontab.systempod.discovery`                     | string  | `*/30 * * * *`                                              |
+| `crontab.systempod.item`                          | string  | `*/2 * * * *`                                               |
 | `monitoring.node.match_label`                     | string  | `""`                                                        |
 | `monitoring.node.include_name`                    | string  | `""`                                                        |
 | `monitoring.node.exclude_name`                    | string  | `""`                                                        |
@@ -94,6 +103,8 @@ $ helm delete zabbix-kubernetes-discovery \
 | `monitoring.cronjob.include_namespace`            | string  | `""`                                                        |
 | `monitoring.cronjob.exclude_name`                 | string  | `""`                                                        |
 | `monitoring.cronjob.exclude_namespace`            | string  | `""`                                                        |
+| `monitoring.systempod.include_name`               | string  | `""`                                                        |
+| `monitoring.systempod.exclude_name`               | string  | `""`                                                        |
 | `resources.requests.cpu`                          | string  | `50m`                                                       |
 | `resources.requests.memory`                       | string  | `128Mi`                                                     |
 | `resources.limits.cpu`                            | string  | `1000m`                                                     |
