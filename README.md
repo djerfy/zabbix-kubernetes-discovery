@@ -131,57 +131,57 @@ After downloading, you need to import it as below:
 
 * Daemonset
   * Items: 4
-    * `Daemonset {#KUBERNETES_DAEMONSET_NAME}: Available replicas`
-    * `Daemonset {#KUBERNETES_DAEMONSET_NAME}: Current replicas`
-    * `Daemonset {#KUBERNETES_DAEMONSET_NAME}: Desired replicas`
-    * `Daemonset {#KUBERNETES_DAEMONSET_NAME}: Ready replicas`
+    * `Daemonset {#KUBERNETES_DAEMONSET_NAMESPACE}/{#KUBERNETES_DAEMONSET_NAME}: Available replicas`
+    * `Daemonset {#KUBERNETES_DAEMONSET_NAMESPACE}/{#KUBERNETES_DAEMONSET_NAME}: Current replicas`
+    * `Daemonset {#KUBERNETES_DAEMONSET_NAMESPACE}/{#KUBERNETES_DAEMONSET_NAME}: Desired replicas`
+    * `Daemonset {#KUBERNETES_DAEMONSET_NAMESPACE}/{#KUBERNETES_DAEMONSET_NAME}: Ready replicas`
   * Triggers: 5
-    * `Daemonset {#KUBERNETES_DAEMONSET_NAME}: Available replicas nodata`
-    * `Daemonset {#KUBERNETES_DAEMONSET_NAME}: Current replicas nodata`
-    * `Daemonset {#KUBERNETES_DAEMONSET_NAME}: Desired replicas nodata`
-    * `Daemonset {#KUBERNETES_DAEMONSET_NAME}: Ready replicas nodata`
-    * `Daemonset {#KUBERNETES_DAEMONSET_NAME}: Problem items nodata`
+    * `Daemonset {#KUBERNETES_DAEMONSET_NAMESPACE}/{#KUBERNETES_DAEMONSET_NAME}: Available replicas nodata`
+    * `Daemonset {#KUBERNETES_DAEMONSET_NAMESPACE}/{#KUBERNETES_DAEMONSET_NAME}: Current replicas nodata`
+    * `Daemonset {#KUBERNETES_DAEMONSET_NAMESPACE}/{#KUBERNETES_DAEMONSET_NAME}: Desired replicas nodata`
+    * `Daemonset {#KUBERNETES_DAEMONSET_NAMESPACE}/{#KUBERNETES_DAEMONSET_NAME}: Ready replicas nodata`
+    * `Daemonset {#KUBERNETES_DAEMONSET_NAMESPACE}/{#KUBERNETES_DAEMONSET_NAME}: Problem items nodata`
   * Graphs: 1
-    * `Daemonset {#KUBERNETES_DAEMONSET_NAME}: Graph replicas`
+    * `Daemonset {#KUBERNETES_DAEMONSET_NAMESPACE}/{#KUBERNETES_DAEMONSET_NAME}: Graph replicas`
 * Deployment
   * Items: 3
-    * `Deployment {#KUBERNETES_DEPLOYMENT_NAME}: Available replicas`
-    * `Deployment {#KUBERNETES_DEPLOYMENT_NAME}: Desired replicas`
-    * `Deployment {#KUBERNETES_DEPLOYMENT_NAME}: Ready replicas`
+    * `Deployment {#KUBERNETES_DEPLOYMENT_NAMESPACE}/{#KUBERNETES_DEPLOYMENT_NAME}: Available replicas`
+    * `Deployment {#KUBERNETES_DEPLOYMENT_NAMESPACE}/{#KUBERNETES_DEPLOYMENT_NAME}: Desired replicas`
+    * `Deployment {#KUBERNETES_DEPLOYMENT_NAMESPACE}/{#KUBERNETES_DEPLOYMENT_NAME}: Ready replicas`
   * Triggers: 5
-    * `Deployment {#KUBERNETES_DEPLOYMENT_NAME}: Available replicas nodata`
-    * `Deployment {#KUBERNETES_DEPLOYMENT_NAME}: Desired replicas nodata`
-    * `Deployment {#KUBERNETES_DEPLOYMENT_NAME}: Ready replicas nodata`
-    * `Deployment {#KUBERNETES_DEPLOYMENT_NAME}: Problem items nodata`
-    * `Deployment {#KUBERNETES_DEPLOYMENT_NAME}: Problem number of replicas`
+    * `Deployment {#KUBERNETES_DEPLOYMENT_NAMESPACE}/{#KUBERNETES_DEPLOYMENT_NAME}: Available replicas nodata`
+    * `Deployment {#KUBERNETES_DEPLOYMENT_NAMESPACE}/{#KUBERNETES_DEPLOYMENT_NAME}: Desired replicas nodata`
+    * `Deployment {#KUBERNETES_DEPLOYMENT_NAMESPACE}/{#KUBERNETES_DEPLOYMENT_NAME}: Ready replicas nodata`
+    * `Deployment {#KUBERNETES_DEPLOYMENT_NAMESPACE}/{#KUBERNETES_DEPLOYMENT_NAME}: Problem items nodata`
+    * `Deployment {#KUBERNETES_DEPLOYMENT_NAMESPACE}/{#KUBERNETES_DEPLOYMENT_NAME}: Problem number of replicas`
   * Graphs: 1
-    * `Deployment {#KUBERNETES_DEPLOYMENT_NAME}: Graph replicas`
+    * `Deployment {#KUBERNETES_DEPLOYMENT_NAMESPACE}/{#KUBERNETES_DEPLOYMENT_NAME}: Graph replicas`
 * Statefulset
   * Items: 3
-    * `Statefulset {#KUBERNETES_STATEFULSET_NAME}: Available replicas`
-    * `Statefulset {#KUBERNETES_STATEFULSET_NAME}: Desired replicas`
-    * `Statefulset {#KUBERNETES_STATEFULSET_NAME}: Ready replicas`
+    * `Statefulset {#KUBERNETES_STATEFULSET_NAMESPACE}/{#KUBERNETES_STATEFULSET_NAME}: Available replicas`
+    * `Statefulset {#KUBERNETES_STATEFULSET_NAMESPACE}/{#KUBERNETES_STATEFULSET_NAME}: Desired replicas`
+    * `Statefulset {#KUBERNETES_STATEFULSET_NAMESPACE}/{#KUBERNETES_STATEFULSET_NAME}: Ready replicas`
   * Triggers: 5
-    * `Statefulset {#KUBERNETES_STATEFULSET_NAME}: Available replicas nodata`
-    * `Stetafulset {#KUBERNETES_STATEFULSET_NAME}: Desired replicas nodata`
-    * `Statefulset {#KUBERNETES_STATEFULSET_NAME}: Ready replicas nodata`
-    * `Statefulset {#KUBERNETES_STATEFULSET_NAME}: Problem items nodata`
-    * `Statefulset {#KUBERNETES_STATEFULSET_NAME}: Problem number of replicas`
+    * `Statefulset {#KUBERNETES_STATEFULSET_NAMESPACE}/{#KUBERNETES_STATEFULSET_NAME}: Available replicas nodata`
+    * `Stetafulset {#KUBERNETES_STATEFULSET_NAMESPACE}/{#KUBERNETES_STATEFULSET_NAME}: Desired replicas nodata`
+    * `Statefulset {#KUBERNETES_STATEFULSET_NAMESPACE}/{#KUBERNETES_STATEFULSET_NAME}: Ready replicas nodata`
+    * `Statefulset {#KUBERNETES_STATEFULSET_NAMESPACE}/{#KUBERNETES_STATEFULSET_NAME}: Problem items nodata`
+    * `Statefulset {#KUBERNETES_STATEFULSET_NAMESPACE}/{#KUBERNETES_STATEFULSET_NAME}: Problem number of replicas`
   * Graphs: 1
-    * `Deployment {#KUBERNETES_STATEFULSET_NAME}: Graph replicas`
+    * `Deployment {#KUBERNETES_STATEFULSET_NAMESPACE}/{#KUBERNETES_STATEFULSET_NAME}: Graph replicas`
 * Cronjob
   * Items: 3
-    * `Cronjob {#KUBERNETES_CRONJOB_NAME}: Job exitcode`
-    * `Cronjob {#KUBERNETES_CRONJOB_NAME}: Job restart`
-    * `Cronjob {#KUBERNETES_CRONJOB_NAME}: Job reason`
+    * `Cronjob {#KUBERNETES_CRONJOB_NAMESPACE}/{#KUBERNETES_CRONJOB_NAME}: Job exitcode`
+    * `Cronjob {#KUBERNETES_CRONJOB_NAMESPACE}/{#KUBERNETES_CRONJOB_NAME}: Job restart`
+    * `Cronjob {#KUBERNETES_CRONJOB_NAMESPACE}/{#KUBERNETES_CRONJOB_NAME}: Job reason`
   * Triggers: 5
-    * `Cronjob {#KUBERNETES_CRONJOB_NAME}: Job exitcode nodata`
-    * `Cronjob {#KUBERNETES_CRONJOB_NAME}: Job restart nodata`
-    * `Cronjob {#KUBERNETES_CRONJOB_NAME}: Job reason nodata`
-    * `Cronjob {#KUBERNETES_CRONJOB_NAME}: Problem items nodata`
-    * `Cronjob {#KUBERNETES_CRONJOB_NAME}: Problem last job`
+    * `Cronjob {#KUBERNETES_CRONJOB_NAMESPACE}/{#KUBERNETES_CRONJOB_NAME}: Job exitcode nodata`
+    * `Cronjob {#KUBERNETES_CRONJOB_NAMESPACE}/{#KUBERNETES_CRONJOB_NAME}: Job restart nodata`
+    * `Cronjob {#KUBERNETES_CRONJOB_NAMESPACE}/{#KUBERNETES_CRONJOB_NAME}: Job reason nodata`
+    * `Cronjob {#KUBERNETES_CRONJOB_NAMESPACE}/{#KUBERNETES_CRONJOB_NAME}: Problem items nodata`
+    * `Cronjob {#KUBERNETES_CRONJOB_NAMESPACE}/{#KUBERNETES_CRONJOB_NAME}: Problem last job`
   * Graphs: 1
-    * `Cronjob {#KUBERNETES_CRONJOB_NAME}: Graph jobs`
+    * `Cronjob {#KUBERNETES_CRONJOB_NAMESPACE}/{#KUBERNETES_CRONJOB_NAME}: Graph jobs`
 * Node
   * Items: 8
     * `Node {#KUBERNETES_NODE_NAME}: Allocatable cpu`
@@ -205,33 +205,36 @@ After downloading, you need to import it as below:
     * `Node {#KUBERNETES_NODE_NAME}: Graph pods`
 * VolumeClaim
   * Items: 6
-    * `Volume {#KUBERNETES_PVC_NAME}: Available bytes`
-    * `Volume {#KUBERNETES_PVC_NAME}: Capacity bytes`
-    * `Volume {#KUBERNETES_PVC_NAME}: Capacity inodes`
-    * `Volume {#KUBERNETES_PVC_NAME}: Free inodes`
-    * `Volume {#KUBERNETES_PVC_NAME}: Used bytes`
-    * `Volume {#KUBERNETES_PVC_NAME}: Used inodes`
+    * `Volume {#KUBERNETES_PVC_NAMESPACE}/{#KUBERNETES_PVC_NAME}: Available bytes`
+    * `Volume {#KUBERNETES_PVC_NAMESPACE}/{#KUBERNETES_PVC_NAME}: Capacity bytes`
+    * `Volume {#KUBERNETES_PVC_NAMESPACE}/{#KUBERNETES_PVC_NAME}: Capacity inodes`
+    * `Volume {#KUBERNETES_PVC_NAMESPACE}/{#KUBERNETES_PVC_NAME}: Free inodes`
+    * `Volume {#KUBERNETES_PVC_NAMESPACE}/{#KUBERNETES_PVC_NAME}: Used bytes`
+    * `Volume {#KUBERNETES_PVC_NAMESPACE}/{#KUBERNETES_PVC_NAME}: Used inodes`
   * Triggers: 11
-    * `Volume {#KUBERNETES_PVC_NAME}: Available bytes nodata`
-    * `Volume {#KUBERNETES_PVC_NAME}: Capacity bytes nodata`
-    * `Volume {#KUBERNETES_PVC_NAME}: Capacity inodes nodata`
-    * `Volume {#KUBERNETES_PVC_NAME}: Consumption bytes critical`
-    * `Volume {#KUBERNETES_PVC_NAME}: Consumption bytes warning`
-    * `Volume {#KUBERNETES_PVC_NAME}: Consumption inodes critical`
-    * `Volume {#KUBERNETES_PVC_NAME}: Consumption inodes warning`
-    * `Volume {#KUBERNETES_PVC_NAME}: Free inodes nodata`
-    * `Volume {#KUBERNETES_PVC_NAME}: Used bytes nodata`
-    * `Volume {#KUBERNETES_PVC_NAME}: Used inodes nodata`
-    * `Volume {#KUBERNETES_PVC_NAME}: Problem items nodata`
+    * `Volume {#KUBERNETES_PVC_NAMESPACE}/{#KUBERNETES_PVC_NAME}: Available bytes nodata`
+    * `Volume {#KUBERNETES_PVC_NAMESPACE}/{#KUBERNETES_PVC_NAME}: Capacity bytes nodata`
+    * `Volume {#KUBERNETES_PVC_NAMESPACE}/{#KUBERNETES_PVC_NAME}: Capacity inodes nodata`
+    * `Volume {#KUBERNETES_PVC_NAMESPACE}/{#KUBERNETES_PVC_NAME}: Consumption bytes critical`
+    * `Volume {#KUBERNETES_PVC_NAMESPACE}/{#KUBERNETES_PVC_NAME}: Consumption bytes warning`
+    * `Volume {#KUBERNETES_PVC_NAMESPACE}/{#KUBERNETES_PVC_NAME}: Consumption inodes critical`
+    * `Volume {#KUBERNETES_PVC_NAMESPACE}/{#KUBERNETES_PVC_NAME}: Consumption inodes warning`
+    * `Volume {#KUBERNETES_PVC_NAMESPACE}/{#KUBERNETES_PVC_NAME}: Free inodes nodata`
+    * `Volume {#KUBERNETES_PVC_NAMESPACE}/{#KUBERNETES_PVC_NAME}: Used bytes nodata`
+    * `Volume {#KUBERNETES_PVC_NAMESPACE}/{#KUBERNETES_PVC_NAME}: Used inodes nodata`
+    * `Volume {#KUBERNETES_PVC_NAMESPACE}/{#KUBERNETES_PVC_NAME}: Problem items nodata`
   * Graphs: 2
-    * `Volume {#KUBERNETES_PVC_NAME}: Graph bytes`
-    * `Volume {#KUBERNETES_PVC_NAME}: Graph inodes`
+    * `Volume {#KUBERNETES_PVC_NAMESPACE}/{#KUBERNETES_PVC_NAME}: Graph bytes`
+    * `Volume {#KUBERNETES_PVC_NAMESPACE}/{#KUBERNETES_PVC_NAME}: Graph inodes`
 * Systempod
   * Items: 2
-    * `Systempod {#KUBERNETES_SYSTEMPOD_NAME}: Desired pod`
-    * `Systempod {#KUBERNETES_SYSTEMPOD_NAME}: Running pod`
+    * `Systempod {#KUBERNETES_SYSTEMPOD_NAMESPACE}/{#KUBERNETES_SYSTEMPOD_NAME}: Desired pod`
+    * `Systempod {#KUBERNETES_SYSTEMPOD_NAMESPACE}/{#KUBERNETES_SYSTEMPOD_NAME}: Running pod`
+  * Triggers: 2
+    * `Systempod {#KUBERNETES_SYSTEMPOD_NAMESPACE}/{#KUBERNETES_SYSTEMPOD_NAME}: Problem items nodata`
+    * `Systempod {#KUBERNETES_SYSTEMPOD_NAMESPACE}/{#KUBERNETES_SYSTEMPOD_NAME}: Problem pod`
   * Graphs: 1
-    * `Systempod {#KUBERNETES_SYSTEMPOD_NAME}: Pod`
+    * `Systempod {#KUBERNETES_SYSTEMPOD_NAMESPACE}/{#KUBERNETES_SYSTEMPOD_NAME}: Graph status`
 
 ## Development
 
