@@ -27,7 +27,7 @@ RUN apt-get update && \
     useradd -u 2000 -d /app -s /bin/bash -M -g ${CONTAINER_GROUP} ${CONTAINER_USER} && \
     python3 -m venv venv
 
-ARG SUPERCRONIC_VER="0.2.31"
+ARG SUPERCRONIC_VER="0.2.32"
 ARG SUPERCRONIC_SHA="fb4242e9d28528a76b70d878dbf69fe8d94ba7d2"
 
 RUN curl -fsSLO "https://github.com/aptible/supercronic/releases/download/v${SUPERCRONIC_VER}/supercronic-linux-amd64" && \

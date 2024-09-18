@@ -63,25 +63,38 @@ monitoring:
     include_namespace: ''
     exclude_name: ''
     exclude_namespace: ''
+  systempod:
+    include_name: ''
+    exclude_name: ''
 
 crontab:
   name: zabbix-kubernetes-discovery
   node:
+    enabled: true
     discovery: '*/30 * * * *'
     item: '*/2 * * * *'
   daemonset:
+    enabled: true
     discovery: '*/30 * * * *'
     item: '*/2 * * * *'
   volume:
+    enabled: true
     discovery: '*/30 * * * *'
     item: '*/2 * * * *'
   deployment:
+    enabled: true
     discovery: '*/30 * * * *'
     item: '*/2 * * * *'
   statefulset:
+    enabled: true
     discovery: '*/30 * * * *'
     item: '*/2 * * * *'
   cronjob:
+    enabled: true
+    discovery: '*/30 * * * *'
+    item: '*/2 * * * *'
+  systempod:
+    enabled: true
     discovery: '*/30 * * * *'
     item: '*/2 * * * *'
 

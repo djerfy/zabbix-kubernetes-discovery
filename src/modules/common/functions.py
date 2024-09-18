@@ -1,7 +1,10 @@
 import re
-import json
 
-def ifObjectMatch(object_list=None, object_name=None):
+
+def ifObjectMatch(
+    object_list=None,
+    object_name=None
+):
     """
     description: check if the object is in list
     return: bool
@@ -25,7 +28,11 @@ def ifObjectMatch(object_list=None, object_name=None):
 
     return False
 
-def ifLabelMatch(match_label=None, object_labels=None):
+
+def ifLabelMatch(
+    match_label=None,
+    object_labels=None
+):
     """
     description: check if the object match a label
     return: bool

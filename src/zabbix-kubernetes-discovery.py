@@ -13,7 +13,7 @@ parser = argparse.ArgumentParser()
 parser.add_argument("--zabbix-timeout", dest="zabbix_timeout", action="store", required=False, help="Set Zabbix timeout", default=5)
 parser.add_argument("--zabbix-endpoint", dest="zabbix_endpoint", action="store", required=True, help="Set Zabbix endpoint (server)")
 parser.add_argument("--kubernetes-name", dest="kubernetes_name", action="store", required=True, help="Set Kubernetes cluster name in Zabbix")
-parser.add_argument("--monitoring-mode", dest="monitoring_mode", action="store", required=True, help="Mode of monitoring", choices=["volume","deployment","daemonset","node","statefulset","cronjob"])
+parser.add_argument("--monitoring-mode", dest="monitoring_mode", action="store", required=True, help="Mode of monitoring", choices=["volume","deployment","daemonset","node","statefulset","cronjob","systempod"])
 parser.add_argument("--monitoring-type", dest="monitoring_type", action="store", required=True, help="Type of monitoring", choices=["discovery", "item", "json"])
 parser.add_argument("--object-name", dest="object_name", action="store", required=False, help="Name of object in Kubernetes", default=None)
 parser.add_argument("--match-label", dest="match_label", action="store", required=False, help="Match label of object in Kubernetes", default=None)
@@ -321,6 +321,40 @@ if __name__ == "__main__":
                             args.include_namespace,
                             args.exclude_name,
                             args.exclude_namespace
+                        )
+                    )
+                )
+            ))
+
+    # Systempod
+    if args.monitoring_mode == "systempod":
+        if args.monitoring_type == "json":
+            print("JSON output (systempod): {}".format(
+                getSystempod(
+                    args.include_name,
+                    args.exclude_name
+                )
+            ))
+        if args.monitoring_type == "discovery":
+            print("Zabbix discovery (systempod): {}".format(
+                zabbix.send(
+                    zabbixDiscoverySystempod(
+                        args.kubernetes_name,
+                        getSystempod(
+                            args.include_name,
+                            args.exclude_name
+                        )
+                    )
+                )
+            ))
+        if args.monitoring_type == "item":
+            print("Zabbix item (systempod): {}".format(
+                zabbix.send(
+                    zabbixItemSystempod(
+                        args.kubernetes_name,
+                        getSystempod(
+                            args.include_name,
+                            args.exclude_name
                         )
                     )
                 )
