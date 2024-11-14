@@ -1,7 +1,11 @@
 from pyzabbix import ZabbixMetric
 import json
 
-def zabbixDiscoveryNode(clustername, nodes=[]):
+
+def zabbixDiscoveryNode(
+    clustername,
+    nodes=[]
+):
     """
     description: create a discovery for node
     return: class ZabbixMetric
@@ -17,7 +21,10 @@ def zabbixDiscoveryNode(clustername, nodes=[]):
     return sender
 
 
-def zabbixDiscoveryDaemonset(clustername, daemonsets=[]):
+def zabbixDiscoveryDaemonset(
+    clustername,
+    daemonsets=[]
+):
     """
     description: create a discovery for daemonset, per namespace
     return: class ZabbixMetric
@@ -35,7 +42,10 @@ def zabbixDiscoveryDaemonset(clustername, daemonsets=[]):
     return sender
 
 
-def zabbixDiscoveryVolume(clustername, volumes=[]):
+def zabbixDiscoveryVolume(
+    clustername,
+    volumes=[]
+):
     """
     description: create a discovery for persistent volume claim, per namespace
     return: class ZabbixMetric
@@ -53,7 +63,10 @@ def zabbixDiscoveryVolume(clustername, volumes=[]):
     return sender
 
 
-def zabbixDiscoveryDeployment(clustername, deployments=[]):
+def zabbixDiscoveryDeployment(
+    clustername,
+    deployments=[]
+):
     """
     description: create a discovery for deployment, per namespace
     return: class ZabbixMetric
@@ -71,7 +84,10 @@ def zabbixDiscoveryDeployment(clustername, deployments=[]):
     return sender
 
 
-def zabbixDiscoveryStatefulset(clustername, statefulsets=[]):
+def zabbixDiscoveryStatefulset(
+    clustername,
+    statefulsets=[]
+):
     """
     description: create a discovery for statefulset, per namespace
     return: class ZabbixMetric
@@ -89,7 +105,10 @@ def zabbixDiscoveryStatefulset(clustername, statefulsets=[]):
     return sender
 
 
-def zabbixDiscoveryCronjob(clustername, cronjobs=[]):
+def zabbixDiscoveryCronjob(
+    clustername,
+    cronjobs=[]
+):
     """
     description: create a discovery for cronjob, per namespace
     return: class ZabbixMetric
@@ -103,5 +122,26 @@ def zabbixDiscoveryCronjob(clustername, cronjobs=[]):
         discovery['data'].append(output)
 
     sender = [ZabbixMetric(clustername, "kubernetes.cronjob.discovery", json.dumps(discovery))]
+
+    return sender
+
+
+def zabbixDiscoverySystempod(
+    clustername,
+    systempods=[]
+):
+    """
+    description: create a discovery for system pod, per namespace
+    return: class ZabbixMetric
+    """
+    discovery = {"data":[]}
+
+    for systempod in systempods:
+        output = {
+            "{#KUBERNETES_SYSTEMPOD_NAMESPACE}": systempod['namespace'],
+            "{#KUBERNETES_SYSTEMPOD_NAME}": systempod['name']}
+        discovery['data'].append(output)
+
+    sender = [ZabbixMetric(clustername, "kubernetes.systempod.discovery", json.dumps(discovery))]
 
     return sender

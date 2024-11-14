@@ -1,6 +1,10 @@
 from pyzabbix import ZabbixMetric
 
-def zabbixItemNode(clustername, nodes=[]):
+
+def zabbixItemNode(
+    clustername,
+    nodes=[]
+):
     """
     description: create a item for node
     return: class ZabbixMetric
@@ -22,7 +26,10 @@ def zabbixItemNode(clustername, nodes=[]):
     return sender
 
 
-def zabbixItemDaemonset(clustername, daemonsets=[]):
+def zabbixItemDaemonset(
+    clustername,
+    daemonsets=[]
+):
     """
     description: create a item for daemonset, per namespace
     return: class ZabbixMetric
@@ -38,7 +45,10 @@ def zabbixItemDaemonset(clustername, daemonsets=[]):
     return sender
 
 
-def zabbixItemVolume(clustername, volumes=[]):
+def zabbixItemVolume(
+    clustername,
+    volumes=[]
+):
     """
     description: create a item for persistent volume claim, per namespace
     return: class ZabbixMetric
@@ -56,7 +66,10 @@ def zabbixItemVolume(clustername, volumes=[]):
     return sender
 
 
-def zabbixItemDeployment(clustername, deployments=[]):
+def zabbixItemDeployment(
+    clustername,
+    deployments=[]
+):
     """
     description: create a item for deployment, per namespace
     return: class ZabbixResponse
@@ -71,7 +84,10 @@ def zabbixItemDeployment(clustername, deployments=[]):
     return sender
 
 
-def zabbixItemStatefulset(clustername, statefulsets=[]):
+def zabbixItemStatefulset(
+    clustername,
+    statefulsets=[]
+):
     """
     description: create a item for statefulset, per namespace
     return: class ZabbixResponse
@@ -86,7 +102,10 @@ def zabbixItemStatefulset(clustername, statefulsets=[]):
     return sender
 
 
-def zabbixItemCronjob(clustername, cronjobs=[]):
+def zabbixItemCronjob(
+    clustername,
+    cronjobs=[]
+):
     """
     description: create a item for cronjob, per namespace
     return: class ZabbixResponse
@@ -97,5 +116,21 @@ def zabbixItemCronjob(clustername, cronjobs=[]):
         sender.append(ZabbixMetric(clustername, f"kubernetes.cronjob.status[{cronjob['namespace']},{cronjob['name']}]", cronjob['status']),)
         sender.append(ZabbixMetric(clustername, f"kubernetes.cronjob.reason[{cronjob['namespace']},{cronjob['name']}]", cronjob['last_job']['reason']),)
         sender.append(ZabbixMetric(clustername, f"kubernetes.cronjob.message[{cronjob['namespace']},{cronjob['name']}]", cronjob['last_job']['message']),)
+
+    return sender
+
+
+def zabbixItemSystempod(
+    clustername,
+    systempods=[]
+):
+    """
+    description: create a item for system pod, per namespace
+    return: class ZabbixResponse
+    """
+    sender = []
+
+    for systempod in systempods:
+        sender.append(ZabbixMetric(clustername, f"kubernetes.systempod.running[{systempod['namespace']},{systempod['name']}]", systempod['running']),)
 
     return sender
