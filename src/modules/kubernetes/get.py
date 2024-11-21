@@ -409,7 +409,7 @@ def getSystempod(
     """
     kubernetes = client.CoreV1Api()
 
-    nodes, pods, pods_filtered, apps = [], [], [], {}
+    nodes, pods, pods_filtered = [], [], []
 
     for node in kubernetes.list_node().items:
         if "node-role.kubernetes.io/control-plane" in node.metadata.labels:
@@ -445,6 +445,7 @@ def getSystempod(
         "kube-controller-manager",
         "kube-scheduler"
     ]:
+        apps = {}
         apps['name'] = app
         apps['namespace'] = "kube-system"
         apps['desired'] = len(nodes)
