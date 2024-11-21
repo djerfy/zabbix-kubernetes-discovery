@@ -1190,7 +1190,7 @@ zabbix_export:
                 - tag: KubernetesObject
                   value: Systempod
             - uuid: 36cf572a5cd047d0b50b8207bd29ac12
-              expression: 'last(/Template Zabbix Kubernetes Discovery/kubernetes.systempod.running[{#KUBERNETES_SYSTEMPOD_NAMESPACE},{#KUBERNETES_SYSTEMPOD_NAME}],#3) >= last(/Template Zabbix Kubernetes Discovery/kubernetes.systempod.desired[{#KUBERNETES_SYSTEMPOD_NAMESPACE},{#KUBERNETES_SYSTEMPOD_NAME}],#3)'
+              expression: 'last(/Template Zabbix Kubernetes Discovery/kubernetes.systempod.running[{#KUBERNETES_SYSTEMPOD_NAMESPACE},{#KUBERNETES_SYSTEMPOD_NAME}],#3) <> last(/Template Zabbix Kubernetes Discovery/kubernetes.systempod.desired[{#KUBERNETES_SYSTEMPOD_NAMESPACE},{#KUBERNETES_SYSTEMPOD_NAME}],#3)'
               name: 'Systempod {#KUBERNETES_SYSTEMPOD_NAMESPACE}/{#KUBERNETES_SYSTEMPOD_NAME}: Problem pod'
               priority: HIGH
               description: 'Problem on system pod.'
