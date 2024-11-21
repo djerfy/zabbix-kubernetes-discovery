@@ -1220,7 +1220,7 @@ zabbix_export:
         - tag: Middleware
           value: Kubernetes
         - tag: Version
-          value: 1.4.19
+          value: 1.4.20
       macros:
         - macro: '{$KUBERNETES.NODE.PODS.CRITICAL}'
           value: '95'
