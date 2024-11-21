@@ -132,5 +132,6 @@ def zabbixItemSystempod(
 
     for systempod in systempods:
         sender.append(ZabbixMetric(clustername, f"kubernetes.systempod.running[{systempod['namespace']},{systempod['name']}]", systempod['running']),)
+        sender.append(ZabbixMetric(clustername, f"kubernetes.systempod.desired[{systempod['namespace']},{systempod['name']}]", systempod['desired']),)
 
     return sender
