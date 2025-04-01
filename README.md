@@ -23,6 +23,8 @@
 
 # Zabbix Kubernetes Discovery
 
+> :warning: **This repository is archived and zabbix-kubernetes-discovery is no longer maintained. You can fork to continue your development.**
+
 [![Artifact Hub](https://img.shields.io/endpoint?url=https://artifacthub.io/badge/repository/djerfy&style=flat-square)](https://artifacthub.io/packages/search?repo=djerfy)
 
 ## Introduction
